@@ -19,10 +19,18 @@ const Route = use('Route')
 
 Route.on('/').render('welcome')
 
+// = = = = = = = = = =
 Route.get('/login', 'AuthController.index')
+  .middleware('notauth')
+
 Route.post('/login', 'AuthController.login')
+  .middleware('notauth')
 
-Route.get('/logout', 'AuthController.logout')
+Route.get('/logout', 'AuthController.logout').as('logout')
 
+// = = = = = = = = = =
 Route.get('/register', 'RegisterController.index')
+  .middleware('notauth')
+
 Route.post('/register', 'RegisterController.register')
+  .middleware('notauth')

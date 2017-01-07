@@ -30,13 +30,12 @@ class AuthController {
     yield request
       .with({successes: [{message: "Veiksmīgi ieiets lietotājā " + email}]})
       .flash()
-    response.route('back')
+    response.redirect('back')
   }
 
   * logout(request, response) {
-
     yield request.auth.logout()
-    yield response.redirect('/')
+    response.redirect('back')
   }
 }
 
