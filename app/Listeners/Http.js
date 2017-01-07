@@ -38,4 +38,24 @@ Http.handleError = function * (error, request, response) {
  * starting http server.
  */
 Http.onStart = function () {
+  const View = use('Adonis/Src/View')
+
+  View.filter('nl2br', function (str) {
+    return str.replace(/\r\n|\r|\n/g, '<br>')
+  })
+
+  View.filter('markdown', function (str) {
+    const marked = require('marked');
+    marked.setOptions({
+      renderer: new marked.Renderer(),
+      gfm: true,
+      tables: true,
+      breaks: false,
+      pedantic: false,
+      sanitize: false,
+      smartLists: true,
+      smartypants: false
+    });
+    return marked(str)
+  })
 }

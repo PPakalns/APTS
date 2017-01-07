@@ -21,6 +21,7 @@
     "adonis-middleware": "^1.0.10",
     "adonis-validation-provider": "^3.0.5",
     "adonis-websocket": "^1.0.2",
+    "marked": "^0.3.6",
     "sqlite3": "^3.1.8",
     "standard": "^8.6.0",
     "youch": "^1.0.1"
