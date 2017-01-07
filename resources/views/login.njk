@@ -1,0 +1,35 @@
+{% extends 'master' %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+  <div class="panel panel-default">
+    <div class="panel-heading">Ieiet</div>
+    <div class="panel-body">
+      {{ form.open({ action: 'AuthController.login', class:"form-horizontal"}) }}
+
+        {{ csrfField }}
+
+        <div class="form-group">
+          {{ form.label('email', 'Epasta adrese', {class: 'col-md-4 control-label'}) }}
+          <div class="col-md-6">
+            {{ form.text('email', old('email') or "paraugs@paraugs.lv", {class: 'form-control'}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          {{ form.label('password', 'Parole', {class: 'col-md-4 control-label'}) }}
+          <div class="col-md-6">
+            {{ form.password('password', old('password') or "", {class: 'form-control'}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-4">
+            {{ form.button('Ieiet', 'Ieiet', {class: "btn btn-primary"}) }}
+          </div>
+        </div>
+      {{ form.close() }}
+    </div>
+  </div>
+{% endblock %}

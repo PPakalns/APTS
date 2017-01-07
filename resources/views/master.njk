@@ -51,8 +51,16 @@
 
     <div class="container">
 
-      <div class="blog-header">
+      <div class="header">
         {% block header %}{% endblock %}
+      </div>
+
+      <div class="errors">
+        {% for error in old('errors') %}
+          <div class="bg-danger">
+            {{ error.message }}
+          </div>
+        {% endfor %}
       </div>
 
       <div class="row">
