@@ -2,6 +2,7 @@
 
 const User = use('App/Model/User')
 const Hash = use('Hash')
+const Validator = use('Validator')
 
 class AuthController {
 
@@ -14,14 +15,22 @@ class AuthController {
     const email = request.input('email')
     const password = request.input('password')
 
+    console.log( email, password )
+
     try {
-      request.auth.attempt(email, password)
+      yield request.auth.attempt(email, password)
     } catch (e) {
-      yield request.withAll().andWith({error: [e]}).flash()
-      return response.redirect('login')
+      yield request
+        .withOnly('email')
+        .andWith({errors: [{message: "Autentifikācija bija neveiksmīga!"}]})
+        .flash()
+      return response.route('/login')
     }
 
-    yield response.sendView('login')
+    yield request
+      .with({successes: [{message: "Veiksmīgi ieiets lietotājā " + email}]})
+      .flash()
+    response.route('back')
   }
 
   * logout(request, response) {

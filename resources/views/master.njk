@@ -33,15 +33,9 @@
               <li><a href="/login">Ieiet</a></li>
               <li><a href="/register">Reģistrēties</a></li>
             {% else %}
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                  {{ currentUser.username }} <span class="caret"></span>
-                </a>
 
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="/logout"><i class="fa fa-btn fa-sign-out"></i>Iziet</a></li>
-                </ul>
-              </li>
+              <p class="navbar-text">Lietotājs: {{ currentUser.email }}</p>
+              <li><a href="/login">Iziet</a></li>
             {% endif %}
 
           </ul>
@@ -55,17 +49,21 @@
         {% block header %}{% endblock %}
       </div>
 
-      <div class="errors">
-        {% for error in old('errors') %}
-          <div class="bg-danger">
-            {{ error.message }}
-          </div>
-        {% endfor %}
-      </div>
-
       <div class="row">
 
         <div class="col-sm-8 content">
+
+          {% for error in old('errors') %}
+            <p class="bg-danger">
+              {{ error.message }}
+            </p>
+          {% endfor %}
+
+          {% for success in old('successes') %}
+            <p class="bg-success">
+              {{ success.message }}
+            </p>
+          {% endfor %}
           {% block content %}{% endblock %}
         </div>
 

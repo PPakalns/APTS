@@ -13,14 +13,14 @@
         <div class="form-group">
           {{ form.label('email', 'Epasta adrese', {class: 'col-md-4 control-label'}) }}
           <div class="col-md-6">
-            {{ form.text('email', old('email') or "paraugs@paraugs.lv", {class: 'form-control'}) }}
+            {{ form.email('email', null, {class: 'form-control'}) }}
           </div>
         </div>
 
         <div class="form-group">
           {{ form.label('password', 'Parole', {class: 'col-md-4 control-label'}) }}
           <div class="col-md-6">
-            {{ form.password('password', old('password') or "", {class: 'form-control'}) }}
+            {{ form.password('password', null, {class: 'form-control', withOld: false}) }}
           </div>
         </div>
 

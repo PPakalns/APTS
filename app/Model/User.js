@@ -5,6 +5,13 @@ const Hash = use('Hash')
 
 class User extends Lucid {
 
+  static get rules () {
+    return {
+      email: 'required|email|unique:users',
+      password: 'required|min:8|max:30'
+    }
+  }
+
   static boot () {
     super.boot()
 
@@ -16,6 +23,10 @@ class User extends Lucid {
       this.password = yield Hash.make(this.password)
       yield next
     })
+  }
+
+  static get hidden () {
+    return ['password']
   }
 
   apiTokens () {

@@ -21,3 +21,7 @@ body {
   padding-left: 0;
   list-style-position: inside;
 }
+
+.bg-success, .bg-danger {
+  padding: 10px;
+}

@@ -22,5 +22,7 @@ Route.on('/').render('welcome')
 Route.get('/login', 'AuthController.index')
 Route.post('/login', 'AuthController.login')
 
+Route.get('/logout', 'AuthController.logout')
+
 Route.get('/register', 'RegisterController.index')
 Route.post('/register', 'RegisterController.register')

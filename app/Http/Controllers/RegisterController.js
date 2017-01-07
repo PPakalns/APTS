@@ -1,5 +1,8 @@
 'use strict'
 
+const Validator = use('Validator')
+const User = use('App/Model/User')
+
 class RegisterController {
 
   * index(request, response) {
@@ -7,6 +10,21 @@ class RegisterController {
   }
 
   * register(request, response) {
+
+    const userData = request.only('email', 'password')
+
+    const validation = yield Validator.validate(userData, User.rules)
+
+    if (validation.fails())
+    {
+      yield request
+        .withOnly('email', 'password')
+        .andWith({errors: validation.messages() })
+        .flash()
+
+      response.redirect('back')
+      return
+    }
 
     const user = new User()
 
@@ -19,7 +37,8 @@ class RegisterController {
       success: 'Reģistrācija bija veiksmīga. Varat ieiet sistēmā.'
     }
 
-    yield response.sendView('register', { registerMessage: Register } );
+    yield request.with({successes:[{message:registerMessage.success}]}).flash()
+    response.redirect('back')
   }
 }
 
