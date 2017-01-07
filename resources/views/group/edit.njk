@@ -1,0 +1,46 @@
+{% extends 'master' %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+  <div class="panel panel-default">
+    <div class="panel-heading">Grupas rediģēšana</div>
+    <div class="panel-body">
+      {{ form.open({route: 'group/edit_save', params: {id: group.id}, class:"form-horizontal"}) }}
+
+        {{ csrfField }}
+
+        <div class="form-group">
+          {{ form.label('name', 'Grupas nosaukums', {class: 'col-md-4 control-label'}) }}
+          <div class="col-md-6">
+            {{ form.text('name', group.name, {class: 'form-control'}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class='col-md-12'>
+            {{ form.label('description', 'Informācija grupas biedriem', {class: 'control-label'}) }}
+            {{ form.textarea('description', group.description, {class: 'form-control', rows: '20'}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-4 col-md-offset-8 text-right">
+            {{ form.button('Saglabāt', 'Saglabāt', {class: "btn btn-primary"}) }}
+          </div>
+        </div>
+      {{ form.close() }}
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Grupas paraugs</div>
+    <div class="panel-body">
+      <h3> {{ group.name }} </h3>
+      <hr>
+      <div class="description">
+        {{ group.description }}
+      </div>
+    </div>
+  </div>
+{% endblock %}

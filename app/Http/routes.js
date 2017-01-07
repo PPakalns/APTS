@@ -32,11 +32,12 @@ Route.group('register', function(){
 }).middleware('notauth')
 
 Route.group('users', function(){
-  Route.get('/users', 'UserController.index')
+  Route.get('/users', 'UserController.index').as('user/list')
 })
 
 Route.group('group', function(){
   Route.get('', 'GroupController.index').as('group/list')
   Route.get('/show/:id', 'GroupController.show').as('group/show')
   Route.get('/edit/:id', 'GroupController.edit').as('group/edit')
+  Route.post('/edit/:id', 'GroupController.edit_save').as('group/edit_save')
 }).prefix('/group')
