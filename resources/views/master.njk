@@ -1,38 +1,96 @@
 <!doctype html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>APTS</title>
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,600,700,900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"  crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
 
-  <title>AdonisJs - Node.Js MVC Framework</title>
+  <body>
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
 
-  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,600,700,900' rel='stylesheet' type='text/css'>
-  <link rel="icon" href="/assets/favicon.png" type="image/x-icon">
-  <link rel="stylesheet" type="text/css" href="style.css">
-</head>
-<body>
+          <a class="navbar-brand" href="/">
+            APTS
+          </a>
 
-  <section>
-    <div class="__wrapper">
-      {% block content %}{% endblock %}
+        </div>
 
-      {% block footer %}
-        <div class="__footer">
-          <ul>
-            <li>
-              <a href="https://twitter.com/intent/tweet?url=http://adonisjs.com&text=I am using AdonisJs, a practical MVC framework for nodejs&hashtags=nodejs,adonisframework" target="_blank">
-                <img src="/assets/twitter.svg">
-              </a>
-            </li>
-            <li>
-              <a href="https://github.com/adonisjs/adonis-framework" target="_blank"><img src="/assets/github.svg"></a>
-            </li>
+        <div class="collapse navbar-collapse" id="app-navbar-collapse">
+
+          <ul class="nav navbar-nav">
+            <li><a href="/">Uzdevumi</a></li>
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+
+            {% if not currentUser %}
+              <li><a href="/login">Ieiet</a></li>
+              <li><a href="/register">Reģistrēties</a></li>
+            {% else %}
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                  {{ currentUser.username }} <span class="caret"></span>
+                </a>
+
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="/logout"><i class="fa fa-btn fa-sign-out"></i>Iziet</a></li>
+                </ul>
+              </li>
+            {% endif %}
+
           </ul>
         </div>
-      {% endblock %}
-    </div>
-  </section>
+      </div>
+    </nav>
 
-</body>
+    <div class="container">
+
+      <div class="blog-header">
+        {% block header %}{% endblock %}
+      </div>
+
+      <div class="row">
+
+        <div class="col-sm-8 content">
+          {% block content %}{% endblock %}
+        </div>
+
+        <div class="col-sm-3 col-sm-offset-1 sidebar">
+          <div>
+            <h4>Archives</h4>
+            <ol>
+              <li>Test 1</li>
+              <li>Test 2</li>
+              <li>Test 3</li>
+              <li>Test 4</li>
+              <li>Test 5</li>
+              <li>Test 6</li>
+            </ol>
+          </div>
+        </div> {# sidebar #}
+      </div> {# .row #}
+    </div> {# .container #}
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-6">
+            <p>APTS - Automātiskā Programmu Testēšanas Sistēma</p>
+          </div>
+          <div class="col-sm-6">
+            <p>(c) Pēteris Pakalns</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
 </html>
