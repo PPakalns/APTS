@@ -17,20 +17,26 @@
 
 const Route = use('Route')
 
-Route.on('/').render('welcome')
+Route.on('/').render('welcome').as('home')
 
-// = = = = = = = = = =
-Route.get('/login', 'AuthController.index')
-  .middleware('notauth')
-
-Route.post('/login', 'AuthController.login')
-  .middleware('notauth')
+Route.group('login', function(){
+  Route.get('/login', 'AuthController.index').as('login')
+  Route.post('/login', 'AuthController.login')
+}).middleware('notauth')
 
 Route.get('/logout', 'AuthController.logout').as('logout')
 
-// = = = = = = = = = =
-Route.get('/register', 'RegisterController.index')
-  .middleware('notauth')
+Route.group('register', function(){
+  Route.get('/register', 'RegisterController.index').as('register')
+  Route.post('/register', 'RegisterController.register')
+}).middleware('notauth')
 
-Route.post('/register', 'RegisterController.register')
-  .middleware('notauth')
+Route.group('users', function(){
+  Route.get('/users', 'UserController.index')
+})
+
+Route.group('group', function(){
+  Route.get('', 'GroupController.index').as('group/list')
+  Route.get('/show/:id', 'GroupController.show').as('group/show')
+  Route.get('/edit/:id', 'GroupController.edit').as('group/edit')
+}).prefix('/group')

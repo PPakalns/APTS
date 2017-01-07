@@ -7,81 +7,85 @@
     <title>APTS</title>
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,300,600,700,900' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"  crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/style.css">
   </head>
 
   <body>
-    <nav class="navbar navbar-default navbar-static-top">
-      <div class="container">
-        <div class="navbar-header">
+    <div id="wrapper">
+      <nav class="navbar navbar-default navbar-static-top">
+        <div class="container">
+          <div class="navbar-header">
 
-          <a class="navbar-brand" href="/">
-            APTS
-          </a>
+            <a class="navbar-brand" href="{{ 'home' | route({}) }}">
+              APTS
+            </a>
 
-        </div>
-
-        <div class="collapse navbar-collapse" id="app-navbar-collapse">
-
-          <ul class="nav navbar-nav">
-            <li><a href="/">Uzdevumi</a></li>
-          </ul>
-
-          <ul class="nav navbar-nav navbar-right">
-
-            {% if not currentUser %}
-              <li><a href="/login">Ieiet</a></li>
-              <li><a href="/register">Reģistrēties</a></li>
-            {% else %}
-
-              <p class="navbar-text">Lietotājs: {{ currentUser.email }}</p>
-              <li><a href="/logout">Iziet</a></li>
-            {% endif %}
-
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container">
-
-      <div class="header">
-        {% block header %}{% endblock %}
-      </div>
-
-      <div class="row">
-
-        <div class="col-sm-8 content">
-
-          {% for error in old('errors') %}
-            <p class="bg-danger">
-              {{ error.message }}
-            </p>
-          {% endfor %}
-
-          {% for success in old('successes') %}
-            <p class="bg-success">
-              {{ success.message }}
-            </p>
-          {% endfor %}
-          {% block content %}{% endblock %}
-        </div>
-
-        <div class="col-sm-3 col-sm-offset-1 sidebar">
-          <div>
-            <h4>Archives</h4>
-            <ol>
-              <li>Test 1</li>
-              <li>Test 2</li>
-              <li>Test 3</li>
-              <li>Test 4</li>
-              <li>Test 5</li>
-              <li>Test 6</li>
-            </ol>
           </div>
-        </div> {# sidebar #}
-      </div> {# .row #}
-    </div> {# .container #}
+
+          <div class="collapse navbar-collapse" id="app-navbar-collapse">
+
+            <ul class="nav navbar-nav">
+              <li><a href="{{ 'users' | route({}) }}">Lietotāji</a></li>
+              <li><a href="{{ 'group/list' | route({}) }}">Grupas</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+
+              {% if not currentUser %}
+                <li><a href="{{ 'login' | route({}) }}">Ieiet</a></li>
+                <li><a href="{{ 'register' | route({}) }}">Reģistrēties</a></li>
+              {% else %}
+
+                <p class="navbar-text">Lietotājs: {{ currentUser.email }}</p>
+                <li><a href="{{ 'logout' | route({}) }}">Iziet</a></li>
+              {% endif %}
+
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div class="container">
+
+        <div class="header">
+          {% block header %}{% endblock %}
+        </div>
+
+        <div class="row">
+
+          <div class="col-sm-8 content">
+
+            {% for error in old('errors') %}
+              <p class="bg-danger">
+                {{ error.message }}
+              </p>
+            {% endfor %}
+
+            {% for success in old('successes') %}
+              <p class="bg-success">
+                {{ success.message }}
+              </p>
+            {% endfor %}
+
+            {% block content %}{% endblock %}
+          </div>
+
+          <div class="col-sm-3 col-sm-offset-1 sidebar">
+            <div>
+              <h4>Archives</h4>
+              <ol>
+                <li>Test 1</li>
+                <li>Test 2</li>
+                <li>Test 3</li>
+                <li>Test 4</li>
+                <li>Test 5</li>
+                <li>Test 6</li>
+              </ol>
+            </div>
+          </div> {# sidebar #}
+        </div> {# .row #}
+      </div> {# .container #}
+    </div> {# #wrapper #}
     <footer class="footer">
       <div class="container">
         <div class="row">

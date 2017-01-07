@@ -1,0 +1,15 @@
+{% extends 'master' %}
+
+{% block header %}
+  <h1>Grupas</h1>
+  <p>Grupās tās dalībniekiem ir pieeja programmēšanas uzdevumiem</p>
+{% endblock %}
+
+{% block content %}
+  <h2>
+    {{ group.name }}
+  </h2>
+  <p>
+    {{ group.description }}
+  </p>
+{% endblock %}
