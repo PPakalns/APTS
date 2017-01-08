@@ -5,7 +5,7 @@ html, body {
 #wrapper {
   width: 100%;
   min-height: 100%;
-  padding-bottom: 34px;
+  padding-bottom: 70px;
   margin-bottom: -34px;
 }
 
@@ -52,4 +52,9 @@ table th {
   padding-right: 5px;
   background-color: #fff !important;
   border: 1px solid #ddd !important;
+}
+
+.editmenu a{
+  margin-left: 10px;
+  display: inline-block;
 }

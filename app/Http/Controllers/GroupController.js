@@ -50,6 +50,14 @@ class GroupController {
         .flash()
     res.route('group/show', {id: groupData.id})
   }
+
+  * users(req, res){
+    const id = req.param('id')
+    const group = yield Group.findOrFail(id)
+    yield group.related('users').load()
+
+    yield res.sendView('group/users', {group: group.toJSON()})
+  }
 }
 
 module.exports = GroupController
