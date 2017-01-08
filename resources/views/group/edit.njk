@@ -45,6 +45,9 @@
       data_description = $("#description_preview").text(data_description).text()
       $("#description_preview").html(marked(data_description))
       MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
+      hljs.initHighlighting.called = false;
+      hljs.initHighlighting();
     })
   </script>
 

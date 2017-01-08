@@ -44,18 +44,19 @@ Http.onStart = function () {
     return str.replace(/\r\n|\r|\n/g, '<br>')
   })
 
+  const marked = require('marked');
+  marked.setOptions({
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: true,
+    smartLists: true,
+    smartypants: false
+  });
+
   View.filter('markdown', function (str) {
-    const marked = require('marked');
-    marked.setOptions({
-      renderer: new marked.Renderer(),
-      gfm: true,
-      tables: true,
-      breaks: false,
-      pedantic: false,
-      sanitize: true,
-      smartLists: true,
-      smartypants: false
-    });
     return marked(str)
   })
 }
