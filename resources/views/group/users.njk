@@ -10,32 +10,56 @@
     Grupa: {{ group.name }}
   </h2>
   <hr>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>#</td>
-        <th>Dalībnieks</td>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% set i=0 %}
-      {% for user in group.users %}
+
+  {% if group.users.length == 0 %}
+    <p class="bg-info">
+      Grupā nav neviena dalībnieka!
+    </p>
+  {% else %}
+    {{ form.open({route: 'group/users/remove', class:"form-horizontal"}) }}
+    {{ form.hidden('group_id', group.id ) }}
+
+    {{ csrfField }}
+
+    <div class="form-group">
+      <div class="col-md-6 col-md-offset-6 text-right">
+        {{ form.button("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>Noņemt atzīmētos dalībniekus", 'remove', {class: "btn btn-default"}) }}
+      </div>
+    </div>
+    <table class="table">
+      <thead>
         <tr>
-          <td>
-            {% set i=i+1 %}
-            {{ i }}
-          </td>
-          <td>
-            {{ user.email }}
-          </td>
-          <td class="editmenu">
-            <a href="{{ 'group/users/remove' | route({group_id: group.id, user_id: user.id }) }}">
-              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Noņemt
-            </a>
-          </td>
+          <th>#</td>
+          <th>Dalībnieks</td>
+          <th>
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Noņemt
+          </th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% set i=0 %}
+        {% for user in group.users %}
+          <tr>
+            <td>
+              {% set i=i+1 %}
+              {{ i }}
+            </td>
+            <td>
+              {{ user.email }}
+            </td>
+            <td>
+              <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:lightgray;"></span>
+              {{ form.checkbox("user_"+user.id, 'agree', false) }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="form-group">
+      <div class="col-md-6 col-md-offset-6 text-right">
+        {{ form.button("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>Noņemt atzīmētos dalībniekus", 'remove', {class: "btn btn-default"}) }}
+      </div>
+    </div>
+    {{ form.close() }}
+  {% endif %}
 {% endblock %}

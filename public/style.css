@@ -39,7 +39,7 @@ body {
   list-style-position: inside;
 }
 
-.bg-success, .bg-danger {
+.bg-success, .bg-danger, .bg-info {
   padding: 10px;
 }
 

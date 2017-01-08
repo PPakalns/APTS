@@ -42,4 +42,5 @@ Route.group('group', function(){
   Route.post('/edit/:id', 'GroupController.edit_save').as('group/edit_save')
 
   Route.get('/users/:id', 'GroupController.users').as('group/users')
+  Route.post('/users/remove', 'GroupController.users_remove').as('group/users/remove')
 }).prefix('/group')

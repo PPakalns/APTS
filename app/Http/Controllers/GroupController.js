@@ -26,7 +26,7 @@ class GroupController {
   }
 
   * edit_save(req, res) {
-    const groupData = req.all('id', 'name', 'description')
+    const groupData = req.only('id', 'name', 'description')
 
     const validation = yield Validator.validate(groupData, Group.rules)
     if (validation.fails())
@@ -57,6 +57,45 @@ class GroupController {
     yield group.related('users').load()
 
     yield res.sendView('group/users', {group: group.toJSON()})
+  }
+
+  * users_remove(req, res){
+
+    const formData = req.all()
+    const group = yield Group.findOrFail(formData.group_id)
+
+    var remove_users = []
+
+    // Parse checkbox names to determine which users to remove from group
+	  var checkbox_regex = /^user_(\d+)$/
+    for (var property in formData) {
+      if (formData.hasOwnProperty(property)) {
+        var match = property.match(checkbox_regex);
+        if (match)
+        {
+          var user_id = parseInt(match[1])
+          remove_users.push( user_id )
+        }
+      }
+    }
+
+    yield group.users().detach(remove_users)
+
+    // Display flash message to user
+    if ( remove_users.length == 0 )
+    {
+      yield req
+        .with({"errors": [{message: "Lai noņemtu dalībniekus no grupas, atzīmējiet tos ar ķeksi kolumnā \"Noņemt\"."}]})
+        .flash()
+    }
+    else
+    {
+      yield req
+        .with({"successes": [{message: "Veiksmīgi noņemti " + remove_users.length + " dalībniekus no grupas!"}]})
+        .flash()
+    }
+
+    res.route('group/users', {id: formData.group_id});
   }
 }
 
