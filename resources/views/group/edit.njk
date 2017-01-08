@@ -9,6 +9,7 @@
       {{ form.open({route: 'group/edit_save', params: {id: group.id}, class:"form-horizontal"}) }}
 
         {{ csrfField }}
+        {{ form.hidden('id', old('id') or group.id ) }}
 
         <div class="form-group">
           {{ form.label('name', 'Grupas nosaukums', {class: 'col-md-4 control-label'}) }}
@@ -53,7 +54,7 @@
       <h3 id="name_preview"> {{ old('name') or group.name }} </h3>
       <hr>
       <div id="description_preview" class="tex2jax_process">
-        {{ ( old('description') or group.description ) | escape | markdown | safe }}
+        {{ ( old('description') or group.description ) | markdown | safe }}
       </div>
     </div>
   </div>

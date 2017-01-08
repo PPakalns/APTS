@@ -1,6 +1,7 @@
 'use strict'
 
 const Group = use('App/Model/Group')
+const Validator = use('Validator')
 
 class GroupController {
 
@@ -25,9 +26,29 @@ class GroupController {
   }
 
   * edit_save(req, res) {
-    const id = req.param('id')
-    yield req.withAll().flash()
-    res.route('group/edit',{id: id})
+    const groupData = req.all('id', 'name', 'description')
+
+    const validation = yield Validator.validate(groupData, Group.rules)
+    if (validation.fails())
+    {
+      yield req
+        .withAll()
+        .andWith({"errors": [{message:"Lūdzu norādiet grupas nosaukumu."}]})
+        .flash()
+      res.route('group/edit',{id: id})
+      return
+    }
+
+    const group = yield Group.findOrFail(groupData.id)
+    group.name = groupData.name;
+    group.description = groupData.description;
+    yield group.save()
+
+    yield req
+        .withAll()
+        .andWith({"successes": [{message:"Grupa veiksmīgi rediģēta"}]})
+        .flash()
+    res.route('group/show', {id: groupData.id})
   }
 }
 

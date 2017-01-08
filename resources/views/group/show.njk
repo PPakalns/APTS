@@ -14,7 +14,7 @@
   <h2>
     {{ group.name }}
   </h2>
-  <p class="tex2jax_process">
-    {{ group.description }}
-  </p>
+  <div class="tex2jax_process">
+    {{ group.description | markdown | safe }}
+  </div>
 {% endblock %}
