@@ -11,55 +11,126 @@
   </h2>
   <hr>
 
-  {% if group.users.length == 0 %}
-    <p class="bg-info">
-      Grupā nav neviena dalībnieka!
-    </p>
-  {% else %}
-    {{ form.open({route: 'group/users/remove', class:"form-horizontal"}) }}
-    {{ form.hidden('group_id', group.id ) }}
+  <div class="panel panel-default">
+    <div class="panel-heading">Dalībnieku pievienošana</div>
+    <div class="panel-body">
+      {{ form.open({route: 'group/users/add', class:"form-horizontal"}) }}
 
-    {{ csrfField }}
+      {{ form.hidden('group_id', group.id ) }}
+      {{ csrfField }}
 
-    <div class="form-group">
-      <div class="col-md-6 col-md-offset-6 text-right">
-        {{ form.button("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>Noņemt atzīmētos dalībniekus", 'remove', {class: "btn btn-default"}) }}
+      <div class="form-group">
+        {{ form.label('email', 'Lietotāja epasts', {class: 'col-md-4 control-label'}) }}
+        <div class="col-md-4">
+          {{ form.email('email', old('email') or null, {class: 'form-control', list: 'userslist'}) }}
+        </div>
+        <div class="col-md-4">
+          {{ form.button('Pievienot lietotāju', 'pievienot', {class: "btn btn-primary"}) }}
+        </div>
+      </div>
+      {{ form.close() }}
+
+      <datalist id="userslist">
+      </datalist>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function(){
+      var last_update = new Date();
+      var iteration = 0;
+      var updated_iteration = 0;
+      var last_search = ""
+
+      $("#email").keypress(function(){
+
+        var now = new Date()
+        var diff = (now-last_update)
+        var text = $(this).val()
+
+        if ( diff > 2*1000 && text != last_search )
+        {
+          var now_iteration = iteration+1;
+          iteration = iteration+1;
+
+          last_update = now
+          $.get("{{ 'user/shortlist' | route({}) }}",{search: text}, function( data ){
+            if ( now_iteration > updated_iteration )
+            {
+              updated_iteration = now_iteration
+              var length = data.length
+
+              var userlist = $("#userslist")
+              $(userslist).empty()
+
+              for (var i=0; i<length; i++)
+              {
+                var option = document.createElement("option")
+                option.setAttribute("value", data[ i ].email)
+                $(userslist).append(option)
+              }
+            }
+          })
+        }
+      })
+    })
+  </script>
+
+  <hr>
+  <div class="panel panel-default">
+    <div class="panel-heading">Dalībnieku saraksts</div>
+    <div class="panel-body">
+      {% if group.users.length == 0 %}
+        <p class="bg-info">
+          Grupā nav neviena dalībnieka!
+        </p>
+      {% else %}
+        {{ form.open({route: 'group/users/remove', class:"form-horizontal"}) }}
+        {{ form.hidden('group_id', group.id ) }}
+
+        {{ csrfField }}
+
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-6 text-right">
+            {{ form.button("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>Noņemt atzīmētos dalībniekus", 'remove', {class: "btn btn-default"}) }}
+          </div>
+        </div>
+        <table class="table table-bordered table-condensed table-striped">
+          <thead>
+            <tr>
+              <th>#</td>
+              <th>Dalībnieks</td>
+              <th>
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Noņemt
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% set i=0 %}
+            {% for user in group.users %}
+              <tr>
+                <td>
+                  {% set i=i+1 %}
+                  {{ i }}
+                </td>
+                <td>
+                  {{ user.email }}
+                </td>
+                <td>
+                  <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:lightgray;"></span>
+                  {{ form.checkbox("user_"+user.id, 'agree', false) }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-6 text-right">
+            {{ form.button("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>Noņemt atzīmētos dalībniekus", 'remove', {class: "btn btn-default"}) }}
+          </div>
+        </div>
+        {{ form.close() }}
       </div>
     </div>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>#</td>
-          <th>Dalībnieks</td>
-          <th>
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Noņemt
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {% set i=0 %}
-        {% for user in group.users %}
-          <tr>
-            <td>
-              {% set i=i+1 %}
-              {{ i }}
-            </td>
-            <td>
-              {{ user.email }}
-            </td>
-            <td>
-              <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:lightgray;"></span>
-              {{ form.checkbox("user_"+user.id, 'agree', false) }}
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <div class="form-group">
-      <div class="col-md-6 col-md-offset-6 text-right">
-        {{ form.button("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>Noņemt atzīmētos dalībniekus", 'remove', {class: "btn btn-default"}) }}
-      </div>
-    </div>
-    {{ form.close() }}
   {% endif %}
 {% endblock %}

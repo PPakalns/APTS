@@ -44,14 +44,13 @@ body {
 }
 
 table {
-  border-collapse: collapse !important;
+  border-collapse: collapse;
 }
 table td,
-table th {
+table tr {
   padding-left: 5px;
   padding-right: 5px;
-  background-color: #fff !important;
-  border: 1px solid #ddd !important;
+  border: 1px solid #ddd;
 }
 
 .editmenu a{

@@ -33,6 +33,8 @@ Route.group('register', function(){
 
 Route.group('users', function(){
   Route.get('/users', 'UserController.index').as('user/list')
+
+  Route.get('/users/api/short', 'UserController.shortlist').as('user/shortlist')
 })
 
 Route.group('group', function(){
@@ -43,4 +45,5 @@ Route.group('group', function(){
 
   Route.get('/users/:id', 'GroupController.users').as('group/users')
   Route.post('/users/remove', 'GroupController.users_remove').as('group/users/remove')
+  Route.post('/users/add', 'GroupController.users_add').as('group/users/add')
 }).prefix('/group')

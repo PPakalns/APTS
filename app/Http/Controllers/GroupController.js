@@ -1,6 +1,7 @@
 'use strict'
 
 const Group = use('App/Model/Group')
+const User = use('App/Model/User')
 const Validator = use('Validator')
 
 class GroupController {
@@ -59,6 +60,43 @@ class GroupController {
     yield res.sendView('group/users', {group: group.toJSON()})
   }
 
+  * users_add(req, res){
+    const formData = req.all()
+    const group = yield Group.findOrFail(formData.group_id)
+    var user = yield User.query().where('email', formData.email).limit(1)
+
+    if (user.length == 0 )
+    {
+      yield req
+        .withAll()
+        .andWith({"errors": [{message:"Lietotājs "+formData.email+" neeksistē. Lūdzu pārbaudiet pareizrakstību."}]})
+        .flash()
+    }
+    else if (user.length == 1 )
+    {
+      user = user[ 0 ]
+      const isowned = yield group.users().where("users.id", user.id).fetch()
+      console.log(isowned)
+
+      if ( isowned.size() == 0 )
+      {
+        yield req
+          .with({"successes": [{message:"Lietotājs "+formData.email+" veiksmīgi pievienots grupai."}]})
+          .flash()
+        yield group.users().attach([user.id])
+      }
+      else
+      {
+        yield req
+          .withAll()
+          .andWith({"errors": [{message:"Lietotājs "+formData.email+" jau ir pievienots grupai!"}]})
+          .flash()
+      }
+    }
+
+    res.route('group/users', {id: formData.group_id})
+  }
+
   * users_remove(req, res){
 
     const formData = req.all()
@@ -91,7 +129,7 @@ class GroupController {
     else
     {
       yield req
-        .with({"successes": [{message: "Veiksmīgi noņemti " + remove_users.length + " dalībniekus no grupas!"}]})
+        .with({"successes": [{message: "Veiksmīgi noņemti " + remove_users.length + " dalībniek"+(remove_users.length==1?"s":"i")+" no grupas!"}]})
         .flash()
     }
 
