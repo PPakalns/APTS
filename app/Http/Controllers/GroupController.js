@@ -76,7 +76,6 @@ class GroupController {
     {
       user = user[ 0 ]
       const isowned = yield group.users().where("users.id", user.id).fetch()
-      console.log(isowned)
 
       if ( isowned.size() == 0 )
       {

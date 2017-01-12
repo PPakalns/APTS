@@ -6,7 +6,7 @@ class Group extends Lucid {
 
   static get rules () {
     return {
-      name: 'required'
+      name: 'required|max:524'
     }
   }
 

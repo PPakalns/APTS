@@ -57,3 +57,7 @@ table tr {
   margin-left: 10px;
   display: inline-block;
 }
+
+pre code.hljs{
+  margin: -9.5px;
+}

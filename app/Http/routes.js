@@ -47,3 +47,7 @@ Route.group('group', function(){
   Route.post('/users/remove', 'GroupController.users_remove').as('group/users/remove')
   Route.post('/users/add', 'GroupController.users_add').as('group/users/add')
 }).prefix('/group')
+
+Route.group('problem', function(){
+  Route.get('', 'ProblemController.index').as('problem/list')
+}).prefix('/problem')
