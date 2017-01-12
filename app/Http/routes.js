@@ -52,4 +52,6 @@ Route.group('group', function(){
 
 Route.group('problem', function(){
   Route.get('', 'ProblemController.index').as('problem/list')
+  Route.get('/create', 'ProblemController.create').as('problem/create')
+  Route.post('/create', 'ProblemController.create_save').as('problem/create_save')
 }).prefix('/problem')

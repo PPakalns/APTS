@@ -1,0 +1,30 @@
+{% extends 'master' %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+  <div class="panel panel-default">
+    <div class="panel-heading">{{ form_heading or "Uzdevuma rediģēšana" }}</div>
+    <div class="panel-body">
+        {{ form.open({route: 'problem/create_save', class:"form-horizontal", files: true}) }}
+
+        {{ csrfField }}
+
+        <div class="form-group">
+          <div class='col-md-12'>
+            {{ form.label('test_file', 'Testu faili zip arhīvā (līdz 200mb)', {class: 'control-label'}) }}
+            {{ form.file('test_file', "",{class: 'form-control', rows: '20'}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-4 col-md-offset-8 text-right">
+            <button type="button" class="btn btn-info" id="preview">Priekšstatīt</button>
+            {{ form.button('Saglabāt', 'Saglabāt', {class: "btn btn-primary"}) }}
+          </div>
+        </div>
+      {{ form.close() }}
+    </div>
+  </div>
+
+{% endblock %}

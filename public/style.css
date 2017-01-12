@@ -10,12 +10,7 @@ html, body {
 }
 
 body {
-  font-family: 'Source Sans Pro', sans-serif;
-  -webkit-font-feature-settings: "kern", "liga", "pnum";
-  -moz-font-feature-settings: "kern", "liga", "pnum";
-  -ms-font-feature-settings: "kern", "liga", "pnum";
-  font-feature-settings: "kern", "liga", "pnum";
-  -webkit-font-smoothing: antialiased;
+  font-family: 'Open Sans', sans-serif;
   background: #ffffff;
 }
 
@@ -47,7 +42,7 @@ table {
   border-collapse: collapse;
 }
 table td,
-table tr {
+table tr, table th {
   padding-left: 5px;
   padding-right: 5px;
   border: 1px solid #ddd;
@@ -59,7 +54,6 @@ table tr {
 }
 
 .content{
-  font-size: 1.1em;
 
 }
 

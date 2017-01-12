@@ -7,6 +7,11 @@
 
 {% block content %}
 
+  <p class="text-right editmenu">
+    <a href="{{ 'problem/create' | route({}) }}">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Izveidot uzdevumu
+    </a>
+  </p>
   {% if problems.length == 0 %}
     <p class="bg-info">
       Diemžēl nav pievienots neviens uzdevums.
