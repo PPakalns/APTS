@@ -4,12 +4,17 @@
 
 {% block content %}
   <div class="panel panel-default">
-    <div class="panel-heading">Grupas rediģēšana</div>
+    <div class="panel-heading">{{ form_heading or "Grupas rediģēšana" }}</div>
     <div class="panel-body">
-      {{ form.open({route: 'group/edit_save', params: {id: group.id}, class:"form-horizontal"}) }}
+
+      {% if create %}
+        {{ form.open({route: 'group/create_save', class:"form-horizontal"}) }}
+      {% else %}
+        {{ form.open({route: 'group/edit_save', params: {id: group.id}, class:"form-horizontal"}) }}
+        {{ form.hidden('id', old('id') or group.id ) }}
+      {% endif %}
 
         {{ csrfField }}
-        {{ form.hidden('id', old('id') or group.id ) }}
 
         <div class="form-group">
           {{ form.label('name', 'Grupas nosaukums', {class: 'col-md-4 control-label'}) }}

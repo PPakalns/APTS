@@ -42,6 +42,8 @@ Route.group('group', function(){
   Route.get('/show/:id', 'GroupController.show').as('group/show')
   Route.get('/edit/:id', 'GroupController.edit').as('group/edit')
   Route.post('/edit/:id', 'GroupController.edit_save').as('group/edit_save')
+  Route.get('/create/', 'GroupController.create').as('group/create')
+  Route.post('/create/', 'GroupController.create_save').as('group/create_save')
 
   Route.get('/users/:id', 'GroupController.users').as('group/users')
   Route.post('/users/remove', 'GroupController.users_remove').as('group/users/remove')

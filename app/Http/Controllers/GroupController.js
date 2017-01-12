@@ -52,6 +52,36 @@ class GroupController {
     res.route('group/show', {id: groupData.id})
   }
 
+  * create(req, res) {
+    yield res.sendView('group/edit', {form_heading: "Izveidot grupu", create: true})
+  }
+
+  * create_save(req, res) {
+    const groupData = req.only('name', 'description')
+
+    const validation = yield Validator.validate(groupData, Group.rules)
+    if (validation.fails())
+    {
+      yield req
+        .withAll()
+        .andWith({"errors": [{message:"Lūdzu norādiet grupas nosaukumu."}]})
+        .flash()
+      res.route('group/create')
+      return
+    }
+
+    const group = new Group()
+    group.name = groupData.name;
+    group.description = groupData.description;
+    yield group.save()
+
+    yield req
+        .withAll()
+        .andWith({"successes": [{message:"Grupa veiksmīgi izveidota!"}]})
+        .flash()
+    res.route('group/show', {id: group.id})
+  }
+
   * users(req, res){
     const id = req.param('id')
     const group = yield Group.findOrFail(id)

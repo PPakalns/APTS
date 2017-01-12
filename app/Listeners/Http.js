@@ -57,6 +57,8 @@ Http.onStart = function () {
   });
 
   View.filter('markdown', function (str) {
+    if (str===undefined)
+      return "";
     return marked(str)
   })
 }

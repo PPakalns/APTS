@@ -58,6 +58,11 @@ table tr {
   display: inline-block;
 }
 
+.content{
+  font-size: 1.1em;
+
+}
+
 pre code.hljs{
   margin: -9.5px;
 }
