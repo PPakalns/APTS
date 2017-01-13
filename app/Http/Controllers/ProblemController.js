@@ -41,6 +41,7 @@ class ProblemController {
     problem.name = problemData.name;
     problem.description = problemData.description;
 
+    // TODO: Remove after middleware permission check creation
     const user = yield req.auth.getUser()
     if (user)
     {

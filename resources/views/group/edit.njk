@@ -40,6 +40,19 @@
     </div>
   </div>
 
+  <div class="panel panel-default">
+    <div class="panel-heading">Grupas paraugs</div>
+    <div class="panel-body">
+      <h3 id="name_preview"> {{ old('name') or group.name }} </h3>
+      <hr>
+      <div id="description_preview" class="tex2jax_process">
+        {{ ( old('description') or group.description ) | markdown | safe }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block customscript %}
   <script>
     var form = document.getElementById("preview")
     form.addEventListener("click", function(){
@@ -55,15 +68,4 @@
       hljs.initHighlighting();
     })
   </script>
-
-  <div class="panel panel-default">
-    <div class="panel-heading">Grupas paraugs</div>
-    <div class="panel-body">
-      <h3 id="name_preview"> {{ old('name') or group.name }} </h3>
-      <hr>
-      <div id="description_preview" class="tex2jax_process">
-        {{ ( old('description') or group.description ) | markdown | safe }}
-      </div>
-    </div>
-  </div>
 {% endblock %}
