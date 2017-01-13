@@ -1,5 +1,6 @@
 node_modules
 storage
+database/development.sqlite
 !.gitkeep
 .env
 npm-debug.log

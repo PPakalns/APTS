@@ -33,8 +33,7 @@
               {{ i }}
             </td>
             <td>
-              {{ problem.name }}
-              {# {{ linkTo('group/show', group.name, {id: group.id}) }} #}
+              {{ linkTo('problem/show', problem.name, {id: problem.id}) }}
             </td>
           </tr>
         {% endfor %}

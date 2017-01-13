@@ -4,16 +4,29 @@
 
 {% block content %}
   <div class="panel panel-default">
-    <div class="panel-heading">{{ form_heading or "Uzdevuma rediģēšana" }}</div>
+    <div class="panel-heading">{{ form_heading or "Problēmas rediģēšana" }}</div>
     <div class="panel-body">
-        {{ form.open({route: 'problem/create_save', class:"form-horizontal", files: true}) }}
+
+      {% if create %}
+        {{ form.open({route: 'problem/create_save', class:"form-horizontal"}) }}
+      {% else %}
+        {{ form.open({route: 'problem/edit_save', params: {id: problem.id}, class:"form-horizontal"}) }}
+        {{ form.hidden('id', old('id') or problem.id ) }}
+      {% endif %}
 
         {{ csrfField }}
 
         <div class="form-group">
+          {{ form.label('name', 'Uzdevuma nosaukums', {class: 'col-md-4 control-label'}) }}
+          <div class="col-md-6">
+            {{ form.text('name', old('name') or problem.name, {class: 'form-control'}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
           <div class='col-md-12'>
-            {{ form.label('test_file', 'Testu faili zip arhīvā (līdz 200mb)', {class: 'control-label'}) }}
-            {{ form.file('test_file', "",{class: 'form-control', rows: '20'}) }}
+            {{ form.label('description', 'Uzdevuma apraksts', {class: 'control-label'}) }}
+            {{ form.textarea('description', old('description') or problem.description, {class: 'form-control', rows: '20'}) }}
           </div>
         </div>
 
@@ -27,4 +40,30 @@
     </div>
   </div>
 
+  <script>
+    var form = document.getElementById("preview")
+    form.addEventListener("click", function(){
+      var data_name = $("#name").val()
+      var data_description = $("#description").val() + ''
+
+      $("#name_preview").text(data_name)
+      data_description = $("#description_preview").text(data_description).text()
+      $("#description_preview").html(marked(data_description))
+      MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
+      hljs.initHighlighting.called = false;
+      hljs.initHighlighting();
+    })
+  </script>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Uzdevuma paraugs</div>
+    <div class="panel-body">
+      <h3 id="name_preview"> {{ old('name') or problem.name }} </h3>
+      <hr>
+      <div id="description_preview" class="tex2jax_process">
+        {{ ( old('description') or problem.description ) | markdown | safe }}
+      </div>
+    </div>
+  </div>
 {% endblock %}

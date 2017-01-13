@@ -2,6 +2,7 @@
 
 const Problem = use('App/Model/Problem')
 const Helpers = use('Helpers')
+const Validator = use('Validator')
 var uuid = require('node-uuid')
 
 class ProblemController {
@@ -11,13 +12,44 @@ class ProblemController {
     yield res.sendView('problem/list', {problems: problems.toJSON()});
   }
 
+  * show (req, res) {
+    const id = req.param('id')
+    const problem = yield Problem.findOrFail(id)
+
+    yield res.sendView('problem/show', {problem: problem.toJSON()})
+  }
+
   * create(req, res) {
-    yield res.sendView('problem/edit', {form_heading: "Izveidot uzdevumu", create: true})
+    yield res.sendView('problem/edit', {form_heading: "Izveidot grupu", create: true})
   }
 
   * create_save(req, res) {
+    const problemData = req.only('name', 'description')
 
+    const validation = yield Validator.validate(problemData, Problem.rules)
+    if (validation.fails())
+    {
+      yield req
+        .withAll()
+        .andWith({"errors": [{message:"Lūdzu norādiet uzdevuma nosaukumu."}]})
+        .flash()
+      res.route('problem/create')
+      return
+    }
 
+    const problem = new Problem()
+    problem.name = problemData.name;
+    problem.description = problemData.description;
+    yield problem.save()
+
+    yield req
+        .withAll()
+        .andWith({"successes": [{message:"Uzdevums veiksmīgi izveidots!"}]})
+        .flash()
+    res.route('problem/show', {id: problem.id})
+  }
+
+  * upload_tests(req, res) {
     // getting file instance
     const test_file = req.file('test_file', {
         maxSize: '100mb',
@@ -48,22 +80,6 @@ class ProblemController {
       res.route('problem/create')
       return
     }
-
-    const problem = new Problem()
-    problem.name = "example"
-    problem.description = "example"
-    problem.test_filename = test_file.clientName()
-    problem.test_size = test_file.clientSize()
-    problem.test_filepath = new_test_filename;
-
-    const user = yield req.auth.getUser()
-    console.log(user)
-    problem.author = user.id;
-    console.log(problem)
-
-    yield problem.save()
-
-    res.route('problem/list')
   }
 }
 
