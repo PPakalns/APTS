@@ -40,6 +40,12 @@ class ProblemController {
     const problem = new Problem()
     problem.name = problemData.name;
     problem.description = problemData.description;
+
+    const user = yield req.auth.getUser()
+    if (user)
+    {
+      problem.author = user.id;
+    }
     yield problem.save()
 
     yield req
