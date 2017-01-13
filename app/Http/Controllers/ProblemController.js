@@ -49,6 +49,40 @@ class ProblemController {
     res.route('problem/show', {id: problem.id})
   }
 
+  * edit(req, res) {
+    const id = req.param('id')
+    const problem = yield Problem.findOrFail(id)
+
+    yield res.sendView('problem/edit', {problem: problem.toJSON()})
+  }
+
+  * edit_save(req, res) {
+    const problemData = req.only('id', 'name', 'description')
+
+    const validation = yield Validator.validate(problemData, Problem.rules)
+    if (validation.fails())
+    {
+      yield req
+        .withAll()
+        .andWith({"errors": [{message:"Lūdzu norādiet uzdevuma nosaukumu."}]})
+        .flash()
+      res.route('problem/edit',{id: id})
+      return
+    }
+
+    const problem = yield Problem.findOrFail(problemData.id)
+    problem.name = problemData.name;
+    problem.description = problemData.description;
+    yield problem.save()
+
+    yield req
+        .withAll()
+        .andWith({"successes": [{message:"Uzdevums veiksmīgi rediģēta"}]})
+        .flash()
+    res.route('problem/show', {id: problemData.id})
+  }
+
+
   * upload_tests(req, res) {
     // getting file instance
     const test_file = req.file('test_file', {
