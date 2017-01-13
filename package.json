@@ -25,6 +25,7 @@
     "node-uuid": "^1.4.7",
     "sqlite3": "^3.1.8",
     "standard": "^8.6.0",
+    "yauzl": "^2.7.0",
     "youch": "^1.0.1"
   },
   "standard": {
