@@ -18,6 +18,10 @@ class Problem extends Lucid {
     return this.hasMany('App/Model/Test', 'id', 'problem_id')
   }
 
+  assignments() {
+    return this.hasMany('App/Model/Assignment', 'id', 'problem_id')
+  }
+
 }
 
 module.exports = Problem

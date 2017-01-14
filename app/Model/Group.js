@@ -14,6 +14,9 @@ class Group extends Lucid {
     return this.belongsToMany('App/Model/User', 'user_group')
   }
 
+  assignments() {
+    return this.hasMany('App/Model/Assignment', 'id', 'group_id')
+  }
 }
 
 module.exports = Group
