@@ -1,6 +1,13 @@
 {% extends 'master' %}
 
-{% block header %}{% endblock %}
+{% block header %}
+  {% if group %}
+    <h2>Grupas rediģēšana</h2>
+    <p class="lead">{{group.name}}</p>
+  {% else %}
+    <h2>Grupas izveidošana</h2>
+  {% endif %}
+{% endblock %}
 
 {% block content %}
   <div class="panel panel-default">

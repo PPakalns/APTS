@@ -84,3 +84,8 @@ table.no-border td, table.no-border th{
 .breadcrumb>li+li:before {color: rgba(92, 92, 125, 1); content: "\276D\00a0";}
 
 /* Breadcrumbs end */
+
+.tex2jax_process{
+  line-height: 170%;
+  font-size: 1.1em;
+}

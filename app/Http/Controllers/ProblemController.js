@@ -37,7 +37,7 @@ class ProblemController {
   }
 
   * create(req, res) {
-    yield res.sendView('problem/edit', {form_heading: "Izveidot grupu", create: true})
+    yield res.sendView('problem/edit', {form_heading: "Izveidot uzdevumu", create: true})
   }
 
   * create_save(req, res) {
@@ -59,7 +59,7 @@ class ProblemController {
         .withAll()
         .andWith({"errors": errors})
         .flash()
-      res.route('problem/edit',{id: problemData.id})
+      res.route('problem/create')
       return
     }
 
