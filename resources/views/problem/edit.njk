@@ -19,21 +19,21 @@
         <div class="form-group">
           {{ form.label('name', 'Uzdevuma nosaukums', {class: 'col-md-4 control-label'}) }}
           <div class="col-md-6">
-            {{ form.text('name', old('name') or problem.name, {class: 'form-control'}) }}
+            {{ form.text('name', old('name') or problem.name, {class: 'form-control', required: true}) }}
           </div>
         </div>
 
         <div class="form-group">
           {{ form.label('memory', 'Atmiņas limits (Mb)', {class: 'col-md-4 control-label'}) }}
           <div class="col-md-2">
-            {{ form.text('memory', old('memory') or problem.memory, {class: 'form-control', placeholder:"512"}) }}
+            {{ form.text('memory', old('memory') or problem.memory, {class: 'form-control', placeholder:"512", required: true}) }}
           </div>
         </div>
 
         <div class="form-group">
           {{ form.label('timelimit', 'Laika limits (s)', {class: 'col-md-4 control-label'}) }}
           <div class="col-md-2">
-            {{ form.text('timelimit', old('timelimit') or problem.timelimit, {class: 'form-control', placeholder:"0.5"}) }}
+            {{ form.text('timelimit', old('timelimit') or problem.timelimit, {class: 'form-control', placeholder:"0.5", required: true}) }}
           </div>
         </div>
 
