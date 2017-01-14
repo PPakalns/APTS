@@ -22,3 +22,32 @@
     {{ group.description | markdown | safe }}
   </div>
 {% endblock %}
+
+{% block sidebar %}
+  {% set Assignment = use('App/Model/Assignment') %}
+  {% yield assignments = Assignment.query().with('problem').where('group_id', group.id) %}
+
+  <table class="table">
+    <tr>
+      <th>
+        Grupas uzdevumi
+      </th>
+    </tr>
+    {% if assignments.length == 0 %}
+      <tr>
+        <td class="nocontent">
+          Grupai nav pievienots neviens uzdevums
+        </td>
+      </tr>
+    {% else %}
+      {% for assignment in assignments %}
+        <tr>
+          <td>
+            {{ assignment.problem.name }}
+          </td>
+        </tr>
+      {% endfor %}
+    {% endif %}
+  </table>
+
+{% endblock %}

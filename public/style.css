@@ -60,3 +60,8 @@ table tr, table th {
 pre code.hljs{
   margin: -9.5px;
 }
+
+td.nocontent{
+  color: darkred;
+  font-style: italic;
+}
