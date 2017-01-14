@@ -65,6 +65,7 @@ Route.group('problem', function(){
   Route.get('/test/list/:id', 'ProblemController.test_list').as('problem/test/list')
   Route.get('/test/edit/:id', 'ProblemController.test_edit').as('problem/test/edit')
   Route.post('/test/edit/:id', 'ProblemController.test_edit_save').as('problem/test/edit_save')
+  Route.get('/test/download/:id', 'ProblemController.testfile_download').as('problem/test/download')
 
   Route.get('/api/short', 'ProblemController.shortlist').as('problem/shortlist')
 }).prefix('/problem')

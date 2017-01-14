@@ -12,6 +12,11 @@
       Diemžēl nav pievienots neviens tests.
     </p>
   {% else %}
+  <p class="text-right editmenu">
+    <a href="{{ 'problem/test/download' | route({id: problem.id}) }}">
+      <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Lejupielādēt testu zip failu
+    </a>
+  </p>
     <table class="table table-condensed">
       <thead>
         <tr>

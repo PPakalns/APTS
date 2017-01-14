@@ -115,6 +115,24 @@ class ProblemController {
     yield res.sendView('problem/test/list', {tests: tests.toJSON(), problem: problem.toJSON()})
   }
 
+  * testfile_download(req, res) {
+    const id =req.param('id')
+    const problem = yield Problem.findOrFail(id)
+
+    if (!problem.test_filename)
+    {
+      yield req
+        .with({"errors": [{message:"Uzdevumam nav pievienots testu arhīvs"}]})
+        .flash()
+      res.route('problem/test/list', {id: problem.id})
+      return
+    }
+
+    res.header('Content-type', problem.test_filemime)
+    res.header('content-disposition', "attachment; filename=\""+problem.test_filename+"\"")
+    res.download(Helpers.storagePath(problem.test_filepath))
+  }
+
   * test_edit(req, res) {
     const id = req.param('id')
     const problem = yield Problem.findOrFail(id)
