@@ -14,6 +14,10 @@ class Problem extends Lucid {
     return this.belongsTo('App/Model/User', 'id', 'author')
   }
 
+  tests() {
+    return this.hasMany('App/Model/Test')
+  }
+
 }
 
 module.exports = Problem
