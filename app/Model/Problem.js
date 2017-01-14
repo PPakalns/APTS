@@ -15,7 +15,7 @@ class Problem extends Lucid {
   }
 
   tests() {
-    return this.hasMany('App/Model/Test')
+    return this.hasMany('App/Model/Test', 'id', 'problem_id')
   }
 
 }

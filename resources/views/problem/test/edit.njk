@@ -4,11 +4,13 @@
 
 {% block content %}
   <div class="panel panel-default">
-    <div class="panel-heading">{{ form_heading or "Problēmas testi" }}</div>
+    <div class="panel-heading">Problēmas testu arhīva augšupielāde</div>
     <div class="panel-body">
+      <h2>Problēma: {{ problem.name }}</h2>
+      <hr>
 
       {{ form.open({route: 'problem/test/edit_save', params: {id: problem.id}, class:"form-horizontal", files: true}) }}
-      {{ form.hidden('id', old('id') or problem.id ) }}
+      {{ form.hidden('id', problem.id ) }}
 
       {{ csrfField }}
 

@@ -14,6 +14,7 @@ class ProblemsTableSchema extends Schema {
 
       table.string('test_filename', 525)
       table.string('test_filepath', 525)
+      table.string('test_filemime', 525)
       table.integer('test_filesize')
     })
   }

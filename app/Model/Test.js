@@ -5,7 +5,7 @@ const Lucid = use('Lucid')
 class Test extends Lucid {
 
   problem () {
-    return this.belongsTo('App/Model/Problem')
+    return this.belongsTo('App/Model/Problem', 'id', 'problem_id')
   }
 
 }

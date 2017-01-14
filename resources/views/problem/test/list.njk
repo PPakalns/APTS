@@ -1,0 +1,51 @@
+{% extends 'master' %}
+
+{% block header %}
+  <h1>Programmēšanas uzdevumi</h1>
+  <pre><code class="python">if not Happy(): beHappy()</code></pre>
+{% endblock %}
+
+{% block content %}
+
+  {% if tests.length == 0 %}
+    <p class="bg-info">
+      Diemžēl nav pievienots neviens tests.
+    </p>
+  {% else %}
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>#</td>
+          <th>Ievadfails</td>
+          <th>Izvadfails</td>
+          <th>Numurs</td>
+          <th>Numurs grupā</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% set i=0 %}
+        {% for test in tests %}
+          <tr>
+            <td>
+              {% set i=i+1 %}
+              {{ i }}
+            </td>
+            <td>
+              {{ test.input_filename }}
+            </td>
+            <td>
+              {{ test.output_filename }}
+            </td>
+            <td>
+              {{ test.number }}
+            </td>
+            <td>
+              {{ test.gid }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+{% endblock %}

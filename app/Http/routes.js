@@ -58,6 +58,7 @@ Route.group('problem', function(){
   Route.get('/edit/:id', 'ProblemController.edit').as('problem/edit')
   Route.post('/edit/:id', 'ProblemController.edit_save').as('problem/edit_save')
 
+  Route.get('/test/list/:id', 'ProblemController.test_list').as('problem/test/list')
   Route.get('/test/edit/:id', 'ProblemController.test_edit').as('problem/test/edit')
   Route.post('/test/edit/:id', 'ProblemController.test_edit_save').as('problem/test/edit_save')
 }).prefix('/problem')

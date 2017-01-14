@@ -1,8 +1,10 @@
 'use strict'
 
+const Test = use('App/Model/Test')
 const Problem = use('App/Model/Problem')
 const Helpers = use('Helpers')
 const Validator = use('Validator')
+
 var uuid = require('node-uuid')
 var yauzl = require("yauzl");
 
@@ -90,6 +92,15 @@ class ProblemController {
     res.route('problem/show', {id: problemData.id})
   }
 
+  * test_list(req, res) {
+    const id = req.param('id')
+    const problem = yield Problem.findOrFail(id)
+
+    const tests = yield problem.tests().orderBy('number', 'asc').orderBy('gid', 'asc').fetch()
+
+    yield res.sendView('problem/test/list', {tests: tests.toJSON(), problem: problem.toJSON()})
+  }
+
   * test_edit(req, res) {
     const id = req.param('id')
     const problem = yield Problem.findOrFail(id)
@@ -98,6 +109,7 @@ class ProblemController {
 
   * test_edit_save(req, res) {
     const data = req.only("id")
+    const problem = yield Problem.findOrFail(data.id)
 
     // getting file instance
     const test_file = req.file('test_file', {
@@ -106,7 +118,7 @@ class ProblemController {
     })
 
     if (!test_file){
-      // Nav norādīts testa fails
+      // User did not choose test file
       yield req
         .withAll()
         .andWith({'errors': [{message:"Norādiet pareizu testu failu."}]})
@@ -116,25 +128,21 @@ class ProblemController {
     }
 
     const storagePath = Helpers.storagePath()
-    const new_test_filename = uuid.v4();
+    const newTestFileName = uuid.v4();
 
-    yield test_file.move(storagePath, new_test_filename)
+    yield test_file.move(storagePath, newTestFileName)
 
     if (!test_file.moved()) {
-      // Testa faila augšupielādes problēmas
+      // Could not upload test file
       yield req
         .withAll()
         .andWith({'errors': [{message:"Testu fails neatbilst ierobežojumiem. (Ierobežojumi: Līdz 100mb liels zip arhīvs)"}]})
         .flash()
-      console.log(test_file.errors())
       res.route('problem/test/edit', {id: data.id})
       return
     }
-    yield req
-      .withAll()
-      .andWith({'successes': [{message:"Augšupielāde izdevās"}]})
-      .flash()
 
+    // Zip file helper functions to parse zip filenames
     var getZipFile = function (path_to_zip) {
       return new Promise(function(resolve, reject){
         yauzl.open(path_to_zip, {lazyEntries: true}, function(err, zipfile) {
@@ -174,16 +182,54 @@ class ProblemController {
       })
     }
 
-    var zipfile = yield getZipFile(test_file.uploadPath())
-    console.log(zipfile)
+    // Parse zip file content
+    var zipFile = yield getZipFile(test_file.uploadPath())
+    var completedTests = []
+    var completedTestsNumeric = []
 
     while ( true )
     {
-      var filename = yield getZipFileNamePromise(zipfile);
-      if (!filename)
+      var testFile = yield getZipFileNamePromise(zipFile);
+      if (!testFile)
         break;
-      console.log(filename.fileName)
+      var testFileName = testFile.fileName;
+      var isInput = testFileName.match(/^(.+)\.(i|o)([\d]+)([A-Za-z]*)$/);
+      if (isInput){
+        var testId = isInput[ 1 ] + "." + isInput[ 3 ] + isInput[ 4 ];
+        if (completedTests.hasOwnProperty(testId) == false)
+        {
+          completedTests[testId] = {}
+          completedTestsNumeric.push(completedTests[testId])
+
+          completedTests[testId].number = isInput[ 3 ]
+          completedTests[testId].gid = isInput[ 4 ]
+        }
+
+        if (isInput[ 2 ] == "i")
+        {
+          completedTests[testId].input_filename = isInput[ 0 ]
+        }
+        else if (isInput[ 2 ] == "o")
+        {
+          completedTests[testId].output_filename = isInput[ 0 ]
+        }
+      }
     }
+
+    // Save tests to database
+    yield problem.tests().delete()
+    problem.test_filename = test_file.clientName()
+    problem.test_filesize = test_file.clientSize()
+    problem.test_filemime = test_file.mimeType()
+    problem.test_filepath = newTestFileName;
+    yield problem.save()
+
+    yield problem.tests().createMany(completedTestsNumeric)
+
+    yield req
+      .withAll()
+      .andWith({'successes': [{message:"Augšupielāde izdevās"}]})
+      .flash()
 
     res.route('problem/test/edit', {id: data.id})
     return
