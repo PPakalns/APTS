@@ -51,6 +51,7 @@ Route.group('group', function(){
 
   Route.get('/assignments/:group_id', 'AssignmentController.group_management').as('group/assignment')
   Route.post('/assignments/create', 'AssignmentController.create').as('assignment/create')
+  Route.post('/assignments/options/update', 'AssignmentController.options_update').as('assignment/options/update')
 }).prefix('/group')
 
 Route.group('problem', function(){

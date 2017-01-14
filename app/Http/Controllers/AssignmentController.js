@@ -3,6 +3,7 @@
 const Group = use('App/Model/Group')
 const Problem = use('App/Model/Problem')
 const Assignment = use('App/Model/Assignment')
+const Database = use('Database')
 
 class AssignmentController {
 
@@ -16,9 +17,9 @@ class AssignmentController {
   }
 
   * create(req, res){
-    const formdata = req.only('group_id', 'problem_id')
-    const group = yield Group.findOrFail(formdata.group_id)
-    const problem = yield Problem.findOrFail(formdata.problem_id)
+    const formData = req.only('group_id', 'problem_id')
+    const group = yield Group.findOrFail(formData.group_id)
+    const problem = yield Problem.findOrFail(formData.problem_id)
 
     const alreadyOwn = yield group.assignments().where('problem_id', problem.id).fetch()
 
@@ -40,9 +41,52 @@ class AssignmentController {
     res.route('group/assignment', {group_id: group.id})
   }
 
-  * update_options(req, res){
+  * options_update(req, res){
     // When visibility or other assignment options are updated
 
+    const formData = req.all();
+    const group = yield Group.findOrFail(formData.group_id)
+
+    let visible_tasks = []
+    let visibility_regex = /^vis_(\d+)$/
+
+    for (let property in formData) {
+      if (formData.hasOwnProperty(property))
+      {
+        let key = property+''
+        let match = key.match(visibility_regex)
+        if (match)
+        {
+          visible_tasks.push(parseInt(match[1]));
+        }
+      }
+    }
+
+    const notVisibleAssignmentCount = yield Database
+      .table('assignments')
+      .update('visible', false)
+      .where('group_id', group.id)
+      .whereNotIn('id', visible_tasks)
+
+    const visibleAssignmentCount = yield Database
+      .table('assignments')
+      .update('visible', true)
+      .where('group_id', group.id)
+      .whereIn('id', visible_tasks)
+
+    console.log(visible_tasks)
+
+    yield req
+      .with({successes:
+        [
+          {message: "Dati atjaunoti veiksmīgi!"},
+          {message: "Grupas dalībniekiem redzami "+visibleAssignmentCount+" uzdevumi!"},
+          {message: "Grupas dalībniekiem paslēpti "+notVisibleAssignmentCount+" uzdevumi!"},
+        ]
+      })
+      .flash()
+
+    res.route('group/assignment', {group_id: group.id})
   }
 }
 

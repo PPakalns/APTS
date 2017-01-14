@@ -38,7 +38,7 @@
           Grupai nav neviena uzdevuma
         </p>
       {% else %}
-        {{ form.open({route: 'group/users/remove', class:"form-horizontal"}) }}
+        {{ form.open({route: 'assignment/options/update', class:"form-horizontal"}) }}
         {{ form.hidden('group_id', group.id ) }}
 
         {{ csrfField }}
@@ -75,7 +75,7 @@
                 </td>
                 <td>
                   <span class="glyphicon glyphicon-eye-open" aria-hidden="true" style="color:lightgray;"></span>
-                  {{ form.checkbox("assignment_"+assignment.id, 'agree', assignment.visible) }}
+                  {{ form.checkbox("vis_"+assignment.id, 'agree', assignment.visible) }}
                 </td>
               </tr>
             {% endfor %}
