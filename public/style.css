@@ -17,11 +17,14 @@ body {
 .footer {
   text-align: center;
   margin: auto;
-  margin-bottom: 0px;
   background-color: rgb(248,248,248);
   border-top: 2px solid rgb(231,231,231);
   box-sizing: border-box;
   height: 34px;
+}
+
+.footer .row{
+  background-color: rgb(248,248,248);
 }
 
 .footer div p {
@@ -71,3 +74,13 @@ table.no-border td, table.no-border th{
   border-right: 0px;
 }
 
+/* Breadcrumbs */
+
+.breadcrumb {background: rgba(255, 255, 255, 1); border: 0px solid rgba(255, 255, 255, 1); border-radius: 4px; display: block;}
+.breadcrumb li {font-size: 15px;}
+.breadcrumb a {color: rgba(0, 98, 184, 1);}
+.breadcrumb a:hover {color: rgba(7, 95, 173, 1);}
+.breadcrumb>.active {color: rgba(92, 92, 92, 1);}
+.breadcrumb>li+li:before {color: rgba(92, 92, 125, 1); content: "\276D\00a0";}
+
+/* Breadcrumbs end */

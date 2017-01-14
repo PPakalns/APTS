@@ -47,14 +47,20 @@
       </nav>
 
       <div class="container">
+        {% block path %}
+        {% endblock path %}
 
         <div class="header">
           {% block header %}{% endblock %}
         </div>
 
         <div class="row">
+          <div class="col-sm-3 col-sm-push-9 sidebar">
+            {% block sidebar %}
+            {% endblock %}
+          </div> {# sidebar #}
 
-          <div class="col-sm-8 content">
+          <div class="col-sm-8 col-sm-pull-3 content">
 
             {% for error in old('errors') %}
               <p class="bg-danger">
@@ -71,10 +77,6 @@
             {% block content %}{% endblock %}
           </div>
 
-          <div class="col-sm-3 col-sm-offset-1 sidebar">
-            {% block sidebar %}
-            {% endblock %}
-          </div> {# sidebar #}
         </div> {# .row #}
       </div> {# .container #}
     </div> {# #wrapper #}

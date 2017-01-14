@@ -7,24 +7,21 @@
 
 {% block content %}
 
-  <p class="text-right editmenu">
-    <a href="{{ 'problem/create' | route({}) }}">
-      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Izveidot uzdevumu
-    </a>
-  </p>
-  {% if problems.length == 0 %}
-    <p class="bg-info">
-      Diemžēl nav pievienots neviens uzdevums.
-    </p>
-  {% else %}
-    <table class="table">
-      <thead>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</td>
+        <th>Nosaukums</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% if problems.length == 0 %}
         <tr>
-          <th>#</td>
-          <th>Nosaukums</td>
+          <td colspan=2 class="info">
+            Diemžēl nav pievienots neviens uzdevums.
+          </td>
         </tr>
-      </thead>
-      <tbody>
+      {% else %}
         {% set i=0 %}
         {% for problem in problems %}
           <tr>
@@ -37,8 +34,21 @@
             </td>
           </tr>
         {% endfor %}
-      </tbody>
-    </table>
-  {% endif %}
+      {% endif %}
+    </tbody>
+  </table>
 
+{% endblock %}
+
+{% block sidebar %}
+  <div class="list-group">
+    <a href="{{ 'problem/list' | route({}) }}" class="list-group-item  list-group-item-warning">
+      <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Uzdevumu pārvaldīšana
+    </a>
+  </div>
+  <div class="list-group">
+    <a href="{{ 'problem/create' | route({}) }}" class="list-group-item">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Izveidot uzdevumu
+    </a>
+  </div>
 {% endblock %}

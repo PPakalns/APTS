@@ -12,6 +12,10 @@ class ProblemsTableSchema extends Schema {
       table.text('description')
       table.integer('author').unsigned().references('id').inTable('users')
 
+      table.decimal('timelimit', 4, 2)
+      table.integer('memory')
+
+      table.integer('test_count')
       table.string('test_filename', 525)
       table.string('test_filepath', 525)
       table.string('test_filemime', 525)

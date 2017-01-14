@@ -7,6 +7,24 @@ const Database = use('Database')
 
 class AssignmentController {
 
+  * show(req, res){
+
+    const id = req.param('id')
+    const assignment = yield Assignment.findOrFail(id)
+    yield assignment.related('group', 'problem').load()
+
+    let jsonAssignment = assignment.toJSON()
+
+    yield res
+      .sendView('problem/show',
+        {
+          inAssignment: true,
+          assignment: jsonAssignment,
+          problem: jsonAssignment.problem
+        }
+      )
+  }
+
   * group_management(req, res){
     const groupid = req.param('group_id')
     const group = yield Group.findOrFail(groupid)
@@ -73,8 +91,6 @@ class AssignmentController {
       .update('visible', true)
       .where('group_id', group.id)
       .whereIn('id', visible_tasks)
-
-    console.log(visible_tasks)
 
     yield req
       .with({successes:

@@ -7,11 +7,6 @@
 
 {% block content %}
 
-  <p class="text-right editmenu">
-    <a href="{{ 'group/create' | route({}) }}">
-      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Izveidot grupu
-    </a>
-  </p>
   {% if groups.length == 0 %}
     <p class="bg-info">
       Diemžēl nav izveidota naviena grupa.
@@ -41,4 +36,12 @@
     </table>
   {% endif %}
 
+{% endblock %}
+
+{% block sidebar %}
+  <div class="list-group">
+    <a href="{{ 'group/create' | route({}) }}" class="list-group-item">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Izveidot grupu
+    </a>
+  </div>
 {% endblock %}

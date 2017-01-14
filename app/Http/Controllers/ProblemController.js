@@ -6,8 +6,8 @@ const Helpers = use('Helpers')
 const Validator = use('Validator')
 const Database = use('Database')
 
-var uuid = require('node-uuid')
-var yauzl = require("yauzl");
+let uuid = require('node-uuid')
+let yauzl = require("yauzl");
 
 class ProblemController {
 
@@ -41,14 +41,34 @@ class ProblemController {
   }
 
   * create_save(req, res) {
-    const problemData = req.only('name', 'description')
+    let problemData = req.only('name', 'description', 'timelimit', 'memory', 'shit')
+
+    problemData.timelimit = Validator.sanitizor.toFloat(problemData.timelimit)
+    problemData.memory = Validator.sanitizor.toInt(problemData.memory, '')
+
+    var errors = []
+    if (isNaN(problemData.timelimit))
+      errors.push({message: "Norādiet laika limitu, piemēram, 0.2"})
+
+    if (isNaN(problemData.memory))
+      errors.push({message: "Norādiet atmiņas limitu kā naturālu skaitli, piemēram, 256"})
+
+    if (errors.length>0)
+    {
+      yield req
+        .withAll()
+        .andWith({"errors": errors})
+        .flash()
+      res.route('problem/edit',{id: problemData.id})
+      return
+    }
 
     const validation = yield Validator.validate(problemData, Problem.rules)
     if (validation.fails())
     {
       yield req
         .withAll()
-        .andWith({"errors": [{message:"Lūdzu norādiet uzdevuma nosaukumu."}]})
+        .andWith({"errors": validation.messages()})
         .flash()
       res.route('problem/create')
       return
@@ -57,6 +77,8 @@ class ProblemController {
     const problem = new Problem()
     problem.name = problemData.name;
     problem.description = problemData.description;
+    problem.timelimit = problemData.timelimit;
+    problem.memory = problemData.memory;
 
     // TODO: Remove after middleware permission check creation
     const user = yield req.auth.getUser()
@@ -81,7 +103,28 @@ class ProblemController {
   }
 
   * edit_save(req, res) {
-    const problemData = req.only('id', 'name', 'description')
+    let problemData = req.only('id', 'name', 'description', 'timelimit', 'memory')
+    const problem = yield Problem.findOrFail(problemData.id)
+
+    problemData.timelimit = Validator.sanitizor.toFloat(problemData.timelimit)
+    problemData.memory = Validator.sanitizor.toInt(problemData.memory, 10)
+
+    var errors = []
+    if (isNaN(problemData.timelimit))
+      errors.push({message: "Norādiet laika limitu, piemēram, 0.2"})
+
+    if (isNaN(problemData.memory))
+      errors.push({message: "Norādiet atmiņas limitu kā naturālu skaitli, piemēram, 256"})
+
+    if (errors.length>0)
+    {
+      yield req
+        .withAll()
+        .andWith({"errors": errors})
+        .flash()
+      res.route('problem/edit',{id: problemData.id})
+      return
+    }
 
     const validation = yield Validator.validate(problemData, Problem.rules)
     if (validation.fails())
@@ -90,18 +133,19 @@ class ProblemController {
         .withAll()
         .andWith({"errors": [{message:"Lūdzu norādiet uzdevuma nosaukumu."}]})
         .flash()
-      res.route('problem/edit',{id: id})
+      res.route('problem/edit',{id: problemData.id})
       return
     }
 
-    const problem = yield Problem.findOrFail(problemData.id)
     problem.name = problemData.name;
     problem.description = problemData.description;
+    problem.timelimit = problemData.timelimit;
+    problem.memory = problemData.memory;
     yield problem.save()
 
     yield req
         .withAll()
-        .andWith({"successes": [{message:"Uzdevums veiksmīgi rediģēta"}]})
+        .andWith({"successes": [{message:"Uzdevums veiksmīgi rediģēts"}]})
         .flash()
     res.route('problem/show', {id: problemData.id})
   }
@@ -254,6 +298,7 @@ class ProblemController {
     problem.test_filesize = test_file.clientSize()
     problem.test_filemime = test_file.mimeType()
     problem.test_filepath = newTestFileName;
+    problem.test_count = completedTestsNumeric.length;
     yield problem.save()
 
     yield problem.tests().createMany(completedTestsNumeric)
