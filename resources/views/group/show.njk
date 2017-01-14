@@ -25,8 +25,14 @@
 
 {% block sidebar %}
   {% set Assignment = use('App/Model/Assignment') %}
-  {% yield assignments = Assignment.query().with('problem').where('group_id', group.id) %}
+  {% yield assignmentstmp = Assignment.query().visible().with('problem').where('group_id', group.id).fetch() %}
+  {% yield assignments = assignmentstmp.toJSON() %}
 
+  <p class="text-right editmenu">
+    <a href="{{ 'group/assignment' | route({group_id: group.id }) }}">
+      <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Pārvaldīt grupas uzdevumus
+    </a>
+  </p>
   <table class="table">
     <tr>
       <th>
@@ -48,6 +54,10 @@
         </tr>
       {% endfor %}
     {% endif %}
+    <tr>
+      <th>
+        Dalībnieki grupā: {{ participantCount }}
+      </th>
+    </tr>
   </table>
-
 {% endblock %}

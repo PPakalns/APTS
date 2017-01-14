@@ -1,0 +1,174 @@
+{% extends 'master' %}
+
+{% block header %}
+  <h1>Grupas uzdevumu pārvalde</h1>
+  <p>Pārvaldiet grupas dalībniekiem pieejamos uzdevumus</p>
+{% endblock %}
+
+{% block content %}
+  <h2>
+    Grupa: {{ group.name }}
+  </h2>
+  <hr>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">Uzdevumu pievienošana</div>
+    <div class="panel-body">
+      <form class="form-horizontal">
+        <div class="form-group">
+          {{ form.label('problem_name', 'Meklēt pēc uzdevuma:', {class: 'col-md-4 control-label'}) }}
+          <div class="col-md-6">
+            {{form.search('problem_name', null, {class: 'form-control'})}}
+          </div>
+        </div>
+      </form>
+    </div>
+    <table class="table table-condensed no-border table-hover" id="preview_table">
+    </table>
+  </div>
+  <div class="alert alert-info">
+    Grupai pievienotos uzdevumus var paslēpt, bet <b>nevar izdzēst</b>.
+  </div>
+  <hr>
+  <div class="panel panel-default">
+    <div class="panel-heading">Grupas uzdevumu saraksts</div>
+    <div class="panel-body">
+      {% if group.users.length == 0 %}
+        <p class="bg-info">
+          Grupai nav neviena uzdevuma
+        </p>
+      {% else %}
+        {{ form.open({route: 'group/users/remove', class:"form-horizontal"}) }}
+        {{ form.hidden('group_id', group.id ) }}
+
+        {{ csrfField }}
+
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-6 text-right">
+            {{ form.button("<span class='glyphicon glyphicon-wrench' aria-hidden='true'></span>Atjaunot uzdevumu uzstādījumus", 'remove', {class: "btn btn-default"}) }}
+          </div>
+        </div>
+        <table class="table table-bordered table-condensed table-striped">
+          <thead>
+            <tr>
+              <th>#</td>
+              <th>Uzdevuma ID</th>
+              <th>Uzdevums</td>
+              <th>
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> Redzams dalībniekiem
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {% set i=0 %}
+            {% for assignment in assignments %}
+              <tr>
+                <td>
+                  {% set i=i+1 %}
+                  {{ i }}
+                </td>
+                <td>
+                  {{ assignment.problem.id }}
+                </td>
+                <td>
+                  {{ assignment.problem.name }}
+                </td>
+                <td>
+                  <span class="glyphicon glyphicon-eye-open" aria-hidden="true" style="color:lightgray;"></span>
+                  {{ form.checkbox("assignment_"+assignment.id, 'agree', assignment.visible) }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-6 text-right">
+            {{ form.button("<span class='glyphicon glyphicon-wrench' aria-hidden='true'></span>Atjaunot uzdevumu uzstādījumus", 'remove', {class: "btn btn-default"}) }}
+          </div>
+        </div>
+        {{ form.close() }}
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block customscript %}
+  <script>
+    $(document).ready(function(){
+      var csrfval = "{{ csrfToken }}"
+
+      var iteration = 0;
+      var updated_iteration = 0;
+
+      var last_search = ""
+      var timer = null
+
+      var updateClear = function() {
+        timer = null
+        update()
+      }
+
+      var update = function(){
+
+        var text = $("#problem_name").val()
+
+        if (timer == null && text!=last_search)
+        {
+          last_search = text
+          timer = setTimeout(updateClear, 1000)
+
+          var now_iteration = iteration+1;
+          iteration = iteration+1;
+
+          $.get("{{ 'problem/shortlist' | route({}) }}",{search: text}, function( data ){
+            if ( now_iteration > updated_iteration )
+            {
+              updated_iteration = now_iteration
+              var length = data.length
+              var preview_table = $("#preview_table");
+              $(preview_table).empty()
+
+              var thead = document.createElement("thead")
+              var tr = document.createElement("tr")
+              var th = document.createElement("th")
+              th.setAttribute("colspan", 2)
+              $(th).text("Atrastie uzdevumi:")
+              tr.append(th)
+              thead.append(tr)
+
+              var tbody = document.createElement("tbody")
+
+              for ( var i=0; i<length; i++ )
+              {
+                var tr = document.createElement("tr")
+                var td1 = document.createElement("td")
+                $(td1).text(data[ i ].name)
+                var td2 = document.createElement("td")
+                td2.setAttribute("class", "text-right")
+
+                tr.append(td1)
+                tr.append(td2)
+
+                var form = document.createElement("form")
+                form.setAttribute("method", "post")
+                form.setAttribute("action", "{{ 'assignment/create' | route({}) }}")
+                $(form).append("<input type='hidden' name='_csrf' value='"+csrfval+"'>")
+                $(form).append("<input type='hidden' name='group_id' value='{{ group.id }}'>")
+                $(form).append("<input type='hidden' name='problem_id' value='"+data[ i ].id+"'>")
+                $(form).append("<button type='submit' name='create' class='btn btn-xs btn-default'>Pievienot grupai</button>")
+                td2.append(form)
+
+                tbody.append(tr);
+              }
+
+              preview_table.append(thead)
+              preview_table.append(tbody)
+            }
+          })
+        }
+      }
+
+      $("#problem_name").keypress(update)
+    })
+  </script>
+{% endblock %}

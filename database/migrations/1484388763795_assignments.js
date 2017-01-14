@@ -9,6 +9,7 @@ class AssignmentsTableSchema extends Schema {
       table.increments()
       table.timestamps()
 
+      table.boolean('visible')
       table.integer('problem_id').unsigned().references('id').inTable('problems')
       table.integer('group_id').unsigned().references('id').inTable('groups')
     })

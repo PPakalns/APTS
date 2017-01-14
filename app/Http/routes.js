@@ -48,6 +48,9 @@ Route.group('group', function(){
   Route.get('/users/:id', 'GroupController.users').as('group/users')
   Route.post('/users/remove', 'GroupController.users_remove').as('group/users/remove')
   Route.post('/users/add', 'GroupController.users_add').as('group/users/add')
+
+  Route.get('/assignments/:group_id', 'AssignmentController.group_management').as('group/assignment')
+  Route.post('/assignments/create', 'AssignmentController.create').as('assignment/create')
 }).prefix('/group')
 
 Route.group('problem', function(){
@@ -61,4 +64,6 @@ Route.group('problem', function(){
   Route.get('/test/list/:id', 'ProblemController.test_list').as('problem/test/list')
   Route.get('/test/edit/:id', 'ProblemController.test_edit').as('problem/test/edit')
   Route.post('/test/edit/:id', 'ProblemController.test_edit_save').as('problem/test/edit_save')
+
+  Route.get('/api/short', 'ProblemController.shortlist').as('problem/shortlist')
 }).prefix('/problem')

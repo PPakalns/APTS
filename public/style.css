@@ -65,3 +65,9 @@ td.nocontent{
   color: darkred;
   font-style: italic;
 }
+
+table.no-border td, table.no-border th{
+  border-left: 0px;
+  border-right: 0px;
+}
+

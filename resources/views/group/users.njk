@@ -35,47 +35,6 @@
     </div>
   </div>
 
-  <script>
-    $(document).ready(function(){
-      var last_update = new Date();
-      var iteration = 0;
-      var updated_iteration = 0;
-      var last_search = ""
-
-      $("#email").keypress(function(){
-
-        var now = new Date()
-        var diff = (now-last_update)
-        var text = $(this).val()
-
-        if ( diff > 2*1000 && text != last_search )
-        {
-          var now_iteration = iteration+1;
-          iteration = iteration+1;
-
-          last_update = now
-          $.get("{{ 'user/shortlist' | route({}) }}",{search: text}, function( data ){
-            if ( now_iteration > updated_iteration )
-            {
-              updated_iteration = now_iteration
-              var length = data.length
-
-              var userlist = $("#userslist")
-              $(userslist).empty()
-
-              for (var i=0; i<length; i++)
-              {
-                var option = document.createElement("option")
-                option.setAttribute("value", data[ i ].email)
-                $(userslist).append(option)
-              }
-            }
-          })
-        }
-      })
-    })
-  </script>
-
   <hr>
   <div class="panel panel-default">
     <div class="panel-heading">Dalībnieku saraksts</div>
@@ -133,4 +92,47 @@
       </div>
     </div>
   {% endif %}
+{% endblock %}
+
+{% block customscript %}
+  <script>
+    $(document).ready(function(){
+      var last_update = new Date();
+      var iteration = 0;
+      var updated_iteration = 0;
+      var last_search = ""
+
+      $("#email").keypress(function(){
+
+        var now = new Date()
+        var diff = (now-last_update)
+        var text = $(this).val()
+
+        if ( diff > 2*1000 && text != last_search )
+        {
+          var now_iteration = iteration+1;
+          iteration = iteration+1;
+
+          last_update = now
+          $.get("{{ 'user/shortlist' | route({}) }}",{search: text}, function( data ){
+            if ( now_iteration > updated_iteration )
+            {
+              updated_iteration = now_iteration
+              var length = data.length
+
+              var userlist = $("#userslist")
+              $(userslist).empty()
+
+              for (var i=0; i<length; i++)
+              {
+                var option = document.createElement("option")
+                option.setAttribute("value", data[ i ].email)
+                $(userslist).append(option)
+              }
+            }
+          })
+        }
+      })
+    })
+  </script>
 {% endblock %}

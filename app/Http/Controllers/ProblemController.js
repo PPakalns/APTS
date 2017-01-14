@@ -4,6 +4,7 @@ const Test = use('App/Model/Test')
 const Problem = use('App/Model/Problem')
 const Helpers = use('Helpers')
 const Validator = use('Validator')
+const Database = use('Database')
 
 var uuid = require('node-uuid')
 var yauzl = require("yauzl");
@@ -13,6 +14,19 @@ class ProblemController {
   * index (req, res) {
     const problems = yield Problem.query().with('creator').fetch();
     yield res.sendView('problem/list', {problems: problems.toJSON()});
+  }
+
+  // Returns list of problems which have search as substring
+  * shortlist(req, res) {
+    const search = ''+req.input('search')
+
+    const users = yield Database
+      .table('problems')
+      .select('name', 'id')
+      .whereRaw("INSTR(name,?) > 0",[search])
+      .limit(10)
+
+    res.json(users)
   }
 
   * show (req, res) {

@@ -15,8 +15,9 @@ class GroupController {
   * show(req, res) {
     const id = req.param('id')
     const group = yield Group.findOrFail(id)
+    const participantCount = (yield group.users().count())[ 0 ][ 'count(*)' ]
 
-    yield res.sendView('group/show', {group: group.toJSON()})
+    yield res.sendView('group/show', {group: group.toJSON(), participantCount: participantCount })
   }
 
   * edit(req, res) {

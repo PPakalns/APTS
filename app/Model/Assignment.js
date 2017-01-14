@@ -3,6 +3,11 @@
 const Lucid = use('Lucid')
 
 class Assignment extends Lucid {
+
+  static scopeVisible (builder) {
+    builder.where('visible', 1)
+  }
+
   problem() {
     return this.belongsTo('App/Model/Problem', 'id', 'problem_id')
   }
