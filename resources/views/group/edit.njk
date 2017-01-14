@@ -79,13 +79,8 @@
 
 
 {% block sidebar %}
-  {% if group %}
-    <div class="list-group">
-      <a href="{{ 'group/show' | route({id: group.id}) }}" class="list-group-item active">
-        <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{group.name}}
-      </a>
-    </div>
-  {% else %}
+  {% include 'group/admin_sidebar' %}
+  {% if not group %}
   <div class="list-group">
     <a href="{{ 'group/list' | route({}) }}" class="list-group-item  list-group-item-warning">
       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Grupu pārvaldīšana
