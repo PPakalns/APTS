@@ -2,9 +2,9 @@
 
 {% block content %}
   <div class="__banner">
-    <div class="banner__inner">
-      <h1>{{ error.status }}</h1>
-      <p> Something bad happened! <a href="/">Go Back</a> </p>
+    <div class="alert alert-danger">
+      <h3>{{ error.status }}</h3>
+      <p>Sistēmas kļūda!</p>
     </div>
   </div>
 {% endblock %}

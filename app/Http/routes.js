@@ -32,14 +32,17 @@ Route.group('register', function(){
 }).middleware('notauth')
 
 Route.group('users', function(){
-  Route.get('/users', 'UserController.index').as('user/list')
-
-  Route.get('/users/short/:not_group_id?', 'UserController.shortlist').as('user/shortlist')
-})
+  Route.get('', 'UserController.index').as('user/list')
+  Route.get('/short/:not_group_id?', 'UserController.shortlist').as('user/shortlist')
+}).prefix('/users').middleware('admin')
 
 Route.group('group', function(){
-  Route.get('', 'GroupController.index').as('group/list')
+  Route.get('/', 'GroupController.index').as('group/list')
   Route.get('/show/:id', 'GroupController.show').as('group/show')
+  Route.get('/assignment/:id', 'AssignmentController.show').as('assignment/show')
+}).prefix('/group')
+
+Route.group('group forAdmin', function(){
   Route.get('/edit/:id', 'GroupController.edit').as('group/edit')
   Route.post('/edit/:id', 'GroupController.edit_save').as('group/edit_save')
   Route.get('/create/', 'GroupController.create').as('group/create')
@@ -48,14 +51,12 @@ Route.group('group', function(){
   Route.get('/users/:id', 'GroupController.users').as('group/users')
   Route.post('/users/remove', 'GroupController.users_remove').as('group/users/remove')
   Route.post('/users/add', 'GroupController.users_add').as('group/users/add')
-
-  Route.get('/assignment/:id', 'AssignmentController.show').as('assignment/show')
   Route.get('/assignments/manage/:group_id', 'AssignmentController.group_management').as('group/assignment')
   Route.post('/assignments/create', 'AssignmentController.create').as('assignment/create')
   Route.post('/assignments/options/update', 'AssignmentController.options_update').as('assignment/options/update')
-}).prefix('/group')
+}).prefix('/group').middleware('admin')
 
-Route.group('problem', function(){
+Route.group('problem forAdmin', function(){
   Route.get('', 'ProblemController.index').as('problem/list')
   Route.get('/show/:id', 'ProblemController.show').as('problem/show')
   Route.get('/create', 'ProblemController.create').as('problem/create')
@@ -69,4 +70,4 @@ Route.group('problem', function(){
   Route.get('/test/download/:id', 'ProblemController.testfile_download').as('problem/test/download')
 
   Route.get('/api/short/', 'ProblemController.shortlist').as('problem/shortlist')
-}).prefix('/problem')
+}).prefix('/problem').middleware('admin')

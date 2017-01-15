@@ -2,7 +2,7 @@
 
 class RouteForAdmin {
 
-  * handle (request, response, next) {
+  * handle (req, res, next) {
 
     if (req.cUser.admin)
     {
@@ -10,10 +10,12 @@ class RouteForAdmin {
     }
     else
     {
-      return res.location('back')
+      yield req
+        .with({errors: [{message:"Lai skatītu pieprasīto lapu, Jums nav nepieciešamās atļaujas."}]})
+        .flash()
+      return res.route('home')
     }
   }
-
 }
 
 module.exports = RouteForAdmin

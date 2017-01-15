@@ -11,6 +11,7 @@ class AuthenticatedUserPopulate {
       throw new NE.RuntimeException("CURRENT_USER_ALREADY_DEFINED")
 
     // User model to check permissions with
+    // admin -> auth
     req.cUser = {
       auth: false,
       admin: false,

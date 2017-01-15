@@ -35,8 +35,8 @@ const namedMiddleware = {
   auth: 'Adonis/Middleware/Auth',
 
   // APTS middlewares
-  notauth: 'App/Http/Middleware/Notauth'
-  admin: 'App/Http/Middleware/RouteForAdmin'
+  notauth: 'App/Http/Middleware/Notauth',
+  admin: 'App/Http/Middleware/RouteForAdmin',
 }
 
 /*
