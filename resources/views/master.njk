@@ -32,6 +32,7 @@
             {% endif %}
             {% if cUser.admin %}
             <li><a href="{{ 'problem/list' | route({}) }}">Uzdevumi</a></li>
+            <li><a href="{{ 'PageController.index' | action({}) }}">Lapas</a></li>
             {% endif %}
           </ul>
 

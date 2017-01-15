@@ -17,7 +17,9 @@
 
 const Route = use('Route')
 
-Route.on('/').render('welcome').as('home')
+Route.get('/', function * (req, res){
+  res.route('page.show',{id: 'apts'})
+}).as('home')
 
 Route.group('login', function(){
   Route.get('/login', 'AuthController.index').as('login')
@@ -71,3 +73,10 @@ Route.group('problem forAdmin', function(){
 
   Route.get('/api/short/', 'ProblemController.shortlist').as('problem/shortlist')
 }).prefix('/problem').middleware('admin')
+
+
+Route.group('page', function(){
+  Route.resource('page', 'PageController').only('show')
+  Route.post('page/:id/destroy', 'PageController.destroy').middleware('admin')
+  Route.resource('page', 'PageController').except('show','destroy').middleware('admin')
+})

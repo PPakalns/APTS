@@ -1,0 +1,62 @@
+{% extends 'master' %}
+
+{% block header %}
+  <h1>Lapas</h1>
+  <p>Lapās var publicēt vispārīgu informāciju par APTS darbību, jaunumiem.</p>
+{% endblock %}
+
+{% block content %}
+  {% if pages.length == 0 %}
+    <p class="bg-info">
+      Nav izveidota neviena lapa
+    </p>
+  {% else %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</td>
+          <th>Nosaukums</td>
+          <th>Saite</td>
+          <th class="text-center">Redzama</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% set i=0 %}
+        {% for page in pages %}
+          <tr>
+            <td>
+              {% set i=i+1 %}
+              {{ i }}
+            </td>
+            <td>
+              {{ linkToAction('PageController.show', page.name, {id: page.path}) }}
+            </td>
+            <td>
+              <a href="{{ 'PageController.show' | action({id: page.path})}}">
+                <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> {{ 'PageController.show' | action({id: page.path})}}
+              </a>
+            </td>
+            <td class="text-center">
+              {% if page.visible %}
+                <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+  {% if cUser.admin %}
+    <div class="list-group">
+      <a href="{{ 'PageController.index' | action({}) }}" class="list-group-item list-group-item-warning">
+        <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Lapu pārvaldība
+      </a>
+      <a href="{{ 'PageController.create' | action({}) }}" class="list-group-item">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Izveidot lapu
+      </a>
+    </div>
+  {% endif %}
+{% endblock %}
