@@ -39,9 +39,11 @@
 {% endblock %}
 
 {% block sidebar %}
-  <div class="list-group">
-    <a href="{{ 'group/create' | route({}) }}" class="list-group-item">
-      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Izveidot grupu
-    </a>
-  </div>
+  {% if cUser.admin %}
+    <div class="list-group">
+      <a href="{{ 'group/create' | route({}) }}" class="list-group-item">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Izveidot grupu
+      </a>
+    </div>
+  {% endif %}
 {% endblock %}

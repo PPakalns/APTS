@@ -26,20 +26,21 @@
           </div>
 
           <ul class="nav navbar-nav">
-            <li><a href="{{ 'user/list' | route({}) }}">Lietotāji</a></li>
+            {# <li><a href="{{ 'user/list' | route({}) }}">Lietotāji</a></li> #}
             <li><a href="{{ 'group/list' | route({}) }}">Grupas</a></li>
+            {% if cUser.admin %}
             <li><a href="{{ 'problem/list' | route({}) }}">Uzdevumi</a></li>
+            {% endif %}
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
 
-            {% if not currentUser %}
+            {% if cUser.auth %}
+              <p class="navbar-text">Lietotājs: {{ cUser.user.email }}</p>
+              <li><a href="{{ 'logout' | route({}) }}">Iziet</a></li>
+            {% else %}
               <li><a href="{{ 'login' | route({}) }}">Ieiet</a></li>
               <li><a href="{{ 'register' | route({}) }}">Reģistrēties</a></li>
-            {% else %}
-
-              <p class="navbar-text">Lietotājs: {{ currentUser.email }}</p>
-              <li><a href="{{ 'logout' | route({}) }}">Iziet</a></li>
             {% endif %}
 
           </ul>

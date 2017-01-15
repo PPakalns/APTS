@@ -1,6 +1,7 @@
 'use strict'
 
 const NE = use('node-exceptions')
+const View = use('View')
 
 class AuthenticatedUserPopulate {
 
@@ -40,6 +41,8 @@ class AuthenticatedUserPopulate {
         }
       }
     }
+
+    View.global('cUser', req.cUser)
 
     yield next
   }
