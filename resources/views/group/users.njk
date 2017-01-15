@@ -14,14 +14,14 @@
   <div class="panel panel-default">
     <div class="panel-heading">Dalībnieku pievienošana</div>
     <div class="panel-body">
-      <form class="form-horizontal">
+      <div class="form-horizontal">
         <div class="form-group">
           {{ form.label('email', 'Lietotāja epasts', {class: 'col-md-4 control-label'}) }}
           <div class="col-md-4">
-            {{ form.email('email', old('email') or null, {class: 'form-control'}) }}
+            {{ form.text('email', old('email') or null, {class: 'form-control'}) }}
           </div>
         </div>
-      </form>
+      </div>
     </div>
     <table class="table table-condensed no-border table-hover" id="preview_table">
     </table>

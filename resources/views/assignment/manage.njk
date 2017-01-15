@@ -14,14 +14,14 @@
   <div class="panel panel-default">
     <div class="panel-heading">Uzdevumu pievienošana</div>
     <div class="panel-body">
-      <form class="form-horizontal">
+      <div class="form-horizontal">
         <div class="form-group">
           {{ form.label('problem_name', 'Meklēt pēc uzdevuma:', {class: 'col-md-4 control-label'}) }}
           <div class="col-md-6">
             {{form.search('problem_name', null, {class: 'form-control'})}}
           </div>
         </div>
-      </form>
+      </div>
     </div>
     <table class="table table-condensed no-border table-hover" id="preview_table">
     </table>
