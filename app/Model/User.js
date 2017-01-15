@@ -37,6 +37,10 @@ class User extends Lucid {
     return this.hasMany('App/Model/Problem')
   }
 
+  roles() {
+    return this.hasMany('App/Model/Role', 'id', 'user_id')
+  }
+
   groups () {
     return this.belongsToMany('App/Model/Group', 'user_group')
   }

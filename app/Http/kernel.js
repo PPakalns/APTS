@@ -16,7 +16,10 @@ const globalMiddleware = [
   'Adonis/Middleware/BodyParser',
   'Adonis/Middleware/Shield',
   'Adonis/Middleware/Flash',
-  'Adonis/Middleware/AuthInit'
+  'Adonis/Middleware/AuthInit',
+
+  // APTS middlewares
+  'App/Http/Middleware/AuthenticatedUserPopulate',
 ]
 
 /*
@@ -30,6 +33,8 @@ const globalMiddleware = [
 */
 const namedMiddleware = {
   auth: 'Adonis/Middleware/Auth',
+
+  // APTS middlewares
   notauth: 'App/Http/Middleware/Notauth'
 }
 

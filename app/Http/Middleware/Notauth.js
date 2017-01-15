@@ -2,15 +2,13 @@
 
 class Notauth {
 
-  * handle (request, response, next) {
+  * handle (req, res, next) {
 
-    const isLoggedIn = yield request.auth.check()
+    const isLoggedIn = yield req.auth.check()
     if (isLoggedIn) {
-      console.log("LOGGED IN")
-      return response.redirect('/')
+      return res.redirect('/')
     }
 
-      console.log(" NOT LOGGED IN")
     yield next
   }
 
