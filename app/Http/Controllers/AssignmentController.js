@@ -12,8 +12,25 @@ class AssignmentController {
     const id = req.param('id')
     const assignment = yield Assignment.findOrFail(id)
     yield assignment.related('group', 'problem').load()
-
     let jsonAssignment = assignment.toJSON()
+
+    // Check if user is assigned to group
+    const isParticipant =
+        ((yield Database
+          .table('user_group')
+          .where('user_id', req.cUser.user.id)
+          .where('group_id', jsonAssignment.group.id)
+        ).length)
+
+    if ((!isParticipant || !jsonAssignment.visible) && !req.cUser.admin)
+    {
+      yield req
+        .with({errors: [{message: "Jums nav vajadzīgās tiesības, lai skatītu pieprasīto lapu."}]})
+        .flash()
+
+      res.route('group/list')
+      return
+    }
 
     yield res
       .sendView('problem/show',

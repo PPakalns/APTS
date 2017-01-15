@@ -3,6 +3,7 @@
 const Group = use('App/Model/Group')
 const User = use('App/Model/User')
 const Validator = use('Validator')
+const Database = use('Database')
 
 class GroupController {
 
@@ -23,6 +24,24 @@ class GroupController {
     const id = req.param('id')
     const group = yield Group.findOrFail(id)
     const participantCount = (yield group.users().count())[ 0 ][ 'count(*)' ]
+
+    // Check if user is assigned to this group
+    const isParticipant =
+        ((yield Database
+          .table('user_group')
+          .where('user_id', req.cUser.user.id)
+          .where('group_id', group.id)
+        ).length)
+
+    if (!isParticipant && !req.cUser.admin)
+    {
+      yield req
+        .with({errors: [{message: "Jums nav vajadzīgās tiesības, lai skatītu pieprasīto lapu."}]})
+        .flash()
+
+      res.route('group/list')
+      return
+    }
 
     yield res.sendView('group/show', {group: group.toJSON(), participantCount: participantCount })
   }

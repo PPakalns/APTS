@@ -15,8 +15,6 @@ class AuthController {
     const email = request.input('email')
     const password = request.input('password')
 
-    console.log( email, password )
-
     try {
       yield request.auth.attempt(email, password)
     } catch (e) {

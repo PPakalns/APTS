@@ -16,7 +16,8 @@ class AuthenticatedUserPopulate {
     req.cUser = {
       auth: false,
       admin: false,
-      user: {}
+      user: {},
+      ruser: req.currentUser
     }
 
     if ( req.currentUser )
