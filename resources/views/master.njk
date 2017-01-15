@@ -29,6 +29,7 @@
             {# <li><a href="{{ 'user/list' | route({}) }}">Lietotāji</a></li> #}
             {% if cUser.auth %}
             <li><a href="{{ 'group/list' | route({}) }}">Grupas</a></li>
+            <li><a href="{{ 'PageController.show' | action({id: 'FAQ'}) }}">FAQ</a></li>
             {% endif %}
             {% if cUser.admin %}
             <li><a href="{{ 'problem/list' | route({}) }}">Uzdevumi</a></li>

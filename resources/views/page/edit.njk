@@ -23,7 +23,7 @@
         {{ csrfField }}
 
         <div class="form-group">
-          {{ form.label('name', 'Lapas nosaukums', {class: 'col-md-4 control-label'}) }}
+          {{ form.label('name', 'Lapas nosaukums', {class: 'col-md-4 control-label', maxlength: 524}) }}
           <div class="col-md-6">
             {{ form.text('name', old('name') or page.name, {class: 'form-control', required: true}) }}
           </div>
@@ -32,12 +32,19 @@
         <div class="form-group">
           {{ form.label('intro', 'Lapas ievads', {class: 'col-md-4 control-label'}) }}
           <div class="col-md-6">
-            {{ form.text('intro', old('intro') or page.intro, {class: 'form-control'}) }}
+            {{ form.text('intro', old('intro') or page.intro, {class: 'form-control', maxlength: 524}) }}
           </div>
         </div>
 
         <div class="form-group">
-          {{ form.label('path', 'Lapas saites vārds', {class: 'col-md-4 control-label'}) }}
+          {{ form.label('comment', 'Lapas nepieciešamības komentārs', {class: 'col-md-4 control-label'}) }}
+          <div class="col-md-6">
+            {{ form.text('comment', old('comment') or page.comment, {class: 'form-control', maxlength: 524}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          {{ form.label('path', 'Lapas saites vārds', {class: 'col-md-4 control-label', maxlength: 524}) }}
           <div class="col-md-6">
             {{ form.text('path', old('path') or page.path, {class: 'form-control', required: true}) }}
           </div>

@@ -17,6 +17,7 @@
           <th>#</td>
           <th>Nosaukums</td>
           <th>Saite</td>
+          <th>Komentārs</td>
           <th class="text-center">Redzama</td>
         </tr>
       </thead>
@@ -35,6 +36,9 @@
               <a href="{{ 'PageController.show' | action({id: page.path})}}">
                 <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span> {{ 'PageController.show' | action({id: page.path})}}
               </a>
+            </td>
+            <td>
+              {{ page.comment }}
             </td>
             <td class="text-center">
               {% if page.visible %}

@@ -15,7 +15,7 @@ class PageController {
   }
 
   * store(req, res) {
-    const pageData = req.only('name', 'intro', 'path', 'description', 'visible')
+    const pageData = req.only('name', 'intro', 'comment', 'path', 'description', 'visible')
 
     const validation = yield Validator.validate(pageData, Page.rules(0))
     if (validation.fails())
@@ -33,6 +33,7 @@ class PageController {
     const page = new Page()
     page.name = pageData.name;
     page.intro = pageData.intro;
+    page.comment = pageData.comment;
     page.path = pageData.path;
     page.description = pageData.description;
     page.visible = !(!pageData.visible);
@@ -71,7 +72,7 @@ class PageController {
   }
 
   * update(req, res) {
-    const pageData = req.only('id', 'name', 'intro', 'path', 'description', 'visible')
+    const pageData = req.only('id', 'name', 'intro', 'comment', 'path', 'description', 'visible')
     const page = yield Page.findOrFail(pageData.id)
 
     const validation = yield Validator.validate(pageData, Page.rules(page.id))
@@ -89,6 +90,7 @@ class PageController {
     page.intro = pageData.intro;
     page.path = pageData.path;
     page.description = pageData.description;
+    page.comment = pageData.comment;
     page.visible = !(!pageData.visible);
     yield page.save()
 

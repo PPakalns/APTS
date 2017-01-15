@@ -103,6 +103,6 @@ table.no-border td, table.no-border th{
   font-size: 1.3em;
 }
 
-textarea{
+.sidebar, textarea{
   font-family: "Courier New", Courier, monospace;
 }
