@@ -40,7 +40,7 @@ Route.group('group', function(){
   Route.get('/', 'GroupController.index').as('group/list')
   Route.get('/show/:id', 'GroupController.show').as('group/show')
   Route.get('/assignment/:id', 'AssignmentController.show').as('assignment/show')
-}).prefix('/group')
+}).prefix('/group').middleware('auth')
 
 Route.group('group forAdmin', function(){
   Route.get('/edit/:id', 'GroupController.edit').as('group/edit')

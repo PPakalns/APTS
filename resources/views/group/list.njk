@@ -7,9 +7,10 @@
 
 {% block content %}
 
+  <h3>Manas grupas:</h3>
   {% if groups.length == 0 %}
     <p class="bg-info">
-      Diemžēl nav izveidota naviena grupa.
+      Jūs neesat pievienots nevienā grupā.
     </p>
   {% else %}
     <table class="table">
@@ -35,7 +36,38 @@
       </tbody>
     </table>
   {% endif %}
-
+  <hr>
+  {% if cUser.admin %}
+    <h3>Grupu pārvaldība: Visas grupas</h3>
+    {% if agroups.length == 0 %}
+      <p class="bg-info">
+        Neviena grupa nav izveidota.
+      </p>
+    {% else %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</td>
+            <th>Nosaukums</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% set i=0 %}
+          {% for group in agroups %}
+            <tr>
+              <td>
+                {% set i=i+1 %}
+                {{ i }}
+              </td>
+              <td>
+                {{ linkTo('group/show', group.name, {id: group.id}) }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  {% endif %}
 {% endblock %}
 
 {% block sidebar %}

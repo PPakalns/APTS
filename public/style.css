@@ -85,7 +85,24 @@ table.no-border td, table.no-border th{
 
 /* Breadcrumbs end */
 
-.tex2jax_process{
+.prettycontent{
   line-height: 170%;
   font-size: 1.1em;
+}
+
+.prettycontent h1{
+  font-size: 1.6em;
+}
+.prettycontent h2{
+  font-size: 1.5em;
+}
+.prettycontent h3{
+  font-size: 1.4em;
+}
+.prettycontent h4{
+  font-size: 1.3em;
+}
+
+textarea{
+  font-family: "Courier New", Courier, monospace;
 }

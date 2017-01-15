@@ -52,7 +52,7 @@
     <div class="panel-body">
       <h3 id="name_preview"> {{ old('name') or group.name }} </h3>
       <hr>
-      <div id="description_preview" class="tex2jax_process">
+      <div id="description_preview" class="tex2jax_process prettycontent">
         {{ ( old('description') or group.description ) | markdown | safe }}
       </div>
     </div>

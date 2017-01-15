@@ -7,9 +7,16 @@ const Validator = use('Validator')
 class GroupController {
 
   * index(req, res) {
-    const groups = yield Group.all();
+    const groups = yield req.currentUser.groups().fetch()
 
-    yield res.sendView('group/list', {groups: groups.toJSON()})
+    // Group list for admins
+    let agroups = []
+    if (req.cUser.admin)
+    {
+      agroups = (yield Group.all()).toJSON()
+    }
+
+    yield res.sendView('group/list', {groups: groups.toJSON(), agroups: agroups})
   }
 
   * show(req, res) {
