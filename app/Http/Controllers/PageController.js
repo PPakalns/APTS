@@ -48,7 +48,8 @@ class PageController {
 
   * show(req, res) {
     // id is page.path
-    const path = req.param('id')
+    let path = req.param('id')
+    if ( path === null ) path = "apts";
     let page;
 
     if (req.cUser.admin)

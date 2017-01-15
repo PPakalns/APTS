@@ -40,10 +40,6 @@ Http.handleError = function * (error, request, response) {
 Http.onStart = function () {
   const View = use('Adonis/Src/View')
 
-  View.filter('nl2br', function (str) {
-    return str.replace(/\r\n|\r|\n/g, '<br>')
-  })
-
   const marked = require('marked');
   marked.setOptions({
     renderer: new marked.Renderer(),

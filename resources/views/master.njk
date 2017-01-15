@@ -33,6 +33,7 @@
             {% if cUser.admin %}
             <li><a href="{{ 'problem/list' | route({}) }}">Uzdevumi</a></li>
             <li><a href="{{ 'PageController.index' | action({}) }}">Lapas</a></li>
+            <li><a href="{{ 'SubmissionController.index' | action({}) }}">Iesūtījumi</a></li>
             {% endif %}
             <li><a href="{{ 'PageController.show' | action({id: 'FAQ'}) }}">FAQ</a></li>
           </ul>
@@ -63,6 +64,9 @@
           <div class="col-sm-3 col-sm-push-9 sidebar">
             {% block sidebar %}
             {% endblock %}
+            {% asyncAll fix in [0] %}
+              {% include 'submission/sidelist' %}
+            {% endall %}
           </div> {# sidebar #}
 
           <div class="col-sm-9 col-sm-pull-3 content">

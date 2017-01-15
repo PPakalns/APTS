@@ -12,6 +12,35 @@ let unlinkFile = bluebird.promisify(require("fs").unlink);
 
 class SubmissionController {
 
+  * index(req, res) {
+    let submissions = yield Submission.query()
+                           .select("submissions.id", 'submissions.created_at', 'problems.name as problem_name', 'submissions.status', 'submissions.score','users.email','groups.name', 'submissions.filesize')
+                           .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
+                           .innerJoin('problems', 'assignments.problem_id', 'problems.id')
+                           .innerJoin('users', 'submissions.user_id', 'users.id')
+                           .innerJoin('groups', 'assignments.group_id', 'groups.id')
+                           .orderBy('submissions.created_at', 'desc')
+    yield res.sendView('submission/index', {submissions: submissions})
+  }
+
+  * show(req, res) {
+    const id = req.param('id')
+    const submission = yield Submission.findOrFail(id)
+
+    if ( submission.user_id != req.cUser.user.id && !req.cUser.admin )
+    {
+      yield req
+        .with({errors: [{message:"Jums nav atļaujas skatīt pieprasīto iesūtījumu."}]})
+        .flash()
+      res.redirect('back')
+      return
+    }
+
+    yield submission.related('assignment','assignment.problem','assignment.group').load()
+
+    yield res.sendView('submission/show', {submission: submission.toJSON()})
+  }
+
   * submit(req, res) {
     const assignmentId = req.param("assignment_id")
     const assignment = yield Assignment.findOrFail(assignmentId)

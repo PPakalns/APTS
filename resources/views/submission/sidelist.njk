@@ -1,0 +1,56 @@
+{# DISPLAY USER SUBMISSIONS #}
+
+{% if cUser.auth %}
+
+  {% set Submission = use('App/Model/Submission') %}
+  {% set squery = Submission  . query()
+                              . select("submissions.id", 'submissions.created_at', 'problems.name', 'submissions.status', 'submissions.score')
+                              . innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
+                              . innerJoin('problems', 'assignments.problem_id', 'problems.id')
+                              . orderBy('submissions.created_at', 'desc')
+                              . where('user_id', cUser.user.id)
+  %}
+  {% if assignment %}
+    {% set squery = squery.where('assignment_id',assignment.id)%}
+  {% endif %}
+
+  {% yield submissions = squery.limit(10) %}
+
+  {% if submissions.length != 0 %}
+    <table class="table">
+      <thead>
+        <tr>
+          <th colspan={{ 3 if assignment else 4 }}>
+            <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+            {{ "Uzdevuma iesūtījumi" if assignment else "Pēdējie iesūtījumi" }}
+          </th>
+        </tr>
+        <thead>
+          <tr>
+            {% if not assignment %}
+              <th>Problēma</th>
+            {% else %}
+              <th>Laiks</th>
+            {% endif %}
+            <th>Status</th>
+            <th>Rezultāts</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for submit in submissions %}
+            <tr>
+              {% if not assignment %}
+                <td>{{ submit.name }}</td>
+              {% else %}
+                <td>{{ submit.created_at }}</td>
+              {% endif %}
+              <td><a href="{{ 'SubmissionController.show' | action({id: submit.id}) }}">Gaida</a></td>
+              <td>{{ submit.score or 0 }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+    {# END DISPLAY #}
+
+  {% endif %}

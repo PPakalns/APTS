@@ -16,9 +16,11 @@
 */
 
 const Route = use('Route')
+const PageController = use('App/Http/Controllers/PageController')
 
 Route.get('/', function * (req, res){
-  res.route('page.show',{id: 'apts'})
+  let gen = (new PageController).show(req, res);
+  yield gen;
 }).as('home')
 
 Route.group('login', function(){
@@ -82,3 +84,5 @@ Route.group('page', function(){
 })
 
 Route.post('/submit/:assignment_id', 'SubmissionController.submit').as('submission/submit').middleware('auth')
+Route.get('/submission', 'SubmissionController.index').as('submission/list').middleware('admin')
+Route.get('/submission/:id', 'SubmissionController.show').as('submission/show').middleware('auth')

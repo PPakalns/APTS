@@ -62,6 +62,7 @@ table tr, table th {
 
 pre code.hljs{
   margin: -9.5px;
+  background-color: white;
 }
 
 td.nocontent{

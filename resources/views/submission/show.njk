@@ -1,0 +1,35 @@
+{% extends 'master' %}
+
+{% block header %}
+  <h2>Iesūtījums</h2>
+  <p>Programmas iesūtījums</p>
+{% endblock %}
+
+{% block content %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Grupa</th>
+        <th>Laiks</th>
+        <th>Problēma</th>
+        <th>Statuss</th>
+        <th>Rezultāts</th>
+        <th>Izmērs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ submission.assignment.group.name }}</td>
+        <td>{{ submission.created_at }}</td>
+        <td>{{ submission.assignment.problem.name }}</td>
+        <td>{{ "Gaida" if submission.status==0 }}</td>
+        <td>{{ submission.score }}</td>
+        <td>{{ ( submission.filesize / 1024 ) | round(2) }}kB</td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+  <div class="tex2jax_process prettycontent">
+    <pre><code class='c++'>{{ submission.file }}</code></pre>
+</div>
+{% endblock %}
