@@ -6,5 +6,40 @@
 {% endblock %}
 
 {% block content %}
-    <h3>Test page</h3>
+  <div class="tex2jax_process prettycontent">
+    <h2 id="autom-tisk-programmu-test-ana-lekciju-kurs-pamatalgoritmi-un-datu-strukt-ras-un-pamatalgoritmi-i">Automātiskā programmu testēšana</h2>
+    <p>Avots: <a href="http://apts.cs.fmf.lu.lv">http://apts.cs.fmf.lu.lv</a></p>
+    <h2 id="apts">APTS</h2>
+    <p>Populārākie jautājumi:</p>
+    <ol>
+      <li><p>Faila vārdu neatpazīšana.
+          Programma Windows vidē izpildās bez problēmām, bet APTS visiem testiem izdod paziņojumu “Nav izvadfaila” un kļūdu kodus. Kāda varētu būt problēma?</p>
+        <p>APTS operāciju sistēma ir jūtīga pret failu lielajiem un mazajiem burtiem. Lietojiet savās programmās tikai mazos burtus, piemēram, “reverse.in”, “reverse.out”.</p>
+      </li>
+      <li><p>Nekompilējas C++ programma ar atgriežamo tipu void.</p>
+        <p>Kompilators nekompilē vienkāršu C++ programmu: void main() {int i; i=3;}, bet uz studenta datora problēmu nav. Kāda varētu būt problēma?</p>
+        <p>Katrs kompilators arī ir programma, dažādiem izstrādātājiem tie atšķiras.
+          Vieni vairāk pieturas pie standartiem, citi mazāk. Daudzi mēģina pieļaut lielāku brīvību lietotājam.
+          Šajā gadījumā APTS kompilators pieturas pie standarta, ka main() noteikti ir jāatgriež int tipa vērtība.
+          Piemērs “pareizai” programmai: int main() {int i; i=3; return 1;}</p>
+      </li>
+      <li><p>Nekorekta atmiņas izmantošana.</p>
+        <p>Programma uz studenta datora izpildās korekti un dod pareizus rezultātus. Savukārt uz APTS tā pati programma beidzas ar Runtime error. Vai vainīgs nav APTS kompilators?</p>
+        <p>Pieredze rāda, ka šādos gadījumos pārsvarā ir nekorekta dinamiskās atmiņas izmantošana. Tuvākus komentārus var lasīt Nekorektas atmiņas izmantošanas piemēri.</p>
+      </li>
+      <li><p>Neizdodas izdrukāt starprezultātus uz ekrāna no CPP programmas.</p>
+        <p>APTS serverī iesūtot pat vistriviālāko cpp programmu:</p>
+
+<pre><code>#include &lt;iostream.h&gt;
+#include &lt;stdio.h&gt;
+int main() {
+  cout&lt;&lt;"COUT";
+  return 1;
+}</code></pre>
+            <p>tiek izdots paziņojums, ka nav ticis izmantots izvads uz standartiekārtas, t.i., monitora. Nevar veikt starprezultātu izdruku, lai saprastu, kāpēc uz servera programma strādā savādāk.</p>
+        <p>Es ieteiktu izmantot #include &lt;stdio.h&gt; un funkcijas no šīs bibliotēkas, kā izejas faila pointeri norādot stdout. Piemēram, fprintf(stdout, "Viss %i\n", 0); izdrukā uz ekrāna “Viss 0”. Atgādinu, ka izejas failam, ko sagaida programma, kaut tukšam, bet tomēr jābūt.</p>
+      </li>
+    </ol>
+
+  </div>
 {% endblock %}

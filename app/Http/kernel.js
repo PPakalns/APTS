@@ -32,9 +32,9 @@ const globalMiddleware = [
 |
 */
 const namedMiddleware = {
-  auth: 'Adonis/Middleware/Auth',
 
   // APTS middlewares
+  auth: 'App/Http/Middleware/Auth',
   notauth: 'App/Http/Middleware/Notauth',
   admin: 'App/Http/Middleware/RouteForAdmin',
 }
