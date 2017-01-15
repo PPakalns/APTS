@@ -36,6 +36,7 @@ const namedMiddleware = {
 
   // APTS middlewares
   notauth: 'App/Http/Middleware/Notauth'
+  admin: 'App/Http/Middleware/RouteForAdmin'
 }
 
 /*
