@@ -102,7 +102,15 @@ class PageController {
   }
 
   * destroy(req, res) {
-    res.send("OK")
+    const id = req.param('id')
+    const page = yield Page.findOrFail(id)
+    yield page.delete()
+
+    yield req
+      .with({"successes": [{message:"Lapa veiksmīgi dzēsta!"}]})
+      .flash()
+
+    res.route('page.index')
   }
 }
 
