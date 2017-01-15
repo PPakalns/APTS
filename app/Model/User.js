@@ -33,6 +33,10 @@ class User extends Lucid {
     return this.hasMany('App/Model/Token')
   }
 
+  submissions () {
+    return this.hasMany('App/Model/Submission')
+  }
+
   problems () {
     return this.hasMany('App/Model/Problem')
   }

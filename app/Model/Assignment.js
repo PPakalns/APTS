@@ -8,6 +8,10 @@ class Assignment extends Lucid {
     builder.where('visible', 1)
   }
 
+  submissions () {
+    return this.hasMany('App/Model/Submission')
+  }
+
   problem() {
     return this.belongsTo('App/Model/Problem', 'id', 'problem_id')
   }
