@@ -100,7 +100,7 @@
       var iteration = 0;
       var updated_iteration = 0;
 
-      var last_search = ""
+      var last_search = "_"
       var timer = null
 
       var updateClear = function() {
@@ -115,7 +115,7 @@
         if (timer == null && text!=last_search)
         {
           last_search = text
-          timer = setTimeout(updateClear, 1000)
+          timer = setTimeout(updateClear, 500)
 
           var now_iteration = iteration+1;
           iteration = iteration+1;
@@ -169,6 +169,7 @@
       }
 
       $("#problem_name").keypress(update)
+      update()
     })
   </script>
 {% endblock %}

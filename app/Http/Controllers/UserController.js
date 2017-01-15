@@ -2,6 +2,7 @@
 
 const Database = use('Database')
 const User = use('App/Model/User')
+const Group = use('App/Model/Group')
 
 class UserController {
 
@@ -13,12 +14,27 @@ class UserController {
   // Returns list of emails which have search as substring
   * shortlist(req, res) {
     const search = ''+req.input('search')
+    const notGroupId = req.param("not_group_id")
 
-    const users = yield Database
-      .table('users')
-      .select('email')
+    let query = Database
+      .select('email', 'id')
+      .from('users')
       .whereRaw("INSTR(email,?) > 0",[search])
       .limit(10)
+
+    if (notGroupId)
+    {
+      const group = yield Group.findOrFail(notGroupId)
+
+      const subquery = Database
+        .select('user_id')
+        .from('user_group')
+        .where('group_id', group.id)
+
+      query = query.whereNotIn('id', subquery)
+    }
+
+    const users = yield query.debug();
 
     res.json(users)
   }

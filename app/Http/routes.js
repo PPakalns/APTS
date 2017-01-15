@@ -34,7 +34,7 @@ Route.group('register', function(){
 Route.group('users', function(){
   Route.get('/users', 'UserController.index').as('user/list')
 
-  Route.get('/users/api/short', 'UserController.shortlist').as('user/shortlist')
+  Route.get('/users/short/:not_group_id?', 'UserController.shortlist').as('user/shortlist')
 })
 
 Route.group('group', function(){
@@ -68,5 +68,5 @@ Route.group('problem', function(){
   Route.post('/test/edit/:id', 'ProblemController.test_edit_save').as('problem/test/edit_save')
   Route.get('/test/download/:id', 'ProblemController.testfile_download').as('problem/test/download')
 
-  Route.get('/api/short', 'ProblemController.shortlist').as('problem/shortlist')
+  Route.get('/api/short/', 'ProblemController.shortlist').as('problem/shortlist')
 }).prefix('/problem')

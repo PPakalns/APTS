@@ -94,34 +94,23 @@ class GroupController {
   * users_add(req, res){
     const formData = req.all()
     const group = yield Group.findOrFail(formData.group_id)
-    var user = yield User.query().where('email', formData.email).limit(1)
+    const user = yield User.findOrFail(formData.user_id)
 
-    if (user.length == 0 )
+    const isowned = yield group.users().where("users.id", user.id).fetch()
+
+    if ( isowned.size() == 0 )
+    {
+      yield req
+        .with({"successes": [{message:"Lietotājs "+user.email+" veiksmīgi pievienots grupai."}]})
+        .flash()
+      yield group.users().attach([user.id])
+    }
+    else
     {
       yield req
         .withAll()
-        .andWith({"errors": [{message:"Lietotājs "+formData.email+" neeksistē. Lūdzu pārbaudiet pareizrakstību."}]})
+        .andWith({"errors": [{message:"Lietotājs "+user.email+" jau ir pievienots grupai!"}]})
         .flash()
-    }
-    else if (user.length == 1 )
-    {
-      user = user[ 0 ]
-      const isowned = yield group.users().where("users.id", user.id).fetch()
-
-      if ( isowned.size() == 0 )
-      {
-        yield req
-          .with({"successes": [{message:"Lietotājs "+formData.email+" veiksmīgi pievienots grupai."}]})
-          .flash()
-        yield group.users().attach([user.id])
-      }
-      else
-      {
-        yield req
-          .withAll()
-          .andWith({"errors": [{message:"Lietotājs "+formData.email+" jau ir pievienots grupai!"}]})
-          .flash()
-      }
     }
 
     res.route('group/users', {id: formData.group_id})
