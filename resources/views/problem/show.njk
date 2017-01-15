@@ -57,11 +57,17 @@
       <tbody>
         <tr>
           <td colspan=2 class="text-center">
+            {{ form.open({action: 'SubmissionController.submit', params: {assignment_id: assignment.id}, class:"form-horizontal", files: true}) }}
+            {{ csrfField }}
             <input type="file" name="solution" id="submit_file">
             <p>
-              <button class="btn btn-default" style="width:100%;" id="submit_button">Izvēlēties failu</button><br />
+              <button type="button" class="btn btn-default" style="width:100%;" id="submit_button">Izvēlēties failu</button><br />
             </p>
             <p id="submit_text"></p>
+            <p>
+              <button type="submit" class="btn btn-success button-hidden" style="width:100%;" id="submit_form">Iesūtīt</button>
+            </p>
+            {{ form.close() }}
           </td>
         </tr>
       </tbody>
@@ -81,6 +87,7 @@
 
       $( '#submit_file').change(function(){
         $( '#submit_text' ).text($( this ).val() );
+        $( '#submit_form' ).show()
       });
     })
   </script>

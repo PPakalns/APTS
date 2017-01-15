@@ -80,3 +80,5 @@ Route.group('page', function(){
   Route.post('page/:id/destroy', 'PageController.destroy').middleware('admin')
   Route.resource('page', 'PageController').except('show','destroy').middleware('admin')
 })
+
+Route.post('/submit/:assignment_id', 'SubmissionController.submit').as('submission/submit').middleware('auth')

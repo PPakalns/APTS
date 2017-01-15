@@ -112,6 +112,6 @@ table.no-border td, table.no-border th{
   font-family: "Courier New", Courier, monospace;
 }
 
-.alert-hidden{
+.alert-hidden, .button-hidden{
   display: none;
 }
