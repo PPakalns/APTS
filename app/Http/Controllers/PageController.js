@@ -28,8 +28,6 @@ class PageController {
       return
     }
 
-    console.log(pageData)
-
     const page = new Page()
     page.name = pageData.name;
     page.intro = pageData.intro;
@@ -67,7 +65,6 @@ class PageController {
   * edit(req, res) {
     const id = req.param('id')
     const page = yield Page.findOrFail(id)
-    console.log(page.toJSON())
 
     yield res.sendView('page/edit', {page: page.toJSON()})
   }
