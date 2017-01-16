@@ -1,20 +1,19 @@
 {% extends 'master' %}
 
 {% block header %}
-  <h2>Iesūtījums</h2>
-  <p>Programmas iesūtījums</p>
+  <h2>{{ antl.formatMessage('messages.submission') }}</h2>
 {% endblock %}
 
 {% block content %}
   <table class="table">
     <thead>
       <tr>
-        <th>Grupa</th>
-        <th>Laiks</th>
-        <th>Problēma</th>
-        <th>Statuss</th>
-        <th>Rezultāts</th>
-        <th>Izmērs</th>
+        <th>{{ antl.formatMessage('messages.group') }}</th>
+        <th>{{ antl.formatMessage('messages.time') }}</th>
+        <th>{{ antl.formatMessage('messages.task') }}</th>
+        <th>{{ antl.formatMessage('messages.status') }}</th>
+        <th>{{ antl.formatMessage('messages.result') }}</th>
+        <th>{{ antl.formatMessage('messages.size') }}</th>
       </tr>
     </thead>
     <tbody>

@@ -1,8 +1,8 @@
 {% extends 'master' %}
 
 {% block header %}
-  <h1>Grupas</h1>
-  <p>Grupās tās dalībniekiem ir pieeja programmēšanas uzdevumiem</p>
+  <h1>{{ antl.formatMessage('messages.group') }}</h1>
+  <p>{{ antl.formatMessage('messages.groups_description') }}</p>
 {% endblock %}
 
 {% block content %}
@@ -26,7 +26,7 @@
     <thead>
       <tr>
         <th>
-          <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> Grupas uzdevumi
+          <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span> {{ antl.formatMessage('messages.group_tasks') }}
         </th>
       </tr>
     </thead>
@@ -34,7 +34,7 @@
       {% if assignments.length == 0 %}
         <tr>
           <td class="nocontent">
-            Grupai nav pievienots neviens uzdevums
+            {{ antl.formatMessage('messages.group_do_not_have_tasks') }}
           </td>
         </tr>
       {% else %}
@@ -55,7 +55,8 @@
     <thead>
       <tr>
         <th>
-          <span class="glyphicon glyphicon-user" aria-hidden="true"></span> Dalībnieki grupā: {{ participantCount }}
+          <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+          {{ antl.formatMessage('messages.participants', {count: participantCount }) }}
         </th>
       </tr>
     </thead>

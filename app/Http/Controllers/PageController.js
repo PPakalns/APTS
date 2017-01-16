@@ -2,6 +2,7 @@
 
 const Page = use('App/Model/Page')
 const Validator = use('Validator')
+const Antl = use('Antl')
 
 class PageController {
 
@@ -47,7 +48,13 @@ class PageController {
   * show(req, res) {
     // id is page.path
     let path = req.param('id')
-    if ( path === null ) path = "apts";
+
+    if ( path === null )
+    {
+      path = "apts";
+      if ( Antl.getLocale() == "en" ) path = "aptsen";
+    }
+
     let page;
 
     if (req.cUser.admin)

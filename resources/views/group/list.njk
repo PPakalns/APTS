@@ -1,23 +1,23 @@
 {% extends 'master' %}
 
 {% block header %}
-  <h1>Grupas</h1>
-  <p>Grupās tās dalībniekiem ir pieeja programmēšanas uzdevumiem</p>
+  <h1>{{ antl.formatMessage('messages.groups') }}</h1>
+  <p>{{ antl.formatMessage('messages.groups_description') }}</p>
 {% endblock %}
 
 {% block content %}
 
-  <h3>Manas grupas:</h3>
+  <h3>{{ antl.formatMessage('messages.my_groups') }}</h3>
   {% if groups.length == 0 %}
     <p class="bg-info">
-      Jūs neesat pievienots nevienā grupā.
+      {{ antl.formatMessage('messages.user_not_added_to_group') }}
     </p>
   {% else %}
     <table class="table">
       <thead>
         <tr>
           <th>#</td>
-          <th>Nosaukums</td>
+          <th>{{ antl.formatMessage('messages.group_name') }}</td>
         </tr>
       </thead>
       <tbody>
@@ -41,14 +41,14 @@
     <h3>Grupu pārvaldība: Visas grupas</h3>
     {% if agroups.length == 0 %}
       <p class="bg-info">
-        Neviena grupa nav izveidota.
+        {{ antl.formatMessage('grupas.groups_do_not_exsist') }}
       </p>
     {% else %}
       <table class="table">
         <thead>
           <tr>
             <th>#</td>
-            <th>Nosaukums</td>
+            <th>{{ antl.formatMessage('messages.group_name') }}</td>
           </tr>
         </thead>
         <tbody>

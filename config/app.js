@@ -183,7 +183,7 @@ module.exports = {
     | based on HTTP headers/query string.
     |
     */
-    locale: 'en',
+    locale: 'lv',
 
     /*
     |--------------------------------------------------------------------------
@@ -193,6 +193,17 @@ module.exports = {
     | Fallback locale to be used when actual locale is not supported.
     |
     */
-    fallbackLocale: 'en'
+    fallbackLocale: 'lv',
+    /*
+    |--------------------------------------------------------------------------
+    | Locale Matcher
+    |--------------------------------------------------------------------------
+    |
+    | How to match locale formats. The available formats are:
+    |
+    | lookup, best fit
+    |
+    */
+    localeMatcher: 'best fit'
   }
 }

@@ -25,28 +25,46 @@
           </div>
 
           <ul class="nav navbar-nav">
-            {# <li><a href="{{ 'user/list' | route({}) }}">Lietotāji</a></li> #}
             {% if cUser.auth %}
-            <li><a href="{{ 'group/list' | route({}) }}">Grupas</a></li>
+              <li>
+                <a href="{{ 'group/list' | route({}) }}">
+                  {{ antl.formatMessage('messages.group') }}
+                </a>
+              </li>
             {% endif %}
             {% if cUser.admin %}
-            <li><a href="{{ 'problem/list' | route({}) }}">Uzdevumi</a></li>
-            <li><a href="{{ 'PageController.index' | action({}) }}">Lapas</a></li>
-            <li><a href="{{ 'SubmissionController.index' | action({}) }}">Iesūtījumi</a></li>
+              <li>
+                <a href="{{ 'problem/list' | route({}) }}">
+                  {{ antl.formatMessage('messages.tasks') }}
+                </a>
+              </li>
+              <li>
+                <a href="{{ 'PageController.index' | action({}) }}">
+                  {{ antl.formatMessage('messages.pages') }}
+                </a>
+              </li>
+              <li>
+                <a href="{{ 'SubmissionController.index' | action({}) }}">
+                  {{ antl.formatMessage('messages.submissions') }}
+                </a>
+              </li>
             {% endif %}
-            <li><a href="{{ 'PageController.show' | action({id: 'FAQ'}) }}">FAQ</a></li>
+            <li>
+              <a href="{{ 'PageController.show' | action({id: 'FAQ'}) }}">
+                {{ antl.formatMessage('messages.FAQ') }}
+              </a>
+            </li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
 
             {% if cUser.auth %}
-              <li class="navbar-text" style="padding-left:10px;">Lietotājs: {{ cUser.user.email }}</li>
-              <li><a href="{{ 'logout' | route({}) }}">Iziet</a></li>
+              <li class="navbar-text" style="padding-left:10px;">{{ antl.formatMessage( 'messages.menu_user', { user: cUser.user.email } ) }}</li>
+              <li><a href="{{ 'logout' | route({}) }}">{{ antl.formatMessage('messages.logout') }}</a></li>
             {% else %}
-              <li><a href="{{ 'login' | route({}) }}">Ieiet</a></li>
-              <li><a href="{{ 'register' | route({}) }}">Reģistrēties</a></li>
+              <li><a href="{{ 'login' | route({}) }}">{{ antl.formatMessage('messages.login' )}}</a></li>
+              <li><a href="{{ 'register' | route({}) }}">{{ antl.formatMessage('messages.register' )}}</a></li>
             {% endif %}
-
           </ul>
         </div>
       </nav>
@@ -64,7 +82,7 @@
             {% block sidebar %}
             {% endblock %}
             {% asyncAll fix in [0] %}
-              {% include 'submission/sidelist' %}
+            {% include 'submission/sidelist' %}
             {% endall %}
           </div> {# sidebar #}
 
@@ -92,10 +110,16 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <p>APTS - Automātiskā Programmu Testēšanas Sistēma</p>
+            <p>{{ antl.formatMessage('messages.APTS') }} - {{ antl.formatMessage('messages.APTS_') }}</p>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-5">
             <p>(c) Pēteris Pakalns</p>
+          </div>
+          <div class="col-md-1">
+            <p>
+              <a href="?lang=lv" aria-label="Latviešu valoda">LV</a>
+              <a href="?lang=en" aria-label="English valoda">EN</a>
+            </p>
           </div>
         </div>
       </div>
@@ -116,16 +140,16 @@
     <script>
       hljs.initHighlightingOnLoad();
 
-      marked.setOptions({
-        renderer: new marked.Renderer(),
-        gfm: true,
-        tables: true,
-        breaks: false,
-        pedantic: false,
-        sanitize: true,
-        smartLists: true,
-        smartypants: false
-      });
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+});
     </script>
     {% block customscript %}{% endblock %}
   </body>

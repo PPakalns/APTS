@@ -30,7 +30,8 @@ const providers = [
   'adonis-middleware/providers/AppMiddlewareProvider',
   'adonis-auth/providers/AuthManagerProvider',
   'adonis-websocket/providers/WsProvider',
-  'adonis-validation-provider/providers/ValidatorProvider'
+  'adonis-validation-provider/providers/ValidatorProvider',
+  'adonis-antl/providers/AntlProvider'
 ]
 
 /*
@@ -78,7 +79,9 @@ const aliases = {
   Schema: 'Adonis/Src/Schema',
   View: 'Adonis/Src/View',
   Ws: 'Adonis/Addons/Ws',
-  Validator: 'Adonis/Addons/Validator'
+  Validator: 'Adonis/Addons/Validator',
+  Antl: 'Adonis/Addons/Antl',
+  Formats: 'Adonis/Addons/AntlFormats'
 }
 
 /*
@@ -110,7 +113,8 @@ const commands = [
   'Adonis/Commands/Migration:Reset',
   'Adonis/Commands/DB:Seed',
   'Adonis/Commands/Migration:Status',
-  'Adonis/Commands/Key:Generate'
+  'Adonis/Commands/Key:Generate',
+  'Adonis/Commands/Antl:Setup'
 ]
 
 module.exports = { providers, aceProviders, aliases, commands }

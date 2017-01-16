@@ -17,9 +17,8 @@ const globalMiddleware = [
   'Adonis/Middleware/Shield',
   'Adonis/Middleware/Flash',
   'Adonis/Middleware/AuthInit',
-
-  // APTS middlewares
   'App/Http/Middleware/AuthenticatedUserPopulate',
+  'Adonis/Middleware/DetectLocale'
 ]
 
 /*

@@ -22,17 +22,17 @@
         <tr>
           <th colspan=3>
             <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-            {{ "Uzdevuma iesūtījumi" if assignment else "Pēdējie iesūtījumi" }}
+            {{ antl.formatMessage('messages.task_submissions') if assignment else antl.formatMessage('messages.last_submissions') }}
           </th>
         </tr>
         <tr>
           {% if not assignment %}
-            <th>Problēma</th>
+            <th>{{ antl.formatMessage('messages.task') }}</th>
           {% else %}
-            <th>Laiks</th>
+            <th>{{ antl.formatMessage('messages.time') }}</th>
           {% endif %}
-          <th>Status</th>
-          <th>Rezultāts</th>
+          <th>{{ antl.formatMessage('messages.status') }}</th>
+          <th>{{ antl.formatMessage('messages.result') }}</th>
         </tr>
       </thead>
       <tbody>

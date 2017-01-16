@@ -32,17 +32,18 @@
     <thead>
       <tr>
         <th colspan=2>
-          <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span> Ierobežojumi
+          <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
+          {{ antl.formatMessage('messages.limits') }}
         </th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>Atmiņa:</td>
+        <td>{{ antl.formatMessage('messages.memory') }}</td>
         <td>{{ problem.memory }}mb</td>
       </tr>
       <tr>
-        <td>Laika limits:</td>
+        <td>{{ antl.formatMessage('messages.time') }}</td>
         <td>{{ problem.timelimit }}s</td>
       </tr>
     </tbody>
@@ -50,9 +51,7 @@
   {% if inAssignment %}
     <table class="table">
       <thead>
-        <tr>
-          <th colspan=2>Iesūtīt uzdevuma risinājumu:</td>
-        </tr>
+        <tr><th>{{ antl.formatMessage('messages.submit_solution') }}</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -61,11 +60,11 @@
             {{ csrfField }}
             <input type="file" name="solution" id="submit_file">
             <p>
-              <button type="button" class="btn btn-default" style="width:100%;" id="submit_button">Izvēlēties failu</button><br />
+              <button type="button" class="btn btn-default" style="width:100%;" id="submit_button">{{ antl.formatMessage('messages.choose_file') }}</button><br />
             </p>
             <p id="submit_text"></p>
             <p>
-              <button type="submit" class="btn btn-success button-hidden" style="width:100%;" id="submit_form">Iesūtīt</button>
+              <button type="submit" class="btn btn-success button-hidden" style="width:100%;" id="submit_form">{{ antl.formatMessage('messages.submit') }}</button>
             </p>
             {{ form.close() }}
           </td>

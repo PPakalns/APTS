@@ -1,0 +1,43 @@
+{
+  "APTS": "APTS",
+  "APTS_": "Automātiskā Programmu Testēšanas Sistēma",
+
+  "group": "Grupa",
+  "groups": "Grupas",
+  "task": "Uzdevums",
+  "tasks": "Uzdevumi",
+  "pages": "Lapas",
+  "submission": "Iesūtījums",
+  "submissions": "Iesūtījumi",
+  "FAQ": "FAQ",
+
+  "groups_description": "Grupās jums ir pieeja programmēšanas uzdevumiem.",
+  "user_not_added_to_group": "Jūs neesat pievienots nevienā grupā.",
+  "group_name": "Grupas nosaukums",
+  "groups_do_not_exsist": "Neviena grupa sistēmā nav izveidota.",
+  "my_groups": "Manas grupas:",
+  "group_tasks": "Grupas uzdevumi",
+  "group_do_not_have_tasks": "Grupai nav pievienots neviens uzdevums",
+
+  "participants": "Dalībnieki: {count}",
+  "limits": "Ierobežojumi",
+  "memory": "Atmiņa",
+  "time": "Laiks",
+  "submit": "Iesūtīt",
+  "submit_solution": "Iesūtīt risinājumu",
+  "choose_file": "Izvēlies failu",
+  "size": "Izmērs",
+
+  "time": "Laiks",
+  "status": "Status",
+  "result": "Rezultāts",
+
+  "logout": "Iziet",
+  "login": "Ieiet",
+  "register": "Reģistrēties",
+
+  "menu_user": "Lietotājs: {user}",
+
+  "task_submissions": "Uzdevuma iesūtījumi",
+  "last_submissions": "Pēdejie iesūtījumi"
+}
