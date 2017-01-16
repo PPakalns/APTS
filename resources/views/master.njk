@@ -40,7 +40,7 @@
           <ul class="nav navbar-nav navbar-right">
 
             {% if cUser.auth %}
-              <li class="navbar-text">Lietotājs: {{ cUser.user.email }}</li>
+              <li class="navbar-text" style="padding-left:10px;">Lietotājs: {{ cUser.user.email }}</li>
               <li><a href="{{ 'logout' | route({}) }}">Iziet</a></li>
             {% else %}
               <li><a href="{{ 'login' | route({}) }}">Ieiet</a></li>
