@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.7">
     <title>APTS</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/atom-one-light.min.css">
@@ -60,7 +60,7 @@
         </div>
 
         <div class="row">
-          <div class="col-sm-3 col-sm-push-9 sidebar">
+          <div class="col-md-3 col-md-push-9 sidebar">
             {% block sidebar %}
             {% endblock %}
             {% asyncAll fix in [0] %}
@@ -68,7 +68,7 @@
             {% endall %}
           </div> {# sidebar #}
 
-          <div class="col-sm-9 col-sm-pull-3 content">
+          <div class="col-md-9 col-md-pull-3 content">
 
             {% for error in old('errors') %}
               <p class="bg-danger">
@@ -91,10 +91,10 @@
     <footer class="footer">
       <div class="container">
         <div class="row">
-          <div class="col-sm-6">
+          <div class="col-md-6">
             <p>APTS - Automātiskā Programmu Testēšanas Sistēma</p>
           </div>
-          <div class="col-sm-6">
+          <div class="col-md-6">
             <p>(c) Pēteris Pakalns</p>
           </div>
         </div>
