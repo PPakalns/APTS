@@ -3,6 +3,7 @@
 #include <sys/utsname.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <grp.h>
 #include <pwd.h>
 #include <sched.h>
 #include <string.h>
@@ -37,7 +38,7 @@ static int child_main(void *arg)
     }
 
     // Set hostname for child
-    if (sethostname(arg, strlen(arg)) == -1){
+    if (sethostname(args->hostname, strlen(arg)) == -1){
         fprintf(stderr, "Failure in child: setting up hostname!\n");
         exit(EXIT_FAILURE);
     }
@@ -79,7 +80,9 @@ static int child_main(void *arg)
 
 
     uid_t judge_uid = 1001;
-    setgid(judge_uid);
+
+    setgid(1001);
+    setgroups(1, (gid_t[]){(gid_t) 1001});
     setuid(judge_uid);
 
     execv("/bin/bash",(char * const[]){(char*)"/bin/bash", (char*)NULL});
