@@ -44,7 +44,7 @@ class IsolateConfig:
         self.address_space = None      # -m
         self.max_processes = 1         # -p
         self.timeout = None            # --time
-        self.verbosity = 4             # -v
+        self.verbosity = 1             # -v
         self.wallclock_timeout = None  # -w
         self.extra_timeout = None      # -x
 
@@ -146,10 +146,31 @@ class Isolate:
             raise Exception("Isolated directory '%s' is not a directory" % self.config.isolate_dir)
 
     def getSandboxBoxDir(self):
-        return os.path.join(self.config.isolate_dir)
+        return os.path.join(self.config.isolate_dir, "box")
 
     def getSandboxDir(self):
         return self.config.isolate_dir
+
+    def readFile(self, file):
+        trunc = 1000
+        output = b""
+        logger.log(logging.DEBUG, "Reading file %s", file)
+        with open(file, 'rb') as f:
+            while trunc > 0:
+                byte_s = f.read(100)
+                output += byte_s
+                trunc -= len(byte_s)
+                if not byte_s:
+                    break
+        return output.decode()
+
+    def readStdOut(self):
+        file = os.path.join(self.getSandboxBoxDir(), self.config.stdout_file)
+        return self.readFile(file)
+
+    def readStdErr(self):
+        file = os.path.join(self.getSandboxBoxDir(), self.config.stderr_file)
+        return self.readFile(file)
 
     def cleanUp(self):
         self.cleaned = True
@@ -168,7 +189,7 @@ class Isolate:
 
     def run(self, params):
         params = self.config.getRunOptions() + params
-        ret, _ = runIsolate(params)
+        return runIsolate(params)
 
     def __del__(self):
         if self.cleaned==None or not self.cleaned:
@@ -180,6 +201,7 @@ class Compiler:
         self.config = IsolateConfig()
         self.config.cgroup = True
         self.config.cgroup_space = 1024*1024
+        self.config.cgroup_time = True
         self.config.timeout = 30
         self.config.max_processes = 30
         self.config.address_space = 1024*1024
@@ -199,9 +221,25 @@ class Compiler:
 
     def compile(self, sandbox):
         sandbox.copyTo(self.file, self.source())
-        sandbox.run(self.command())
-        sandbox.copyFrom(self.executable(), self.targetpath)
+        return_code, output = sandbox.run(self.command())
+
+        compile_result = {
+            "return_code" : return_code,
+            "output" : output,
+            "stdout" : sandbox.readStdOut(),
+            "stderr" : sandbox.readStdErr()
+        }
+
+        if return_code == 0:
+            sandbox.copyFrom(self.executable(), self.targetpath)
+            compile_result["executable"] = self.targetpath
+
+        return compile_result
 
 class Cpp11(Compiler):
     def command(self):
         return ["/usr/bin/g++", "-DEVAL", "-static", "-O2", "-std=c++11", "-o", self.executable(), self.source()]
+
+class C(Compiler):
+    def command(self):
+        return ["/usr/bin/gcc", "-DEVAL", "-static", "-O2", "-std=c11", "-o", self.executable(), self.source(), "-lm"]
