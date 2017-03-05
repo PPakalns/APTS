@@ -16,6 +16,8 @@ TESTS = [
 EXECUTABLE_PATH = "executable"
 
 for test in TESTS:
+    print()
+    print("############# TESTING %s SOURCE FILE ####################" % test["source"])
     path = os.path.join("sources", test["source"])
 
     compiler = isolate.Cpp11(path, EXECUTABLE_PATH)

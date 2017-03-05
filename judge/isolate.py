@@ -44,13 +44,15 @@ class IsolateConfig:
         self.address_space = None      # -m
         self.max_processes = 1         # -p
         self.timeout = None            # --time
-        self.verbosity = 1             # -v
+        self.verbosity = 0             # -v
         self.wallclock_timeout = None  # -w
         self.extra_timeout = None      # -x
 
         self.stdin_file = "stdin.log"         # -i
         self.stdout_file = "stdout.log"        # -o
         self.stderr_file = "stderr.log"        # -r
+
+        self.executable = "executable"
 
         self.meta_file = "run.meta"    # --meta
 
@@ -191,6 +193,22 @@ class Isolate:
         params = self.config.getRunOptions() + params
         return runIsolate(params)
 
+    def parseMetaFile(self):
+        logger.debug("Reading meta file %s", self.config.meta_file)
+        opt = {}
+        with open(self.config.meta_file, "r") as ins:
+            for line in ins:
+                key, value = line.split(":")
+                opt[key] = value.strip()
+        return opt
+
+    def test(self, input_file, executable, checker):
+        logger.debug("Testing program %s with input %s" % (input_file, executable))
+        self.config.stdin_file = "stdin.log"
+        self.copyTo(input_file, self.config.stdin_file)
+        self.copyTo(executable, self.config.executable)
+        return_code, output = self.run(["./" + self.config.executable])
+
     def __del__(self):
         if self.cleaned==None or not self.cleaned:
             self.cleanUp()
@@ -229,6 +247,7 @@ class Compiler:
             "stdout" : sandbox.readStdOut(),
             "stderr" : sandbox.readStdErr()
         }
+        compile_result.update(sandbox.parseMetaFile())
 
         if return_code == 0:
             sandbox.copyFrom(self.executable(), self.targetpath)
