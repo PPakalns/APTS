@@ -9,21 +9,30 @@ import task
 TESTS = [
     {
         "checker": "sources/wcmp.cpp",
-        "submission": "sources/m_logN.cpp",
-        "zip": "sources/M_tests.zip",
+        "submissions": [
+            {"source": "sources/m_slov.cpp", "exp_status": "OK" },
+            {"source": "sources/m_wa.cpp", "exp_status": "OK"},
+            {"source": "sources/m_exit.cpp", "exp_status": "OK" },
+            {"source": "sources/m_logN.cpp", "exp_status": "OK" }
+        ],
+        "zip": "sources/m_tests.zip",
         "lang": "cpp11",
         "time_limit": 1.24,
-        "memory_limit": 256,
-        "exp_status": "OK"
+        "memory_limit": 256 * 1024,
     }
 ]
 
 
 for test in TESTS:
-    tester = task.Task(test)
+    for submission in test["submissions"]:
+        test["submission"] = submission["source"]
+        test["exp_status"] = submission["exp_status"]
+        tester = task.Task(test)
 
-    result = tester()
+        result = tester()
 
-    if result["status"] != test["exp_status"]:
-        raise Exception("Expected status doesn't match. Expected: %s, Recieved: %s"
-                        % (test["exp_status"], result["status"]))
+        print(result)
+
+        if result["status"] != test["exp_status"]:
+            raise Exception("Expected status doesn't match. Expected: %s, Recieved: %s"
+                            % (test["exp_status"], result["status"]))

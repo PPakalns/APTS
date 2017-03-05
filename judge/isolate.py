@@ -6,7 +6,7 @@ import os
 import logging
 import shutil
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 ISOLATE_PATH = "/usr/local/bin/isolate"
@@ -39,7 +39,7 @@ class IsolateConfig:
         self.preserve_env = False      # -e
         self.inherit_env = []          # --env
         self.set_env = {"PATH":"/usr/bin"} # --env
-        self.fsize = None              # -f
+        self.fsize = 128*1024          # -f
         self.stack_space = None        # -k
         self.address_space = None      # -m
         self.max_processes = 1         # -p
@@ -61,10 +61,17 @@ class IsolateConfig:
         #Python support
         self.set_env["HOME"] = "./"
 
+    def initChecker(self):
+        self.timeout = 10
+        self.address_space = 512 * 1024
+        self.stdin_file = None
+        return self
+
     def getInitOptions(self):
         opt = []
         if self.cgroup:
             opt += ["--cg"]
+        opt += ["--verbose"] * self.verbosity
         opt += ["--init"]
         return opt
 
@@ -125,7 +132,10 @@ class IsolateConfig:
         return opt
 
     def getCleanupOptions(self):
-        return ["--cleanup"]
+        opt = []
+        opt += ["--verbose"] * self.verbosity
+        opt += ["--cleanup"]
+        return opt
 
 class Isolate:
     def __init__(self, config):
@@ -176,13 +186,14 @@ class Isolate:
 
     def cleanUp(self):
         self.cleaned = True
-        runIsolate(self.config.getCleanupOptions())
+        # runIsolate(self.config.getCleanupOptions())
 
     def copyTo(self, src, filename):
         rdst = os.path.join("box", filename)
         dst = os.path.join(self.config.isolate_dir, rdst)
         logger.debug("Copying file from '%s' to '%s'", src, dst)
         shutil.copyfile(src, dst)
+        return dst
 
     def copyFrom(self, bsrc, dst):
         src = os.path.join(self.config.isolate_dir, "box", bsrc)
@@ -191,7 +202,15 @@ class Isolate:
 
     def run(self, params):
         params = self.config.getRunOptions() + params
-        return runIsolate(params)
+        return_code, output = runIsolate(params)
+        run_result = {
+            "return_code" : return_code,
+            "output" : output,
+            "stdout" : self.readStdOut(),
+            "stderr" : self.readStdErr()
+        }
+        run_result.update(self.parseMetaFile())
+        return run_result
 
     def parseMetaFile(self):
         logger.debug("Reading meta file %s", self.config.meta_file)
@@ -201,13 +220,6 @@ class Isolate:
                 key, value = line.split(":")
                 opt[key] = value.strip()
         return opt
-
-    def test(self, input_file, executable, checker):
-        logger.debug("Testing program %s with input %s" % (input_file, executable))
-        self.config.stdin_file = "stdin.log"
-        self.copyTo(input_file, self.config.stdin_file)
-        self.copyTo(executable, self.config.executable)
-        return_code, output = self.run(["./" + self.config.executable])
 
     def __del__(self):
         if self.cleaned==None or not self.cleaned:
@@ -220,7 +232,7 @@ class Compiler:
         self.config.cgroup = True
         self.config.cgroup_space = 1024*1024
         self.config.cgroup_time = True
-        self.config.timeout = 30
+        self.config.timeout = 20
         self.config.max_processes = 30
         self.config.address_space = 1024*1024
         self.config.stdin_file = None
@@ -239,17 +251,9 @@ class Compiler:
 
     def compile(self, sandbox):
         sandbox.copyTo(self.file, self.source())
-        return_code, output = sandbox.run(self.command())
+        compile_result = sandbox.run(self.command())
 
-        compile_result = {
-            "return_code" : return_code,
-            "output" : output,
-            "stdout" : sandbox.readStdOut(),
-            "stderr" : sandbox.readStdErr()
-        }
-        compile_result.update(sandbox.parseMetaFile())
-
-        if return_code == 0:
+        if compile_result["return_code"] == 0:
             sandbox.copyFrom(self.executable(), self.targetpath)
             compile_result["executable"] = self.targetpath
 
