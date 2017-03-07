@@ -9,13 +9,13 @@ class TestsTableSchema extends Schema {
       table.increments()
       table.timestamps()
 
-      table.integer('number') // Test number
+      table.integer('tid') // Test number
       table.string('gid', 10) // Test identificator in group ("", a, b, c)
 
-      table.integer('problem_id').unsigned().references('id').inTable('problems')
+      table.integer('testset_id').unsigned().references('id').inTable('testsets')
 
-      table.string('input_filename', 255)
-      table.string('output_filename', 255)
+      table.string('input_file', 255)
+      table.string('output_file', 255)
     })
   }
 

@@ -5,6 +5,7 @@ const Problem = use('App/Model/Problem')
 const Helpers = use('Helpers')
 const Validator = use('Validator')
 const Database = use('Database')
+const antl = use('Antl')
 
 let uuid = require('node-uuid')
 let yauzl = require("yauzl");
@@ -237,13 +238,8 @@ class ProblemController {
         }
 
         var callbackOnEntry = function(entry){
-          if (/\/$/.test(entry.fileName)) {
-            // Skip directory
-            zipfile.readEntry()
-          } else {
             removeListeners()
             resolve(entry)
-          }
         }
         function removeListeners()
         {
@@ -251,27 +247,29 @@ class ProblemController {
           zipfile.removeListener("end", callbackOnEnd)
         }
 
-        zipfile.readEntry();
-
         zipfile.on("entry", callbackOnEntry)
         zipfile.once("end", callbackOnEnd)
+        zipfile.readEntry();
       })
     }
 
     // Parse zip file content
-    var zipFile = yield getZipFile(test_file.uploadPath())
-    var completedTests = []
-    var completedTestsNumeric = []
+    let zipFile = yield getZipFile(test_file.uploadPath())
+    let completedTests = []
+    let completedTestsNumeric = []
+    let badZipArchive = false
 
-    while ( true )
+    while (true)
     {
-      var testFile = yield getZipFileNamePromise(zipFile);
+      let testFile = yield getZipFileNamePromise(zipFile)
       if (!testFile)
+      {
         break;
-      var testFileName = testFile.fileName;
-      var isInput = testFileName.match(/^(.+)\.(i|o)([\d]+)([A-Za-z]*)$/);
+      }
+      let testFileName = testFile.fileName;
+      let isInput = testFileName.match(/^(.+)\.(i|o)([\d]+)([A-Za-z]*)$/);
       if (isInput){
-        var testId = isInput[ 1 ] + "." + isInput[ 3 ] + isInput[ 4 ];
+        let testId = isInput[ 1 ] + "." + isInput[ 3 ] + isInput[ 4 ];
         if (completedTests.hasOwnProperty(testId) == false)
         {
           completedTests[testId] = {}
@@ -290,6 +288,33 @@ class ProblemController {
           completedTests[testId].output_filename = isInput[ 0 ]
         }
       }
+      else
+      {
+        badZipArchive = antl.formatMessage('messages.zip_bad_file', {filename: testFileName})
+      }
+    }
+
+    for (let testId in completedTests)
+    {
+      if (completedTests.hasOwnProperty(testId))
+      {
+        if (completedTests[testId].hasOwnProperty("input_filename")==false
+            || completedTests[testId].hasOwnProperty("output_filename")==false)
+        {
+          badZipArchive = antl.formatMessage('messages.zip_does_not_contain_inout_files', {testname: testId})
+          break
+        }
+      }
+    }
+
+    if (badZipArchive)
+    {
+      yield req
+        .withAll()
+        .andWith({'errors': [{message: badZipArchive}]})
+        .flash()
+      res.route('problem/test/edit', {id: data.id})
+      return
     }
 
     // Save tests to database

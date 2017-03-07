@@ -39,5 +39,8 @@
   "menu_user": "Lietotājs: {user}",
 
   "task_submissions": "Uzdevuma iesūtījumi",
-  "last_submissions": "Pēdejie iesūtījumi"
+  "last_submissions": "Pēdejie iesūtījumi",
+
+  "zip_does_not_conaint_inout_files": "Iesūtītais arhīvs testam {testname} nesatur ievadfailu un/vai izvadfailu!",
+  "zip_bad_file": "Iesūtītajā zip failā atrasts fails \"{filename}\", kas ir direktorija vai neatbilst pieprasītajam testu faila formātam"
 }
