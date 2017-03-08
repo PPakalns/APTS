@@ -16,7 +16,6 @@ class SubmissionsTableSchema extends Schema {
       // Submission
       table.string('type', 10) // cpp cpp11 c c11 pas
 
-      table.integer('filesize')
       table.string('filename', 525)
       table.string('filemime', 525)
       table.integer('filesize')
@@ -27,7 +26,8 @@ class SubmissionsTableSchema extends Schema {
       table.integer('judge_id').unsigned().references('id').inTable('users') // judge
 
       table.string('status', 100) // OK, CE, IE
-      table.string('status_message', 525) // CE message
+      table.string('public', 525) // Public testing message
+      table.string('private', 525) // Private testing message
 
       table.integer('score')
       table.integer('maxscore')
