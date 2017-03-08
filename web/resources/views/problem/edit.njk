@@ -24,20 +24,6 @@
         </div>
 
         <div class="form-group">
-          {{ form.label('memory', 'Atmiņas limits (Mb)', {class: 'col-md-4 control-label'}) }}
-          <div class="col-md-2">
-            {{ form.text('memory', old('memory') or problem.memory, {class: 'form-control', placeholder:"512", required: true}) }}
-          </div>
-        </div>
-
-        <div class="form-group">
-          {{ form.label('timelimit', 'Laika limits (s)', {class: 'col-md-4 control-label'}) }}
-          <div class="col-md-2">
-            {{ form.text('timelimit', old('timelimit') or problem.timelimit, {class: 'form-control', placeholder:"0.5", required: true}) }}
-          </div>
-        </div>
-
-        <div class="form-group">
           <div class='col-md-12'>
             {{ form.label('description', 'Uzdevuma apraksts', {class: 'control-label'}) }}
             {{ form.textarea('description', old('description') or problem.description, {class: 'form-control', rows: '20'}) }}

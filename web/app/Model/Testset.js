@@ -3,6 +3,7 @@
 const Lucid = use('Lucid')
 
 class Testset extends Lucid {
+
   tests () {
     return this.hasMany('App/Model/Test')
   }

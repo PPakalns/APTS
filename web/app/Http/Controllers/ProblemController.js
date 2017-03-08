@@ -42,27 +42,7 @@ class ProblemController {
   }
 
   * create_save(req, res) {
-    let problemData = req.only('name', 'description', 'timelimit', 'memory')
-
-    problemData.timelimit = Validator.sanitizor.toFloat(problemData.timelimit)
-    problemData.memory = Validator.sanitizor.toInt(problemData.memory, '')
-
-    var errors = []
-    if (isNaN(problemData.timelimit))
-      errors.push({message: "Norādiet laika limitu, piemēram, 0.2"})
-
-    if (isNaN(problemData.memory))
-      errors.push({message: "Norādiet atmiņas limitu kā naturālu skaitli, piemēram, 256"})
-
-    if (errors.length>0)
-    {
-      yield req
-        .withAll()
-        .andWith({"errors": errors})
-        .flash()
-      res.route('problem/create')
-      return
-    }
+    let problemData = req.only('name', 'description')
 
     const validation = yield Validator.validate(problemData, Problem.rules)
     if (validation.fails())
@@ -76,17 +56,10 @@ class ProblemController {
     }
 
     const problem = new Problem()
+    const user = yield req.auth.getUser()
     problem.name = problemData.name;
     problem.description = problemData.description;
-    problem.timelimit = problemData.timelimit;
-    problem.memory = problemData.memory;
-
-    // TODO: Remove after middleware permission check creation
-    const user = yield req.auth.getUser()
-    if (user)
-    {
-      problem.author = user.id;
-    }
+    problem.author = user.id;
     yield problem.save()
 
     yield req
@@ -104,29 +77,10 @@ class ProblemController {
   }
 
   * edit_save(req, res) {
-    let problemData = req.only('id', 'name', 'description', 'timelimit', 'memory')
+    let problemData = req.only('id', 'name', 'description')
     const problem = yield Problem.findOrFail(problemData.id)
 
-    problemData.timelimit = Validator.sanitizor.toFloat(problemData.timelimit)
-    problemData.memory = Validator.sanitizor.toInt(problemData.memory, 10)
-
-    var errors = []
-    if (isNaN(problemData.timelimit))
-      errors.push({message: "Norādiet laika limitu, piemēram, 0.2"})
-
-    if (isNaN(problemData.memory))
-      errors.push({message: "Norādiet atmiņas limitu kā naturālu skaitli, piemēram, 256"})
-
-    if (errors.length>0)
-    {
-      yield req
-        .withAll()
-        .andWith({"errors": errors})
-        .flash()
-      res.route('problem/edit',{id: problemData.id})
-      return
-    }
-
+    // Check problem validation rules
     const validation = yield Validator.validate(problemData, Problem.rules)
     if (validation.fails())
     {
@@ -140,8 +94,6 @@ class ProblemController {
 
     problem.name = problemData.name;
     problem.description = problemData.description;
-    problem.timelimit = problemData.timelimit;
-    problem.memory = problemData.memory;
     yield problem.save()
 
     yield req
@@ -181,6 +133,19 @@ class ProblemController {
   * test_edit_save(req, res) {
     const data = req.only("id")
     const problem = yield Problem.findOrFail(data.id)
+
+    // Check memory and time limits
+    const errors = checkLimits(problemData)
+
+    if (errors)
+    {
+      yield req
+        .withAll()
+        .andWith({"errors": errors})
+        .flash()
+      res.route('problem/edit',{id: problemData.id})
+      return
+    }
 
     // getting file instance
     const test_file = req.file('test_file', {
@@ -330,6 +295,48 @@ class ProblemController {
     res.route('problem/test/edit', {id: data.id})
     return
   }
+}
+
+/*
+ * Function to check time and memory limits
+ * return sarray of errors or null
+ */
+function checkLimits(datak)
+{
+  data.timelimit = Validator.sanitizor.toFloat(data.timelimit)
+  data.memory = Validator.sanitizor.toInt(data.memory)
+
+  var errors = []
+  if (isNaN(problemData.timelimit))
+  {
+    errors.push({message: "Norādiet laika limitu, piemēram, 0.2"})
+  }
+  else
+  {
+    if (false == (data.timelimit > 0 && data.timelimit <= 16))
+    {
+      errors.push({message: "Laika limitam ir jābūt robežās ]0,16] sekundēm."})
+    }
+  }
+
+  if (isNaN(problemData.memory))
+  {
+    errors.push({message: "Norādiet atmiņas limitu kā naturālu skaitli, piemēram, 256"})
+  }
+  else
+  {
+    if (false == (data.memory > 0 && data.memory <= 1024))
+    {
+      errors.push({message: "Atmiņas limitam ir jābūt robežās ]0,1024] MiB."})
+    }
+  }
+
+  if (errors.length == 0)
+  {
+    return null
+  }
+
+  return errors
 }
 
 module.exports = ProblemController
