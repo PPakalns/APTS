@@ -1,6 +1,7 @@
 'use strict'
 
 const Test = use('App/Model/Test')
+const Testset = use('App/Model/Testset')
 const Problem = use('App/Model/Problem')
 const Helpers = use('Helpers')
 const Validator = use('Validator')
@@ -107,9 +108,17 @@ class ProblemController {
     const id = req.param('id')
     const problem = yield Problem.findOrFail(id)
 
-    const tests = yield problem.tests().orderBy('number', 'asc').orderBy('gid', 'asc').fetch()
+    let testset = null
 
-    yield res.sendView('problem/test/list', {tests: tests.toJSON(), problem: problem.toJSON()})
+    if (problem.testset_id != null)
+    {
+      testset = yield Testset.findOrFail(problem.testset_id)
+      testset.related('tests','zip','checker').load()
+
+      testset = testset.toJSON()
+    }
+
+    yield res.sendView('problem/test/list', {testset: testset, problem: problem.toJSON()})
   }
 
   * testfile_download(req, res) {
