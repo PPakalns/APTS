@@ -15,10 +15,7 @@ class SubmissionsTableSchema extends Schema {
       // Submission
       table.string('type', 10) // cpp cpp11 c c11 pas
 
-      table.string('filename', 525)
-      table.string('filemime', 525)
-      table.integer('filesize')
-      table.text('file')
+      table.integer('file_id').unsigned().references('id').inTable('files')
 
       // Testing results
       table.integer('testing_status') // 0 - waiting, 1-testing, 2-done

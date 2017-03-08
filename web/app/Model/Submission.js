@@ -11,6 +11,10 @@ class Submission extends Lucid {
     return this.belongsTo('App/Model/Assignment')
   }
 
+  file () {
+    return this.belongsTo('App/Model/File')
+  }
+
   testset () {
     return this.belongsTo('App/Model/Testset')
   }
