@@ -10,7 +10,6 @@ class SubmissionsTableSchema extends Schema {
       table.timestamps()
       table.integer('user_id').unsigned().references('id').inTable('users')
       table.integer('assignment_id').unsigned().references('id').inTable('assignments')
-      table.integer('problem_id').unsigned().references('id').inTable('problems')
       table.integer('testset_id').unsigned().references('id').inTable('testsets')
 
       // Submission

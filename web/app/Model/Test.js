@@ -4,10 +4,9 @@ const Lucid = use('Lucid')
 
 class Test extends Lucid {
 
-  problem () {
-    return this.belongsTo('App/Model/Problem', 'id', 'problem_id')
+  testset () {
+    return this.belongsTo('App/Model/Testset', 'id', 'testset_id')
   }
-
 }
 
 module.exports = Test

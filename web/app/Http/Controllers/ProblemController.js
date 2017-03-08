@@ -42,7 +42,7 @@ class ProblemController {
   }
 
   * create_save(req, res) {
-    let problemData = req.only('name', 'description', 'timelimit', 'memory', 'shit')
+    let problemData = req.only('name', 'description', 'timelimit', 'memory')
 
     problemData.timelimit = Validator.sanitizor.toFloat(problemData.timelimit)
     problemData.memory = Validator.sanitizor.toInt(problemData.memory, '')

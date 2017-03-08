@@ -34,7 +34,11 @@ class User extends Lucid {
   }
 
   submissions () {
-    return this.hasMany('App/Model/Submission')
+    return this.hasMany('App/Model/Submission', 'id', 'user_id')
+  }
+
+  judged () {
+    return this.hasMany('App/Model/Submission', 'id', 'judge_id')
   }
 
   problems () {

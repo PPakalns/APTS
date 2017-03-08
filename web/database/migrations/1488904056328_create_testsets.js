@@ -30,7 +30,6 @@ class TestsetsTableSchema extends Schema {
   down () {
     this.drop('testsets')
   }
-
 }
 
 module.exports = TestsetsTableSchema

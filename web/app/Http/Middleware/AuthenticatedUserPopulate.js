@@ -16,6 +16,7 @@ class AuthenticatedUserPopulate {
     req.cUser = {
       auth: false,
       admin: false,
+      judge: false,
       user: {},
       ruser: req.currentUser
     }
@@ -29,7 +30,8 @@ class AuthenticatedUserPopulate {
 
       // Assign permissions to user depending on its roles
       let rolemap = {
-        1: "admin"
+        1: "admin",
+        2: "judge"
       }
 
       let length = req.cUser.user.roles.length;
