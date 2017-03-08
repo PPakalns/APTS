@@ -11,6 +11,9 @@ class TestsetsTableSchema extends Schema {
 
       table.integer('problem_id').unsigned().references('id').inTable('problems')
 
+      table.decimal('timelimit', 4, 2)
+      table.integer('memory')
+
       // Test zip archive
       table.integer('test_count')
 

@@ -12,9 +12,6 @@ class ProblemsTableSchema extends Schema {
       table.text('description')
       table.integer('author').unsigned().references('id').inTable('users')
 
-      table.decimal('timelimit', 4, 2)
-      table.integer('memory')
-
       table.integer('testset_id').unsigned().references('id').inTable('testsets')
     })
   }

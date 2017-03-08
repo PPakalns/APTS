@@ -178,12 +178,6 @@ class ProblemController {
     res.download(Helpers.storagePath(problem.test_filepath))
   }
 
-  * test_edit(req, res) {
-    const id = req.param('id')
-    const problem = yield Problem.findOrFail(id)
-    yield res.sendView('problem/test/edit',{problem: problem.toJSON()})
-  }
-
   * test_edit_save(req, res) {
     const data = req.only("id")
     const problem = yield Problem.findOrFail(data.id)
