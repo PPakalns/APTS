@@ -6,115 +6,161 @@
 {% endblock %}
 
 {% block content %}
-      {{ form.open({route: 'problem/test/edit_save', params: {id: problem.id}, class:"form-horizontal", files: true}) }}
-      {{ form.hidden('id', problem.id ) }}
+    <div class="panel panel-default">
+        <div class="panel-heading">Uzdevuma limiti</div>
+        <div class="panel-body">
+            {{ form.open({route: 'problem/test/limits', params: {id: problem.id}, class:"form-horizontal"}) }}
+            {{ form.hidden('id', problem.id ) }}
 
-      {{ csrfField }}
+            {{ csrfField }}
 
-        <div class="form-group">
-          {{ form.label('memory', 'Atmiņas limits (Mb)', {class: 'col-md-4 control-label'}) }}
-          <div class="col-md-2">
-            {{ form.text('memory', old('memory') or testset.memory, {class: 'form-control', placeholder:"512", required: true}) }}
-          </div>
+            <div class="form-group">
+                {{ form.label('memory', 'Atmiņas limits (Mb)', {class: 'col-md-4 control-label'}) }}
+                <div class="col-md-2">
+                    {{ form.text('memory', old('memory') or testset.memory, {class: 'form-control', placeholder:"512", required: true}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form.label('timelimit', 'Laika limits (s)', {class: 'col-md-4 control-label'}) }}
+                <div class="col-md-2">
+                    {{ form.text('timelimit', old('timelimit') or testset.timelimit, {class: 'form-control', placeholder:"0.5", required: true}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-4 col-md-offset-8 text-right">
+                    {{ form.button('Saglabāt', 'Saglabāt', {class: "btn btn-primary"}) }}
+                </div>
+            </div>
+            {{ form.close() }}
         </div>
-
-        <div class="form-group">
-          {{ form.label('timelimit', 'Laika limits (s)', {class: 'col-md-4 control-label'}) }}
-          <div class="col-md-2">
-            {{ form.text('timelimit', old('timelimit') or testset.timelimit, {class: 'form-control', placeholder:"0.5", required: true}) }}
-          </div>
-        </div>
-
-        <div class="form-group">
-          {{ form.label('test_file', 'Uzdevuma testu failu zip arhīvs', {class: 'col-md-4 control-label'}) }}
-          <div class="col-md-6">
-            {{ form.file('test_file') }}
-          </div>
-        </div>
-        <p class="bg-info">
-          Testu failu zip arhīvs ir līdz 100mb liels fails ar zip paplašinājumu, nesatur direktorijas, tikai testa failus formātā "\w+.(i|o)(\d+)(\w?)",
-          kur pirmā grupa norāda vai fails ir ievadfails, vai izvadfails, otrā grupa norāda testa grupas numuru, trešā grupa norāda testa identifikatoru grupā.
-        </p>
-
-        <div class="form-group">
-          {{ form.label('checker_file', 'Čekera fails (cpp fails)', {class: 'col-md-4 control-label'}) }}
-          <div class="col-md-6">
-            {{ form.file('test_file') }}
-          </div>
-        </div>
-        <p class="bg-info">
-          Testu failu zip arhīvs ir līdz 100mb liels fails ar zip paplašinājumu.
-        </p>
-
-        <div class="form-group">
-          <div class="col-md-4 col-md-offset-8 text-right">
-            {{ form.button('Saglabāt', 'Saglabāt', {class: "btn btn-primary"}) }}
-          </div>
-        </div>
-        {{ form.close() }}
-      </div>
     </div>
 
-    {% if not testset.checker %}
-      <p class="bg-warning">
-        Nav pievienots neviens čekeris.
-      </p>
-    {% else %}
-      <p class="text-right editmenu">
-        <a href="{{ 'problem/checker/download' | route({id: testset.id}) }}">
-          <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Lejupielādēt čekera failu
-        </a>
-      </p>
-    {% endif %}
+    <div class="panel panel-default">
+        <div class="panel-heading">Čekeris</div>
 
-    {% if not testset.zip %}
-      <p class="bg-warning">
-        Nav pievienots neviens tests.
-      </p>
-    {% else %}
-      <p class="text-right editmenu">
-        <a href="{{ 'problem/test/download' | route({id: problem.id}) }}">
-          <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Lejupielādēt testu zip failu
-        </a>
-      </p>
-      <table class="table table-condensed">
-        <thead>
-          <tr>
-            <th>#</td>
-            <th>Ievadfails</td>
-            <th>Izvadfails</td>
-            <th>Numurs</td>
-            <th>Numurs grupā</td>
-          </tr>
-        </thead>
-        <tbody>
-          {% set i=0 %}
-          {% for test in testset.tests %}
-            <tr>
-              <td>
-                {% set i=i+1 %}
-                {{ i }}
-              </td>
-              <td>
-                {{ test.input_filename }}
-              </td>
-              <td>
-                {{ test.output_filename }}
-              </td>
-              <td>
-                {{ test.number }}
-              </td>
-              <td>
-                {{ test.gid }}
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% endif %}
+        <div class="panel-body">
 
-  {% endblock %}
+            {{ form.open({route: 'problem/test/checker', params: {id: problem.id}, class:"form-horizontal", files: true}) }}
+            {{ form.hidden('id', problem.id ) }}
 
-  {% block sidebar %}
+            {{ csrfField }}
+
+            <div class="form-group">
+                {{ form.label('checker_file', 'Čekera fails (cpp fails)', {class: 'col-md-4 control-label'}) }}
+                <div class="col-md-6">
+                    {{ form.file('checker_file') }}
+                </div>
+            </div>
+            <p>
+                Čekeris ir līdz 64KiB liels C++ fails, kas pārbauda, vai atbildes ir pareizas, izmantojot <code>testlib.h</code>.
+            </p>
+
+            <div class="form-group">
+                <div class="col-md-4 col-md-offset-8 text-right">
+                    {{ form.button('Saglabāt', 'Saglabāt', {class: "btn btn-primary"}) }}
+                </div>
+            </div>
+            {{ form.close() }}
+
+            <hr>
+
+            {% if not testset.checker %}
+                <p class="bg-warning">
+                    Nav pievienots neviens čekeris.
+                </p>
+            {% else %}
+                <p class="text-left editmenu">
+                    Čekeris uzdevumam pievienots.
+                    <a href="{{ 'problem/checker/download' | route({id: testset.id}) }}">
+                        <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Lejupielādēt čekera failu
+                    </a>
+                </p>
+            {% endif %}
+
+        </div>
+    </div>
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Testi</div>
+        <div class="panel-body">
+            {{ form.open({route: 'problem/test/tests', params: {id: problem.id}, class:"form-horizontal", files: true}) }}
+            {{ form.hidden('id', problem.id ) }}
+
+            {{ csrfField }}
+
+            <div class="form-group">
+                {{ form.label('test_file', 'Testu arhīvs (zip)', {class: 'col-md-4 control-label'}) }}
+                <div class="col-md-6">
+                    {{ form.file('test_file') }}
+                </div>
+            </div>
+            <p>
+                Zip arhīvs ar zip paplašinājumu, kas satur tikai teksta failus.
+            </p>
+
+            <div class="form-group">
+                <div class="col-md-4 col-md-offset-8 text-right">
+                    {{ form.button('Saglabāt', 'Saglabāt', {class: "btn btn-primary"}) }}
+                </div>
+            </div>
+            {{ form.close() }}
+
+            <hr>
+
+            {% if not testset.zip %}
+                <p class="bg-warning">
+                    Nav pievienots neviens tests.
+                </p>
+            {% else %}
+                <p class="text-right editmenu">
+                    <a href="{{ 'problem/test/download' | route({id: problem.id}) }}">
+                        <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Lejupielādēt testu zip failu
+                    </a>
+                </p>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>#</td>
+                            <th>Ievadfails</td>
+                            <th>Izvadfails</td>
+                            <th>Numurs</td>
+                            <th>Numurs grupā</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set i=0 %}
+                        {% for test in testset.tests %}
+                            <tr>
+                                <td>
+                                    {% set i=i+1 %}
+                                    {{ i }}
+                                </td>
+                                <td>
+                                    {{ test.input_file }}
+                                </td>
+                                <td>
+                                    {{ test.output_file }}
+                                </td>
+                                <td>
+                                    {{ test.tid }}
+                                </td>
+                                <td>
+                                    {{ test.gid }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block sidebar %}
     {% include 'problem/admin_sidebar' %}
-  {% endblock %}
+{% endblock %}

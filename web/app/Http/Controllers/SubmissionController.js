@@ -5,11 +5,6 @@ const Helpers = use('Helpers')
 const Assignment = use('App/Model/Assignment')
 const Submission = use('App/Model/Submission')
 
-let uuid = require('node-uuid')
-let bluebird = require('bluebird')
-let readFile = bluebird.promisify(require("fs").readFile);
-let unlinkFile = bluebird.promisify(require("fs").unlink);
-
 class SubmissionController {
 
   * index(req, res) {
@@ -104,7 +99,8 @@ class SubmissionController {
     submission.filename = file.clientName()
     submission.filemime = file.mimeType()
     submission.filesize = file.clientSize()
-    submission.file = yield readFile(file.uploadPath())
+
+    throw Error("not implemented")
 
     // Delete uploaded file
     yield unlinkFile(file.uploadPath())

@@ -69,9 +69,9 @@ Route.group('problem forAdmin', function(){
   Route.post('/edit/:id', 'ProblemController.edit_save').as('problem/edit_save')
 
   Route.get('/test/list/:id', 'ProblemController.test_list').as('problem/test/list')
-
-  Route.post('/test/edit/:id', 'ProblemController.test_edit_save').as('problem/test/edit_save')
-  Route.post('/test/edit/:id', 'ProblemController.test_checker_save').as('problem/test/checker_save')
+  Route.post('/test/limits/:id', 'ProblemController.test_save_limits').as('problem/test/limits')
+  Route.post('/test/checker/:id', 'ProblemController.test_save_checker').as('problem/test/checker')
+  Route.post('/test/tests/:id', 'ProblemController.test_save_tests').as('problem/test/tests')
 
   Route.get('/test/download/:id', 'ProblemController.testfile_download').as('problem/test/download')
 

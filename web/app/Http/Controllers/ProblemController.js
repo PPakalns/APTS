@@ -1,6 +1,7 @@
 'use strict'
 
 const Test = use('App/Model/Test')
+const File = use('App/Model/File')
 const Testset = use('App/Model/Testset')
 const Problem = use('App/Model/Problem')
 const Helpers = use('Helpers')
@@ -13,339 +14,391 @@ let yauzl = require("yauzl");
 
 class ProblemController {
 
-  * index (req, res) {
-    const problems = yield Problem.query().with('creator').fetch();
-    yield res.sendView('problem/list', {problems: problems.toJSON()});
-  }
-
-  // Returns list of problems which have search as substring
-  * shortlist(req, res) {
-    const search = ''+req.input('search')
-
-    const users = yield Database
-      .table('problems')
-      .select('name', 'id')
-      .whereRaw("INSTR(name,?) > 0",[search])
-      .limit(10)
-
-    res.json(users)
-  }
-
-  * show (req, res) {
-    const id = req.param('id')
-    const problem = yield Problem.findOrFail(id)
-
-    yield res.sendView('problem/show', {problem: problem.toJSON()})
-  }
-
-  * create(req, res) {
-    yield res.sendView('problem/edit', {form_heading: "Izveidot uzdevumu", create: true})
-  }
-
-  * create_save(req, res) {
-    let problemData = req.only('name', 'description')
-
-    const validation = yield Validator.validate(problemData, Problem.rules)
-    if (validation.fails())
-    {
-      yield req
-        .withAll()
-        .andWith({"errors": validation.messages()})
-        .flash()
-      res.route('problem/create')
-      return
+    * index (req, res) {
+        const problems = yield Problem.query().with('creator').fetch();
+        yield res.sendView('problem/list', {problems: problems.toJSON()});
     }
 
-    const problem = new Problem()
-    const user = yield req.auth.getUser()
-    problem.name = problemData.name;
-    problem.description = problemData.description;
-    problem.author = user.id;
-    yield problem.save()
+    // Returns list of problems which have search as substring
+    * shortlist(req, res) {
+        const search = ''+req.input('search')
 
-    yield req
-        .withAll()
-        .andWith({"successes": [{message:"Uzdevums veiksmīgi izveidots!"}]})
-        .flash()
-    res.route('problem/show', {id: problem.id})
-  }
+        const users = yield Database
+            .table('problems')
+            .select('name', 'id')
+            .whereRaw("INSTR(name,?) > 0",[search])
+            .limit(10)
 
-  * edit(req, res) {
-    const id = req.param('id')
-    const problem = yield Problem.findOrFail(id)
-
-    yield res.sendView('problem/edit', {problem: problem.toJSON()})
-  }
-
-  * edit_save(req, res) {
-    let problemData = req.only('id', 'name', 'description')
-    const problem = yield Problem.findOrFail(problemData.id)
-
-    // Check problem validation rules
-    const validation = yield Validator.validate(problemData, Problem.rules)
-    if (validation.fails())
-    {
-      yield req
-        .withAll()
-        .andWith({"errors": [{message:"Lūdzu norādiet uzdevuma nosaukumu."}]})
-        .flash()
-      res.route('problem/edit',{id: problemData.id})
-      return
+        res.json(users)
     }
 
-    problem.name = problemData.name;
-    problem.description = problemData.description;
-    yield problem.save()
+    * show (req, res) {
+        const id = req.param('id')
+        const problem = yield Problem.findOrFail(id)
 
-    yield req
-        .withAll()
-        .andWith({"successes": [{message:"Uzdevums veiksmīgi rediģēts"}]})
-        .flash()
-    res.route('problem/show', {id: problemData.id})
-  }
-
-  * test_list(req, res) {
-    const id = req.param('id')
-    const problem = yield Problem.findOrFail(id)
-
-    let testset = null
-
-    if (problem.testset_id != null)
-    {
-      testset = yield Testset.findOrFail(problem.testset_id)
-      testset.related('tests','zip','checker').load()
-
-      testset = testset.toJSON()
+        yield res.sendView('problem/show', {problem: problem.toJSON()})
     }
 
-    yield res.sendView('problem/test/list', {testset: testset, problem: problem.toJSON()})
-  }
-
-  * testfile_download(req, res) {
-    const id =req.param('id')
-    const problem = yield Problem.findOrFail(id)
-
-    if (!problem.test_filename)
-    {
-      yield req
-        .with({"errors": [{message:"Uzdevumam nav pievienots testu arhīvs"}]})
-        .flash()
-      res.route('problem/test/list', {id: problem.id})
-      return
+    * create(req, res) {
+        yield res.sendView('problem/edit', {form_heading: "Izveidot uzdevumu", create: true})
     }
 
-    res.header('Content-type', problem.test_filemime)
-    res.header('content-disposition', "attachment; filename=\""+problem.test_filename+"\"")
-    res.download(Helpers.storagePath(problem.test_filepath))
-  }
+    * create_save(req, res) {
+        let problemData = req.only('name', 'description')
 
-  * test_edit_save(req, res) {
-    const data = req.only("id")
-    const problem = yield Problem.findOrFail(data.id)
-
-    // Check memory and time limits
-    const errors = checkLimits(problemData)
-
-    if (errors)
-    {
-      yield req
-        .withAll()
-        .andWith({"errors": errors})
-        .flash()
-      res.route('problem/edit',{id: problemData.id})
-      return
-    }
-
-    // getting file instance
-    const test_file = req.file('test_file', {
-        maxSize: '100mb',
-        allowedExtensions: ['zip']
-    })
-
-    if (!test_file){
-      // User did not choose test file
-      yield req
-        .withAll()
-        .andWith({'errors': [{message:"Norādiet pareizu testu failu."}]})
-        .flash()
-      res.route('problem/test/edit', {id: data.id})
-      return
-    }
-
-    const storagePath = Helpers.storagePath()
-    const newTestFileName = uuid.v4();
-
-    yield test_file.move(storagePath, newTestFileName)
-
-    if (!test_file.moved()) {
-      // Could not upload test file
-      yield req
-        .withAll()
-        .andWith({'errors': [{message:"Testu fails neatbilst ierobežojumiem. (Ierobežojumi: Līdz 100mb liels zip arhīvs)"}]})
-        .flash()
-      res.route('problem/test/edit', {id: data.id})
-      return
-    }
-
-    // Zip file helper functions to parse zip filenames
-    var getZipFile = function (path_to_zip) {
-      return new Promise(function(resolve, reject){
-        yauzl.open(path_to_zip, {lazyEntries: true}, function(err, zipfile) {
-          if (err) reject(err);
-          resolve(zipfile);
-        })
-      })
-    }
-
-    var getZipFileNamePromise = function(zipfile){
-      return new Promise(function(resolve, reject){
-
-        var callbackOnEnd = function(){
-          removeListeners();
-          resolve(null)
-        }
-
-        var callbackOnEntry = function(entry){
-            removeListeners()
-            resolve(entry)
-        }
-        function removeListeners()
+        const validation = yield Validator.validate(problemData, Problem.rules)
+        if (validation.fails())
         {
-          zipfile.removeListener("entry", callbackOnEntry)
-          zipfile.removeListener("end", callbackOnEnd)
+            yield req
+                .withAll()
+                .andWith({"errors": validation.messages()})
+                .flash()
+            res.route('problem/create')
+            return
         }
 
-        zipfile.on("entry", callbackOnEntry)
-        zipfile.once("end", callbackOnEnd)
-        zipfile.readEntry();
-      })
+        const problem = new Problem()
+        const user = yield req.auth.getUser()
+        problem.name = problemData.name;
+        problem.description = problemData.description;
+        problem.author = user.id;
+        yield problem.save()
+
+        const testset = new Testset()
+        testset.updated = 0
+        testset.problem_id = problem.id
+        testset.timelimit = 1
+        testset.memory = 256
+        yield testset.save()
+
+        problem.testset_id = testset.id
+        yield problem.save()
+
+        yield req
+            .withAll()
+            .andWith({"successes": [{message:"Uzdevums veiksmīgi izveidots!"}]})
+            .flash()
+        res.route('problem/show', {id: problem.id})
     }
 
-    // Parse zip file content
-    let zipFile = yield getZipFile(test_file.uploadPath())
-    let completedTests = []
-    let completedTestsNumeric = []
-    let badZipArchive = false
+    * edit(req, res) {
+        const id = req.param('id')
+        const problem = yield Problem.findOrFail(id)
 
-    while (true)
-    {
-      let testFile = yield getZipFileNamePromise(zipFile)
-      if (!testFile)
-      {
-        break;
-      }
-      let testFileName = testFile.fileName;
-      let isInput = testFileName.match(/^(.+)\.(i|o)([\d]+)([A-Za-z]*)$/);
-      if (isInput){
-        let testId = isInput[ 1 ] + "." + isInput[ 3 ] + isInput[ 4 ];
-        if (completedTests.hasOwnProperty(testId) == false)
-        {
-          completedTests[testId] = {}
-          completedTestsNumeric.push(completedTests[testId])
-
-          completedTests[testId].number = isInput[ 3 ]
-          completedTests[testId].gid = isInput[ 4 ]
-        }
-
-        if (isInput[ 2 ] == "i")
-        {
-          completedTests[testId].input_filename = isInput[ 0 ]
-        }
-        else if (isInput[ 2 ] == "o")
-        {
-          completedTests[testId].output_filename = isInput[ 0 ]
-        }
-      }
-      else
-      {
-        badZipArchive = antl.formatMessage('messages.zip_bad_file', {filename: testFileName})
-      }
+        yield res.sendView('problem/edit', {problem: problem.toJSON()})
     }
 
-    for (let testId in completedTests)
-    {
-      if (completedTests.hasOwnProperty(testId))
-      {
-        if (completedTests[testId].hasOwnProperty("input_filename")==false
-            || completedTests[testId].hasOwnProperty("output_filename")==false)
+    * edit_save(req, res) {
+        let problemData = req.only('id', 'name', 'description')
+        const problem = yield Problem.findOrFail(problemData.id)
+
+        // Check problem validation rules
+        const validation = yield Validator.validate(problemData, Problem.rules)
+        if (validation.fails())
         {
-          badZipArchive = antl.formatMessage('messages.zip_does_not_contain_inout_files', {testname: testId})
-          break
+            yield req.withAll()
+                .andWith({"errors": [{message:"Lūdzu norādiet uzdevuma nosaukumu."}]}).flash()
+            res.route('problem/edit',{id: problemData.id})
+            return
         }
-      }
+
+        problem.name = problemData.name;
+        problem.description = problemData.description;
+        yield problem.save()
+
+        yield req.withAll().andWith({"successes": [{message:"Uzdevums veiksmīgi rediģēts"}]}).flash()
+        res.route('problem/show', {id: problemData.id})
     }
 
-    if (badZipArchive)
-    {
-      yield req
-        .withAll()
-        .andWith({'errors': [{message: badZipArchive}]})
-        .flash()
-      res.route('problem/test/edit', {id: data.id})
-      return
+    * test_list(req, res) {
+        const id = req.param('id')
+        const problem = yield Problem.findOrFail(id)
+
+        let json_testset = null
+
+        let testset = yield Testset.findOrFail(problem.testset_id)
+        yield testset.related('tests','zip','checker').load()
+        json_testset = testset.toJSON()
+
+        yield res.sendView('problem/test/list', {testset: json_testset, problem: problem.toJSON()})
     }
 
-    // Save tests to database
-    yield problem.tests().delete()
-    problem.test_filename = test_file.clientName()
-    problem.test_filesize = test_file.clientSize()
-    problem.test_filemime = test_file.mimeType()
-    problem.test_filepath = newTestFileName;
-    problem.test_count = completedTestsNumeric.length;
-    yield problem.save()
+    * testfile_download(req, res) {
+        const id =req.param('id')
+        const problem = yield Problem.findOrFail(id)
 
-    yield problem.tests().createMany(completedTestsNumeric)
+        if (!problem.test_filename)
+        {
+            yield req
+                .with({"errors": [{message:"Uzdevumam nav pievienots testu arhīvs"}]})
+                .flash()
+            res.route('problem/test/list', {id: problem.id})
+            return
+        }
 
-    yield req
-      .withAll()
-      .andWith({'successes': [{message:"Augšupielāde izdevās"}]})
-      .flash()
+        throw Error("Not implemented")
+    }
 
-    res.route('problem/test/edit', {id: data.id})
-    return
-  }
+    * test_save_limits(req, res) {
+        let data = req.only("id", "timelimit", "memory")
+        const problem = yield Problem.findOrFail(data.id)
+
+        let errors = []
+
+        // Check memory and time limits
+        checkLimits(errors, data)
+
+        if (errors.length > 0)
+        {
+            yield req.withAll().andWith({"errors": errors}).flash()
+            res.route('problem/test/list',{id: data.id})
+            return
+        }
+
+        let testset = yield problem.testset().fetch()
+        testset.updated += 1
+        testset.memory = data.memory
+        testset.timelimit = data.timelimit
+
+        yield testset.save()
+
+        yield req.with({"successes": antl.formatMessage("messages.limits_updated_successfully")}).flash()
+        res.route('problem/test/list', {id: data.id})
+    }
+
+    * test_save_checker(req, res) {
+        let data = req.only("id")
+        const problem = yield Problem.findOrFail(data.id)
+
+        let errors = []
+
+        var checker_opt = {
+            maxSize: '64kb'
+        }
+
+        let checker_file = null
+        checker_file = yield File.uploadFile(req, 'checker_file', checker_opt, true)
+        if (!checker_file)
+        {
+            errors.push(antl.formatMessage("messages.failed_upload", {size: "64kb"}))
+        }
+
+        if (errors.length > 0)
+        {
+            if (checker_file)
+                yield checker_file.delete()
+
+            yield req.withAll().andWith({"errors": errors}).flash()
+            return res.route('problem/test/list',{id: data.id})
+        }
+
+        // Update testset
+        let testset = yield problem.testset().fetch()
+        let ntestset = new Testset()
+        Testset.copy(testset, ntestset)
+        ntestset.updated = 0
+        ntestset.checker_id = checker_file.id
+        yield ntestset.save()
+
+        // Update problem
+        problem.testset_id = ntestset.id
+        yield problem.save()
+
+        yield req.with({"successes": antl.formatMessage("messages.limits_updated_successfully")}).flash()
+        res.route('problem/test/list', {id: data.id})
+    }
+
+    * test_save_tests(req, res) {
+        let data = req.only("id")
+        const problem = yield Problem.findOrFail(data.id)
+
+        let errors = []
+        var tests_opt = {
+            maxSize: '100mb',
+            allowedExtensions: ['zip']
+        }
+
+        let tests = [], zip_file = null
+        zip_file = yield File.uploadFile(req, 'test_file', tests_opt)
+        if (zip_file)
+        {
+            tests = yield parseZipFile(zip_file, errors)
+        }
+        else if (!zip_file)
+        {
+            errors.push(antl.formatMessage("messages.failed_upload_ext", {file: "64kb", ext: "zip"}))
+        }
+
+        if (errors.length > 0)
+        {
+            if (zip_file)
+                yield zip_file.delete()
+
+            yield req.withAll().andWith({"errors": errors}).flash()
+            return res.route('problem/test/list', {id: data.id})
+        }
+
+        // Update testset
+        let testset = yield problem.testset().fetch()
+        let ntestset = new Testset()
+        Testset.copy(testset, ntestset)
+        ntestset.updated = 0
+        ntestset.zip_id = zip_file.id
+        yield ntestset.save()
+
+        // Update problem
+        problem.testset_id = ntestset.id
+        yield problem.save()
+
+        // Update tests
+        for (let test of tests)
+        {
+            test.testset_id = ntestset.id
+        }
+        yield Test.createMany(tests)
+
+        yield req.with({"successes": antl.formatMessage("messages.tests_updated_successfully")}).flash()
+        return res.route('problem/test/list', {id: data.id})
+    }
 }
 
 /*
  * Function to check time and memory limits
  * return sarray of errors or null
  */
-function checkLimits(datak)
+function checkLimits(errors, data)
 {
-  data.timelimit = Validator.sanitizor.toFloat(data.timelimit)
-  data.memory = Validator.sanitizor.toInt(data.memory)
+    data.timelimit = Validator.sanitizor.toFloat(data.timelimit)
+    data.memory = Validator.sanitizor.toInt(data.memory, 10)
 
-  var errors = []
-  if (isNaN(problemData.timelimit))
-  {
-    errors.push({message: "Norādiet laika limitu, piemēram, 0.2"})
-  }
-  else
-  {
-    if (false == (data.timelimit > 0 && data.timelimit <= 16))
+    if (isNaN(data.timelimit))
     {
-      errors.push({message: "Laika limitam ir jābūt robežās ]0,16] sekundēm."})
+        errors.push({message: "Norādiet laika limitu, piemēram, 0.2"})
     }
-  }
-
-  if (isNaN(problemData.memory))
-  {
-    errors.push({message: "Norādiet atmiņas limitu kā naturālu skaitli, piemēram, 256"})
-  }
-  else
-  {
-    if (false == (data.memory > 0 && data.memory <= 1024))
+    else
     {
-      errors.push({message: "Atmiņas limitam ir jābūt robežās ]0,1024] MiB."})
+        if (false == (data.timelimit > 0 && data.timelimit <= 16))
+        {
+            errors.push({message: "Laika limitam ir jābūt robežās ]0,16] sekundēm."})
+        }
     }
-  }
 
-  if (errors.length == 0)
-  {
-    return null
-  }
+    if (isNaN(data.memory))
+    {
+        errors.push({message: "Norādiet atmiņas limitu kā naturālu skaitli, piemēram, 256"})
+    }
+    else
+    {
+        if (false == (data.memory > 0 && data.memory <= 1024))
+        {
+            errors.push({message: "Atmiņas limitam ir jābūt robežās ]0,1024] MiB."})
+        }
+    }
+}
 
-  return errors
+/*
+ * Function parses test zip archive and returns array of tests
+ */
+function* parseZipFile(zip_file, errors)
+{
+    // Zip file helper functions to parse zip filenames
+    let getZipFile = function (path_to_zip) {
+        return new Promise(function(resolve, reject){
+            yauzl.open(path_to_zip, {lazyEntries: true}, function(err, zipfile) {
+                if (err) reject(err);
+                resolve(zipfile);
+            })
+        })
+    }
+
+    let getZipFileNamePromise = function(zipfile){
+        return new Promise(function(resolve, reject){
+
+            var callbackOnEnd = function(){
+                removeListeners();
+                resolve(null)
+            }
+
+            var callbackOnEntry = function(entry){
+                removeListeners()
+                resolve(entry)
+            }
+            function removeListeners()
+            {
+                zipfile.removeListener("entry", callbackOnEntry)
+                zipfile.removeListener("end", callbackOnEnd)
+            }
+
+            zipfile.on("entry", callbackOnEntry)
+            zipfile.once("end", callbackOnEnd)
+            zipfile.readEntry();
+        })
+    }
+
+    // Parse zip file content
+    let open_zip_file = yield getZipFile(zip_file.path)
+    let badZipArchive = false
+    let completedTests = {} // Stores test data, that was uploaded with test zip archive
+
+    while (true)
+    {
+        let testFile = yield getZipFileNamePromise(open_zip_file)
+        if (!testFile)
+        {
+            break;
+        }
+        let testFileName = testFile.fileName;
+        let isInput = testFileName.match(/^(.+)\.(i|o)([\d]+)([A-Za-z]*)$/);
+        if (isInput){
+            let testId = isInput[ 1 ] + "." + isInput[ 3 ] + isInput[ 4 ];
+            if (completedTests.hasOwnProperty(testId) == false)
+            {
+                completedTests[testId] = {}
+
+                completedTests[testId].tid = isInput[ 3 ]
+                completedTests[testId].gid = isInput[ 4 ]
+            }
+
+            if (isInput[ 2 ] == "i")
+            {
+                completedTests[testId].input_file = isInput[ 0 ]
+            }
+            else if (isInput[ 2 ] == "o")
+            {
+                completedTests[testId].output_file = isInput[ 0 ]
+            }
+        }
+        else
+        {
+            errors.push(antl.formatMessage('messages.zip_bad_file', {filename: testFileName}))
+        }
+    }
+
+    let tests = []
+
+    for (let testId in completedTests)
+    {
+        if (completedTests.hasOwnProperty(testId))
+        {
+            if (completedTests[testId].hasOwnProperty("input_file")==false
+                || completedTests[testId].hasOwnProperty("output_file")==false)
+            {
+                errors.push(antl.formatMessage('messages.zip_does_not_contain_inout_files', {testname: testId}))
+                break
+            }
+            else
+            {
+                tests.push(completedTests[testId])
+            }
+        }
+    }
+
+    if (tests.length == 0)
+    {
+        errors.push(antl.formatMessage('messages.zip_empty'))
+    }
+
+    return tests
 }
 
 module.exports = ProblemController

@@ -11,11 +11,12 @@ class TestsetsTableSchema extends Schema {
 
       table.integer('problem_id').unsigned().references('id').inTable('problems')
 
+      table.integer('updated').unsigned()
       table.decimal('timelimit', 4, 2)
-      table.integer('memory')
+      table.integer('memory').unsigned()
 
       // Test zip archive
-      table.integer('test_count')
+      table.integer('test_count').unsigned()
       table.integer('zip_id').unsigned().references('id').inTable('files')
 
       // Checker cpp file

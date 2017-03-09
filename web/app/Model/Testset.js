@@ -4,25 +4,35 @@ const Lucid = use('Lucid')
 
 class Testset extends Lucid {
 
-  tests () {
-    return this.hasMany('App/Model/Test')
-  }
+    static copy(from, to) {
+        const arr = ["problem_id", "updated", "timelimit", "memory", "test_count",
+                     "zip_id", "checker_id"]
 
-  problem () {
-    return this.belongsTo('App/Model/Problem')
-  }
+        for (let key of arr)
+        {
+            to[ key ] = from[ key ]
+        }
+    }
 
-  submissions () {
-    return this.hasMany('App/Model/Submission')
-  }
+    tests () {
+        return this.hasMany('App/Model/Test')
+    }
 
-  zip () {
-    return this.belongsTo('App/Model/File', 'id', 'zip_id')
-  }
+    problem () {
+        return this.belongsTo('App/Model/Problem')
+    }
 
-  checker () {
-    return this.belongsTo('App/Model/File', 'id', 'checker_id')
-  }
+    submissions () {
+        return this.hasMany('App/Model/Submission')
+    }
+
+    zip () {
+        return this.belongsTo('App/Model/File', 'id', 'zip_id')
+    }
+
+    checker () {
+        return this.belongsTo('App/Model/File', 'id', 'checker_id')
+    }
 }
 
 module.exports = Testset
