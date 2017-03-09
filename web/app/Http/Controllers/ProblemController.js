@@ -194,15 +194,9 @@ class ProblemController {
 
         // Update testset
         let testset = yield problem.testset().fetch()
-        let ntestset = new Testset()
-        Testset.copy(testset, ntestset)
-        ntestset.updated = 0
-        ntestset.checker_id = checker_file.id
-        yield ntestset.save()
-
-        // Update problem
-        problem.testset_id = ntestset.id
-        yield problem.save()
+        testset.updated += 1
+        testset.checker_id = checker_file.id
+        yield testset.save()
 
         yield req.with({"successes": antl.formatMessage("messages.limits_updated_successfully")}).flash()
         res.route('problem/test/list', {id: data.id})
