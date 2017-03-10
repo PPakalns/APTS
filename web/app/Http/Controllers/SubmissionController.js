@@ -30,8 +30,7 @@ class SubmissionController {
             return
         }
 
-        yield submission.related('assignment','assignment.problem','assignment.group').load()
-
+        yield submission.related('file', 'assignment','assignment.problem','assignment.group').load()
         yield res.sendView('submission/show', {submission: submission.toJSON()})
     }
 

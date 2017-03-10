@@ -21,7 +21,7 @@
         <td>{{ submission.assignment.group.name }}</td>
         <td>{{ submission.created_at }}</td>
         <td>{{ submission.assignment.problem.name }}</td>
-        <td>{{ submission.status_name }}</td>
+        <td>{{ submission.statusname }}</td>
         <td>{{ submission.score }}</td>
         <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
       </tr>
@@ -29,6 +29,6 @@
   </table>
   <hr>
   <div class="tex2jax_process prettycontent">
-    <pre><code class='c++'>{{ submission.file }}</code></pre>
+    <pre><code>{{ submission.file.file }}</code></pre>
 </div>
 {% endblock %}

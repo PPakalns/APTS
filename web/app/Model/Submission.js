@@ -2,14 +2,6 @@
 
 const Lucid = use('Lucid')
 
-const status_map = {
-    0: "waiting",
-    1: "testing",
-    2: "ok",
-    3: "ce",
-    4: "ie"
-}
-
 class Submission extends Lucid {
 
     // ########################################
@@ -30,7 +22,14 @@ class Submission extends Lucid {
     }
 
 
-    getStatus_name () {
+    getStatusname () {
+        const status_map = {
+            0: "WAIT",
+            1: "TESTING",
+            2: "OK",
+            3: "CE",
+            4: "IE"
+        }
         return status_map[this.status]
     }
 

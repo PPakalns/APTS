@@ -43,7 +43,11 @@
             {% else %}
               <td>{{ submit.created_at }}</td>
             {% endif %}
-            <td><a href="{{ 'SubmissionController.show' | action({id: submit.id}) }}">Gaida</a></td>
+            <td>
+                <a href="{{ 'SubmissionController.show' | action({id: submit.id}) }}">
+                    {{ submit.status }}
+                </a>
+            </td>
             <td>{{ submit.score or 0 }}</td>
           </tr>
         {% endfor %}
