@@ -76,7 +76,7 @@ class ProblemController {
 
         yield req
             .withAll()
-            .andWith({"successes": [{message:"Uzdevums veiksmīgi izveidots!"}]})
+            .andWith({"successes": [{msg:"Uzdevums veiksmīgi izveidots!"}]})
             .flash()
         res.route('problem/show', {id: problem.id})
     }
@@ -106,7 +106,7 @@ class ProblemController {
         problem.description = problemData.description;
         yield problem.save()
 
-        yield req.withAll().andWith({"successes": [{message:"Uzdevums veiksmīgi rediģēts"}]}).flash()
+        yield req.withAll().andWith({"successes": [{msg:"Uzdevums veiksmīgi rediģēts"}]}).flash()
         res.route('problem/show', {id: problemData.id})
     }
 
@@ -162,7 +162,7 @@ class ProblemController {
 
         yield testset.save()
 
-        yield req.with({"successes": antl.formatMessage("messages.limits_updated_successfully")}).flash()
+        yield req.with({"successes": [{msg: antl.formatMessage("messages.limits_updated_successfully")}]}).flash()
         res.route('problem/test/list', {id: data.id})
     }
 
@@ -180,7 +180,7 @@ class ProblemController {
         checker_file = yield File.uploadFile(req, 'checker_file', checker_opt, true)
         if (!checker_file)
         {
-            errors.push(antl.formatMessage("messages.failed_upload", {size: "64kb"}))
+            errors.push({msg: antl.formatMessage("messages.failed_upload", {size: "64kb"})})
         }
 
         if (errors.length > 0)
@@ -198,7 +198,7 @@ class ProblemController {
         testset.checker_id = checker_file.id
         yield testset.save()
 
-        yield req.with({"successes": antl.formatMessage("messages.limits_updated_successfully")}).flash()
+        yield req.with({"successes": [{msg: antl.formatMessage("messages.limits_updated_successfully")}]}).flash()
         res.route('problem/test/list', {id: data.id})
     }
 
@@ -220,7 +220,7 @@ class ProblemController {
         }
         else if (!zip_file)
         {
-            errors.push(antl.formatMessage("messages.failed_upload_ext", {file: "64kb", ext: "zip"}))
+            errors.push({msg: antl.formatMessage("messages.failed_upload_ext", {file: "64kb", ext: "zip"})})
         }
 
         if (errors.length > 0)
@@ -251,7 +251,7 @@ class ProblemController {
         }
         yield Test.createMany(tests)
 
-        yield req.with({"successes": antl.formatMessage("messages.tests_updated_successfully")}).flash()
+        yield req.with({"successes": [{msg:antl.formatMessage("messages.tests_updated_successfully")}]}).flash()
         return res.route('problem/test/list', {id: data.id})
     }
 }
@@ -267,25 +267,25 @@ function checkLimits(errors, data)
 
     if (isNaN(data.timelimit))
     {
-        errors.push({message: "Norādiet laika limitu, piemēram, 0.2"})
+        errors.push({msg: "Norādiet laika limitu, piemēram, 0.2"})
     }
     else
     {
         if (false == (data.timelimit > 0 && data.timelimit <= 16))
         {
-            errors.push({message: "Laika limitam ir jābūt robežās ]0,16] sekundēm."})
+            errors.push({msg: "Laika limitam ir jābūt robežās ]0,16] sekundēm."})
         }
     }
 
     if (isNaN(data.memory))
     {
-        errors.push({message: "Norādiet atmiņas limitu kā naturālu skaitli, piemēram, 256"})
+        errors.push({msg: "Norādiet atmiņas limitu kā naturālu skaitli, piemēram, 256"})
     }
     else
     {
         if (false == (data.memory > 0 && data.memory <= 1024))
         {
-            errors.push({message: "Atmiņas limitam ir jābūt robežās ]0,1024] MiB."})
+            errors.push({msg: "Atmiņas limitam ir jābūt robežās ]0,1024] MiB."})
         }
     }
 }
@@ -364,7 +364,7 @@ function* parseZipFile(zip_file, errors)
         }
         else
         {
-            errors.push(antl.formatMessage('messages.zip_bad_file', {filename: testFileName}))
+            errors.push({msg: antl.formatMessage('messages.zip_bad_file', {filename: testFileName})})
         }
     }
 
@@ -377,7 +377,7 @@ function* parseZipFile(zip_file, errors)
             if (completedTests[testId].hasOwnProperty("input_file")==false
                 || completedTests[testId].hasOwnProperty("output_file")==false)
             {
-                errors.push(antl.formatMessage('messages.zip_does_not_contain_inout_files', {testname: testId}))
+                errors.push({msg: antl.formatMessage('messages.zip_does_not_contain_inout_files', {testname: testId})})
                 break
             }
             else
@@ -389,7 +389,7 @@ function* parseZipFile(zip_file, errors)
 
     if (tests.length == 0)
     {
-        errors.push(antl.formatMessage('messages.zip_empty'))
+        errors.push({msg: antl.formatMessage('messages.zip_empty')})
     }
 
     return tests

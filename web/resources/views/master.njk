@@ -82,28 +82,28 @@
             {% block sidebar %}
             {% endblock %}
             Submission sidebar!!!!
-            {# {% asyncAll fix in [0] %} #}
-            {# {% include 'submission/sidelist' %} #}
-            {# {% endall %} #}
+            {% asyncAll fix in [0] %}
+            {% include 'submission/sidelist' %}
+            {% endall %}
           </div> {# sidebar #}
 
           <div class="col-md-9 col-md-pull-3 content">
 
             {% for error in old('errors') %}
               <p class="bg-danger">
-                {{ error.message or error }}
+                {{ error.msg if error.msg else error.message}}
               </p>
             {% endfor %}
 
             {% for warning in old('warnings') %}
               <p class="bg-warning">
-                {{ warning.message or warning }}
+                {{ warning.msg if warning.msg else warning.message }}
               </p>
             {% endfor %}
 
             {% for success in old('successes') %}
               <p class="bg-success">
-                {{ success.message or success }}
+                {{ success.msg if success.msg else success.message }}
               </p>
             {% endfor %}
 
