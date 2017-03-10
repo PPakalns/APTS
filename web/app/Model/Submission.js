@@ -13,6 +13,15 @@ const status_map = {
 class Submission extends Lucid {
 
     // ########################################
+    // VALIDATION RULES
+
+    static get rules () {
+        return {
+            type: 'required|in:cpp,cpp11'
+        }
+    }
+
+    // ########################################
     // COMPUTED PROPERTIES
 
 

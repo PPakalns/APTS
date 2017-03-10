@@ -58,6 +58,10 @@
           <td colspan=2 class="text-center">
             {{ form.open({action: 'SubmissionController.submit', params: {assignment_id: assignment.id}, class:"form-horizontal", files: true}) }}
             {{ csrfField }}
+            <select name="type" class="form-control" style="width:100%; text-align: center;">
+                <option value="cpp11">C++11</option>
+                <option value="cpp">C++</option>
+            </select>
             <input type="file" name="solution" id="submit_file">
             <p>
               <button type="button" class="btn btn-default" style="width:100%;" id="submit_button">{{ antl.formatMessage('messages.choose_file') }}</button><br />
