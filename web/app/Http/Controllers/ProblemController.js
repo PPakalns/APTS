@@ -14,10 +14,12 @@ let yauzl = require("yauzl");
 
 class ProblemController {
 
+
     * index (req, res) {
         const problems = yield Problem.query().with('creator').fetch();
         yield res.sendView('problem/list', {problems: problems.toJSON()});
     }
+
 
     // Returns list of problems which have search as substring
     * shortlist(req, res) {
@@ -32,6 +34,7 @@ class ProblemController {
         res.json(users)
     }
 
+
     * show (req, res) {
         const id = req.param('id')
         const problem = yield Problem.findOrFail(id)
@@ -39,9 +42,11 @@ class ProblemController {
         yield res.sendView('problem/show', {problem: problem.toJSON()})
     }
 
+
     * create(req, res) {
         yield res.sendView('problem/edit', {form_heading: "Izveidot uzdevumu", create: true})
     }
+
 
     * create_save(req, res) {
         let problemData = req.only('name', 'description')
@@ -81,12 +86,14 @@ class ProblemController {
         res.route('problem/show', {id: problem.id})
     }
 
+
     * edit(req, res) {
         const id = req.param('id')
         const problem = yield Problem.findOrFail(id)
 
         yield res.sendView('problem/edit', {problem: problem.toJSON()})
     }
+
 
     * edit_save(req, res) {
         let problemData = req.only('id', 'name', 'description')
@@ -110,6 +117,7 @@ class ProblemController {
         res.route('problem/show', {id: problemData.id})
     }
 
+
     * test_list(req, res) {
         const id = req.param('id')
         const problem = yield Problem.findOrFail(id)
@@ -123,20 +131,20 @@ class ProblemController {
         yield res.sendView('problem/test/list', {testset: json_testset, problem: problem.toJSON()})
     }
 
-    * testfile_download(req, res) {
-        const id =req.param('id')
-        const problem = yield Problem.findOrFail(id)
 
-        if (!problem.test_filename)
-        {
-            yield req
-                .with({"errors": [{message:"Uzdevumam nav pievienots testu arhīvs"}]})
-                .flash()
-            res.route('problem/test/list', {id: problem.id})
-            return
-        }
+    * download_checker(req, res) {
+        const id =req.param('testset_id')
+        const testset = yield Testset.findOrFail(id)
+        const checker = yield testset.checker().fetch()
+        yield File.download(req, res, checker)
+    }
 
-        throw Error("Not implemented")
+
+    * download_zip(req, res) {
+        const id =req.param('testset_id')
+        const testset = yield Testset.findOrFail(id)
+        const zip = yield testset.zip().fetch()
+        yield File.download(req, res, zip)
     }
 
     * test_save_limits(req, res) {
@@ -165,6 +173,7 @@ class ProblemController {
         yield req.with({"successes": [{msg: antl.formatMessage("messages.limits_updated_successfully")}]}).flash()
         res.route('problem/test/list', {id: data.id})
     }
+
 
     * test_save_checker(req, res) {
         let data = req.only("id")
@@ -201,6 +210,7 @@ class ProblemController {
         yield req.with({"successes": [{msg: antl.formatMessage("messages.limits_updated_successfully")}]}).flash()
         res.route('problem/test/list', {id: data.id})
     }
+
 
     * test_save_tests(req, res) {
         let data = req.only("id")
@@ -256,6 +266,7 @@ class ProblemController {
     }
 }
 
+
 /*
  * Function to check time and memory limits
  * return sarray of errors or null
@@ -289,6 +300,7 @@ function checkLimits(errors, data)
         }
     }
 }
+
 
 /*
  * Function parses test zip archive and returns array of tests

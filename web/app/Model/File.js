@@ -17,9 +17,20 @@ class File extends Lucid {
     }
 
     static * download (req, res, file) {
+        if (!file)
+        {
+            throw Error("File does not exist")
+        }
         res.header('Content-type', file.mime)
         res.header('content-disposition', "attachment; filename=\""+file.name+"\"")
-        res.download(file.path)
+        if (file.path)
+        {
+            res.download(file.path)
+        }
+        else
+        {
+            res.send(file.file)
+        }
     }
 
     static * uploadFile (req, id, options, save_content=false) {

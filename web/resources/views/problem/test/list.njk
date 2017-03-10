@@ -73,7 +73,7 @@
             {% else %}
                 <p class="text-left editmenu">
                     Čekeris uzdevumam pievienots.
-                    <a href="{{ 'problem/checker/download' | route({id: testset.id}) }}">
+                    <a href="{{ 'problem/download/checker' | route({testset_id: testset.id}) }}">
                         <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Lejupielādēt čekera failu
                     </a>
                 </p>
@@ -116,7 +116,7 @@
                 </p>
             {% else %}
                 <p class="text-right editmenu">
-                    <a href="{{ 'problem/test/download' | route({id: problem.id}) }}">
+                    <a href="{{ 'problem/download/zip' | route({testset_id: testset.id}) }}">
                         <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Lejupielādēt testu zip failu
                     </a>
                 </p>
