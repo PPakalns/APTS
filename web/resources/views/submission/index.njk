@@ -1,35 +1,39 @@
 {% extends 'master' %}
 
 {% block header %}
-  <h2>Iesūtījumi</h2>
-  <p>APTS lietotāju iesūtījumi</p>
+    <h2>Iesūtījumi</h2>
+    <p>APTS lietotāju iesūtījumi</p>
 {% endblock %}
 
 {% block content %}
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Grupa</th>
-        <th>Lietotājs</th>
-        <th>Laiks</th>
-        <th>Problēma</th>
-        <th>Statuss</th>
-        <th>Rezultāts</th>
-        <th>Izmērs</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for submission in submissions %}
-        <tr>
-          <td>{{ submission.name}}</td>
-          <td>{{ submission.email}}</td>
-          <td>{{ submission.created_at}}</td>
-          <td>{{ submission.problem_name}}</td>
-          <td><a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">Gaida</a></td>
-          <td>{{ submission.score }}</td>
-          <td>{{ ( submission.filesize / 1024 ) | round(2) }}kB</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ antl.formatMessage('messages.group') }}</th>
+                <th>{{ antl.formatMessage('messages.user') }}</th>
+                <th>{{ antl.formatMessage('messages.time') }}</th>
+                <th>{{ antl.formatMessage('messages.task') }}</th>
+                <th>{{ antl.formatMessage('messages.status') }}</th>
+                <th>{{ antl.formatMessage('messages.result') }}</th>
+                <th>{{ antl.formatMessage('messages.size') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for submission in submissions %}
+                <tr>
+                    <td>{{ submission.assignment.group.name }}</td>
+                    <td>{{ submission.user.email }}</td>
+                    <td>{{ submission.created_at }}</td>
+                    <td>{{ submission.assignment.problem.name }}</td>
+                    <td>
+                        <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
+                            {{ submission.status_name }}
+                        </a>
+                    </td>
+                    <td>{{ submission.score }}</td>
+                    <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

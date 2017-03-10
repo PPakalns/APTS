@@ -71,12 +71,12 @@
                     Nav pievienots neviens čekeris.
                 </p>
             {% else %}
-                <p class="text-left editmenu">
-                    Čekeris uzdevumam pievienots.
+                <p class="text-right editmenu">
                     <a href="{{ 'problem/download/checker' | route({testset_id: testset.id}) }}">
                         <span class="glyphicon glyphicon-download" aria-hidden="true"></span> Lejupielādēt čekera failu
                     </a>
                 </p>
+                Čekeris uzdevumam pievienots.
             {% endif %}
 
         </div>

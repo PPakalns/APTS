@@ -21,9 +21,9 @@
         <td>{{ submission.assignment.group.name }}</td>
         <td>{{ submission.created_at }}</td>
         <td>{{ submission.assignment.problem.name }}</td>
-        <td>{{ "Gaida" if submission.status==0 }}</td>
+        <td>{{ submission.status_name }}</td>
         <td>{{ submission.score }}</td>
-        <td>{{ ( submission.filesize / 1024 ) | round(2) }}kB</td>
+        <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
       </tr>
     </tbody>
   </table>

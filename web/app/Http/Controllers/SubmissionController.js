@@ -8,14 +8,8 @@ const Submission = use('App/Model/Submission')
 class SubmissionController {
 
   * index(req, res) {
-    let submissions = yield Submission.query()
-                           .select("submissions.id", 'submissions.created_at', 'problems.name as problem_name', 'submissions.status', 'submissions.score','users.email','groups.name', 'submissions.filesize')
-                           .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
-                           .innerJoin('problems', 'assignments.problem_id', 'problems.id')
-                           .innerJoin('users', 'submissions.user_id', 'users.id')
-                           .innerJoin('groups', 'assignments.group_id', 'groups.id')
-                           .orderBy('submissions.created_at', 'desc')
-    yield res.sendView('submission/index', {submissions: submissions})
+      let submissions = yield Submission.query().with('user', 'assignment', 'file', 'assignment.group', 'assignment.problem').fetch()
+      yield res.sendView('submission/index', {submissions: submissions.toJSON()})
   }
 
   * show(req, res) {
