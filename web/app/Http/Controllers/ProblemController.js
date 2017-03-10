@@ -128,6 +128,13 @@ class ProblemController {
         yield testset.related('tests','zip','checker').load()
         json_testset = testset.toJSON()
 
+        // Sort tests in increasing order
+        json_testset.tests.sort(function(a, b){
+            if (a.tid != b.tid)
+                return a.tid - b.tid;
+            return (a.gid || "").localeCompare(b.gid || "")
+        })
+
         yield res.sendView('problem/test/list', {testset: json_testset, problem: problem.toJSON()})
     }
 
