@@ -1,22 +1,23 @@
 'use strict'
 
 const Judge = use('App/Model/Judge')
+const Hash = use('Hash')
+let basic_auth = require('basic-auth')
 
 class Authjudge {
-    * handle (req, response, next) {
+    * handle (req, res, next) {
         // Login user with basic auth
         let judge = null
 
         let user_data = basic_auth(req.request)
         if (user_data)
         {
-            let judges = yield Judge.query()
-                .where('name', user_data.name)
-                .where('pass', user_data.pass)
-                .where('disabled', false)
-                .fetch()
-            if (judges && judges.length > 0)
-                judge = judges[ 0 ];
+            let test_judge = yield Judge.findBy('name', user_data.name)
+            if (test_judge && test_judge.disabled==false)
+            {
+                if (yield Hash.verify(user_data.pass, test_judge.pass))
+                    judge = test_judge
+            }
         }
 
         if (judge) {
@@ -25,11 +26,11 @@ class Authjudge {
         }
         else
         {
-            res.unauthorized().json({status: "unauthorized"})
+            res.json({status: "unauthorized"})
             return
         }
         yield next
     }
 }
 
-module.exports = Authbasic
+module.exports = Authjudge

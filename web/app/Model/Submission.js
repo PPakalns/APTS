@@ -4,6 +4,16 @@ const Lucid = use('Lucid')
 
 class Submission extends Lucid {
 
+    // #######################################
+    // Judge requests
+
+    static *getJudgableSubmission()
+    {
+        let submission = yield this.query().where('status', 0).first();
+        return submission
+    }
+
+
     // ########################################
     // VALIDATION RULES
 
@@ -46,16 +56,20 @@ class Submission extends Lucid {
         return this.belongsTo('App/Model/Assignment')
     }
 
+    judge () {
+        return this.hasOne('App/Model/Judge', 'id', 'judge_id')
+    }
+
+    judgeinv () {
+        return this.belongsTo('App/Model/Judge', 'id', 'submission_id')
+    }
+
     file () {
         return this.belongsTo('App/Model/File')
     }
 
     testset () {
         return this.belongsTo('App/Model/Testset')
-    }
-
-    judge () {
-        return this.belongsTo('App/Model/User', 'id', 'judge_id')
     }
 }
 

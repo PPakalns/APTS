@@ -21,7 +21,7 @@ class SubmissionsTableSchema extends Schema {
             table.integer('file_id').unsigned().references('id').inTable('files')
 
             // Testing results
-            table.integer('judge_id').unsigned().references('id').inTable('users') // judge
+            table.integer('judge_id').unsigned().references('id').inTable('judges') // judge
 
             table.integer('status')  // See status_map in app/Model/Submission.js
 

@@ -257,16 +257,16 @@ class ProblemController {
         ntestset.zip_id = zip_file.id
         yield ntestset.save()
 
-        // Update problem
-        problem.testset_id = ntestset.id
-        yield problem.save()
-
         // Update tests
         for (let test of tests)
         {
             test.testset_id = ntestset.id
         }
         yield Test.createMany(tests)
+
+        // Update problem
+        problem.testset_id = ntestset.id
+        yield problem.save()
 
         yield req.with({"successes": [{msg:antl.formatMessage("messages.tests_updated_successfully")}]}).flash()
         return res.route('problem/test/list', {id: data.id})

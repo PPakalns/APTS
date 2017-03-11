@@ -2,7 +2,7 @@
 
 const AppJudge = use('App/Model/Judge')
 const Command = use('Command')
-const Encryption = use('Encryption')
+const Hash = use('Hash')
 
 class Judge extends Command {
 
@@ -43,7 +43,7 @@ class Judge extends Command {
             return
         }
 
-        const pass = Encryption.encrypt(pass1)
+        const pass = yield Hash.make(pass1)
 
         const desc = yield this
             .ask('Short description about judge')
@@ -137,11 +137,47 @@ class Judge extends Command {
         this.success("Judge removed")
     }
 
+    * ChangePassword() {
+
+        let judge = yield this.getJudge()
+
+        if (!judge)
+        {
+            this.error("Judge not found")
+            return
+        }
+
+        const pass1 = yield this
+            .secure('Enter judge password')
+            .print()
+
+        const pass2 = yield this
+            .secure('Enter judge password again')
+            .print()
+
+        if (pass1 != pass2)
+        {
+            this.error("Passwords do not match!")
+            return
+        }
+
+        if (pass1.length < 8)
+        {
+            this.error("Password is too short!")
+            return
+        }
+
+        const pass = yield Hash.make(pass1)
+        judge.pass = pass
+        yield judge.save()
+
+        this.success("Password changed")
+    }
 
     * handle (args, options) {
         while (true)
         {
-            let choices = ['Create judge', 'List judges', 'Toggle judge (disabled)', 'Remove judge', 'Quit']
+            let choices = ['Create judge', 'List judges', 'Toggle judge (disabled)', 'Remove judge', 'Change password']
             const job = yield this.choice('Choose:', choices, choices[ 1 ]).print()
 
             switch (job){
@@ -157,12 +193,13 @@ class Judge extends Command {
                 case choices[ 3 ]:
                     yield this.RemoveJudge()
                     break;
-                case 'Quit':
-                    return
+                case choices[ 4 ]:
+                    yield this.ChangePassword()
+                    break;
                 default:
+                    return
             }
         }
-        return
     }
 
 }

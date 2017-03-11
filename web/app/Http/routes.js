@@ -85,6 +85,11 @@ Route.group('page', function(){
     Route.resource('page', 'PageController').except('show','destroy').middleware('admin')
 })
 
+Route.group('judge', function(){
+    Route.get('judge/get', 'JudgeController.getJob')
+    Route.get('judge/stop', 'JudgeController.stop')
+}).middleware('judge')
+
 Route.post('/submit/:assignment_id', 'SubmissionController.submit').as('submission/submit').middleware('auth')
 Route.get('/submission', 'SubmissionController.index').as('submission/list').middleware('admin')
 Route.get('/submission/:id', 'SubmissionController.show').as('submission/show').middleware('auth')
