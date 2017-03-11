@@ -34,7 +34,7 @@ const namedMiddleware = {
 
   // APTS middlewares
   auth: 'App/Http/Middleware/Auth',
-  "auth:basic": 'App/Http/Middleware/Authbasic',
+  judge: 'App/Http/Middleware/Authbasic',
   notauth: 'App/Http/Middleware/Notauth',
   admin: 'App/Http/Middleware/RouteForAdmin',
 }

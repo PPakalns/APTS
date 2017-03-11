@@ -24,6 +24,8 @@ const providers = [
   'adonis-framework/providers/SessionProvider',
   'adonis-framework/providers/StaticProvider',
   'adonis-framework/providers/ViewProvider',
+  'adonis-framework/providers/EncryptionProvider',
+  'adonis-framework/providers/HashProvider',
   'adonis-lucid/providers/DatabaseProvider',
   'adonis-lucid/providers/LucidProvider',
   'adonis-lucid/providers/FactoryProvider',
@@ -81,7 +83,9 @@ const aliases = {
   Ws: 'Adonis/Addons/Ws',
   Validator: 'Adonis/Addons/Validator',
   Antl: 'Adonis/Addons/Antl',
-  Formats: 'Adonis/Addons/AntlFormats'
+  Formats: 'Adonis/Addons/AntlFormats',
+  Encryption : 'Adonis/Src/Encryption',
+  Hash: 'Adonis/Src/Hash'
 }
 
 /*
@@ -94,6 +98,7 @@ const aliases = {
 |
 */
 const commands = [
+  'App/Commands/Judge',
   'App/Commands/Greet',
   'Adonis/Commands/Auth:Setup',
   'Adonis/Commands/Repl',

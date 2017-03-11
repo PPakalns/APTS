@@ -82,7 +82,7 @@ module.exports = {
     | true. Consider this as a way of saying thanks to us.
     |
     */
-    setPoweredBy: true,
+    setPoweredBy: false,
 
     /*
     |--------------------------------------------------------------------------

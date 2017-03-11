@@ -2,27 +2,11 @@
 
 const NE = use('node-exceptions')
 const View = use('View')
-const User = use('App/Model/User')
 let basic_auth = require('basic-auth')
 
 class AuthenticatedUserPopulate {
 
     * handle (req, res, next) {
-        // Login user with basic auth
-        if (!req.currentUser)
-        {
-            const basicAuth = req.auth.authenticator('basic')
-            if (yield basicAuth.check())
-            {
-                let user_data = basic_auth(req.request)
-                req.currentUser = yield User.findBy('email', user_data.name)
-                if (!req.currentUser)
-                {
-                    throw Error("Authentication fail")
-                }
-            }
-        }
-
         // Check if request model already is not modified
         if (req.cUser !== undefined )
             throw new NE.RuntimeException("CURRENT_USER_ALREADY_DEFINED")
