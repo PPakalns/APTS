@@ -16,6 +16,11 @@ Http.handleError = function * (error, request, response) {
    * DEVELOPMENT REPORTER
    */
   if (Env.get('NODE_ENV') === 'development') {
+    const type = request.accepts('html', 'json')
+    if (type == 'json')
+    {
+        return response.json({status: "error", error: error.status || 500, full_error: error})
+    }
     const ouch = new Ouch().pushHandler(
       new Ouch.handlers.PrettyPageHandler('blue', null, 'sublime')
     )
@@ -28,6 +33,11 @@ Http.handleError = function * (error, request, response) {
   /**
    * PRODUCTION REPORTER
    */
+  const type = request.accepts('html', 'json')
+  if (type == 'json')
+  {
+    return response.json({status: "error", error: error.status || 500})
+  }
   const status = error.status || 500
   console.error(error.stack)
   yield response.status(status).sendView('errors/index', {error})

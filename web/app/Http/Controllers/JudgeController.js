@@ -1,11 +1,11 @@
 'use strict'
 
 const Judge = use('App/Model/Judge')
+const File = use('App/Model/File')
 const Problem = use('App/Model/Problem')
 const Submission = use('App/Model/Submission')
 
 class JudgeController {
-
 
     * stop(req, res)
     {
@@ -18,6 +18,21 @@ class JudgeController {
         res.json({status: "ok"})
     }
 
+    * getFile(req, res)
+    {
+        const id = req.param('file_id')
+        let file = yield File.find(id)
+        yield File.download(req, res, file)
+    }
+
+
+    /*
+     * Judge submit testing results to this function
+     */
+    * submitResult(req, res)
+    {
+        res.json({status: "ok"})
+    }
 
     /*
      * Send json about one judgable submission
@@ -42,6 +57,7 @@ class JudgeController {
         submission.status = 1
         submission.judge_id = judge.id
         judge.submission_id = submission.id
+        judge.status = "TESTING " + submission.id
         yield judge.save()
         yield submission.save()
 
@@ -57,17 +73,19 @@ class JudgeController {
         let upd_tests = []
         for (let test of tests)
         {
-            upd_tests.push({in: test.input_file, out: test.output_file})
+            upd_tests.push({id: test.id, in: test.input_file, out: test.output_file})
         }
 
         output = {
             status: 'ok',
+            memorylimit: testset.timelimit,
+            timelimit: testset.memory,
+            checker_id: testset.checker_id,
+            zip_id: testset.zip_id,
             submission: {
                 id: submission.id,
                 type: submission.type,
-                solution_id: submission.file_id,
-                checker_id: testset.checker_id,
-                zip_id: testset.zip_id
+                solution_id: submission.file_id
             },
             tests: upd_tests
         }

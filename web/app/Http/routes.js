@@ -88,6 +88,8 @@ Route.group('page', function(){
 Route.group('judge', function(){
     Route.get('judge/get', 'JudgeController.getJob')
     Route.get('judge/stop', 'JudgeController.stop')
+    Route.get('judge/download/:file_id', 'JudgeController.getFile')
+    Route.post('judge/submit', 'JudgeController.submitResult')
 }).middleware('judge')
 
 Route.post('/submit/:assignment_id', 'SubmissionController.submit').as('submission/submit').middleware('auth')
