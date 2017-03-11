@@ -2,3 +2,6 @@ executable
 __pycache__
 run.meta
 tmpdata
+tmpdownload
+tmpjudge
+storage
