@@ -79,7 +79,6 @@ Route.group('problem forAdmin', function(){
     Route.get('/api/short/', 'ProblemController.shortlist').as('problem/shortlist')
 }).prefix('/problem').middleware('admin')
 
-
 Route.group('page', function(){
     Route.resource('page', 'PageController').only('show')
     Route.post('page/:id/destroy', 'PageController.destroy').middleware('admin')

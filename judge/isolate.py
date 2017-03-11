@@ -52,8 +52,6 @@ class IsolateConfig:
         self.stdout_file = "stdout.log"        # -o
         self.stderr_file = "stderr.log"        # -r
 
-        self.executable = "executable"
-
         self.meta_file = "run.meta"    # --meta
 
         self.isolate_dir = None

@@ -34,7 +34,7 @@ class UserController {
       query = query.whereNotIn('id', subquery)
     }
 
-    const users = yield query.debug();
+    const users = yield query;
 
     res.json(users)
   }
