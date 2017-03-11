@@ -4,6 +4,7 @@ const Judge = use('App/Model/Judge')
 const File = use('App/Model/File')
 const Problem = use('App/Model/Problem')
 const Submission = use('App/Model/Submission')
+const Testresult = use('App/Model/Testresult')
 
 class JudgeController {
 
@@ -31,6 +32,31 @@ class JudgeController {
      */
     * submitResult(req, res)
     {
+        let body = req.all()
+        let submission = yield Submission.findOrFail(body.submission_id)
+
+        if (submission.status != 1)
+        {
+            throw Error("Judge: submission is not in testing state")
+        }
+
+        submission.judge_id = req.judge.id
+        submission.status = body.status
+        submission.public = body.public
+        submission.private = body.private
+        submission.score = body.score
+        submission.maxscore = body.maxscore
+        submission.maxtime = body.maxtime
+        submission.maxmemory = body.maxmemory
+        yield submission.save()
+
+        for (let test of body.tests)
+        {
+            test.submission_id = submission_id
+        }
+
+        yield Testset.createMany(body.tests)
+
         res.json({status: "ok"})
     }
 
@@ -78,8 +104,8 @@ class JudgeController {
 
         output = {
             status: 'ok',
-            memory_limit: testset.timelimit,
-            time_limit: testset.memory,
+            memory_limit: testset.memory,
+            time_limit: testset.timelimit,
             checker_id: testset.checker_id,
             zip_id: testset.zip_id,
             testset_id: testset.id,

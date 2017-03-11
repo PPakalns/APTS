@@ -21,7 +21,7 @@ def runIsolate(params):
     return_code = proc.wait()
 
     if len(err):
-        logger.error("Isolate error: %s", err.decode())
+        logger.debug("Isolate error: %s", err.decode())
 
     out = out.decode().strip()
     logger.debug("Isolate exit code %d\tReturned string: \"%s\"", return_code, out);

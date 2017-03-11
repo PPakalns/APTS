@@ -74,7 +74,7 @@ def judgeSubmission():
     test_params = {
         'lang': sub['submission']['type'],
         'time_limit': sub['time_limit'],
-        'memory_limit': sub['memory_limit'],
+        'memory_limit': int(sub['memory_limit'])*1024,
 
         # Downloaded files
         'checker': None,
@@ -85,12 +85,11 @@ def judgeSubmission():
     }
 
     for name, params in downloads.items():
-        print(params)
         file_path = judge_api.downloadFile(*params)
         test_params[name] = file_path
         if not file_path:
             logger.error("File download failed with params %s", str(params))
-            results.setDownloadFail()
+            results.setDownloadFail("File download failed %s", name)
             internal_error = True
             break
 
@@ -103,9 +102,8 @@ def judgeSubmission():
     submission_judge = task.Task(test_params, results)
     submission_judge()
 
-    judge_api.submitResult(results.getTestResult())
-
-    return False
+    judge_api.submitResult(results.getResult())
+    return True
 
 
 def main():

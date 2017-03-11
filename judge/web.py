@@ -28,7 +28,7 @@ class JudgeApi:
 
     def _submit(self, result):
         url = self._url('submit')
-        logger.debug("Submitting judge result", url)
+        logger.debug("Submitting judge result %s", url)
         return requests.post(url, auth=self.auth, json=result)
 
 
@@ -36,14 +36,18 @@ class JudgeApi:
         url = self._url('download/%d' % id)
         logger.debug("Downloading file %d form %s", id, url)
         start = time.time()
-        with open(target_path, 'wb') as handle:
-            response = requests.get(url, stream=True, auth=self.auth)
+        try:
+            with open(target_path, 'wb') as handle:
+                response = requests.get(url, stream=True, auth=self.auth)
 
-            if not response.ok:
-                return False
+                if not response.ok:
+                    return False
 
-            for block in response.iter_content(1024):
-                handle.write(block)
+                for block in response.iter_content(1024):
+                    handle.write(block)
+        except:
+            os.remove(target_path)
+            return False
 
         end = time.time()
         logger.debug("Downloaded in %f", end-start)
@@ -65,7 +69,7 @@ class JudgeApi:
         Submits result to server,
         returns true if successfully submited else false
         """
-        resp = self._submit()
+        resp = self._submit(result)
         if (resp.status_code != 200):
             logger.warn("Submit result received status code %d", resp.status_code)
             return False

@@ -17,6 +17,7 @@ os.makedirs(JDIR, exist_ok=True)
 import isolate
 import result
 
+
 def compile(config):
     logger.debug("Starting compilation of lang:%s, path: %s", config["lang"], config["source"])
     if config["lang"] == "cpp11":
@@ -27,6 +28,7 @@ def compile(config):
     compile_result = compiler.compile(sandbox)
     sandbox.cleanUp()
     return compile_result
+
 
 def ExecuteTest(test, isolate_config, wdir):
     logger.debug("Starting test of %s, input: %s", test["solution"], test["input"])
@@ -39,7 +41,7 @@ def ExecuteTest(test, isolate_config, wdir):
 
     # If user program did not exit correctly
     if test_result["return_code"]!=0:
-        result = result.TestResult(
+        return result.TestResult(
             test["id"],
             test_result.get('status'),
             test_result.get('message'),
@@ -47,14 +49,13 @@ def ExecuteTest(test, isolate_config, wdir):
             test_result.get('time'),
             test_result.get('max-rss')
         )
-        return result
 
     output_file = os.path.join(wdir, "output.file")
     sandbox.copyFrom(isolate_config.stdout_file, output_file)
     sandbox.cleanUp()
 
     sandbox = isolate.Isolate(isolate.IsolateConfig().initChecker())
-    sandbox.copyTo(teest["input"], "input")
+    sandbox.copyTo(test["input"], "input")
     sandbox.copyTo(output_file, "output")
     sandbox.copyTo(test["output"], "answer")
     checker_isolated_path = sandbox.copyTo(test["checker"], "checker")
@@ -62,28 +63,31 @@ def ExecuteTest(test, isolate_config, wdir):
     cres = sandbox.run(["checker", "input", "output", "answer"])
     sandbox.cleanUp()
 
-
     # If checker failed incorrectly
-    if cres["return_code"] not in [0,1] or (cres["return_code"]==1 and ('killed' in cres)):
-        result = result.TestResult(
+    if (cres["return_code"] not in [0,1]
+       or (cres["return_code"]==1
+           and ('killed' in cres or 'exitsig' in cres))):
+        logger.error("Checker failed %s", cres)
+        return result.TestResult(
             test["id"],
             'IE2',
             "Internal error",
-            "Checker: " + cres.get('message'),
+            "Checker: " + cres.get('message', ""),
             int(test_result.get('max-rss'))*1024,
             test_result.get('time'),
         )
-        return result
 
-    result = result.TestResult(
+    tr_exit_code = result.translate(cres['exitcode']) if 'exitcode' in cres else 'OK'
+
+    return result.TestResult(
         test["id"],
-        result.translate(cres['exitcode']),
+        tr_exit_code,
         cres.get('stderr'),
-        "Checker: " + cres.get('message'),
+        cres.get('message', ""),
         int(test_result.get('max-rss'))*1024,
         test_result.get('time')
     )
-    return result
+
 
 def Tests(zip, tests, wdir):
 
@@ -94,7 +98,7 @@ def Tests(zip, tests, wdir):
     extract_dir = os.path.join(wdir, "extract_dir")
     os.makedirs(extract_dir, exist_ok=True)
 
-    logger.debug("Opening zip file for test extraction", zip)
+    logger.debug("Opening zip file for test extraction %s", zip)
     with zipfile.ZipFile(zip, 'r') as zf:
         for test in tests:
             try:
@@ -116,7 +120,7 @@ def Tests(zip, tests, wdir):
 
 class Task:
 
-    def __init__(self, config, result):
+    def __init__(self, config, results):
         self.wdir = JDIR # Use judge temporary directory
         self.zip = config['zip']
         self.checker = config['checker']
@@ -126,7 +130,7 @@ class Task:
         self.memory_limit = config['memory_limit']
         self.tests = config['tests']
 
-        self.result = result # see result.py
+        self.results = results # see result.py
 
 
     def __call__(self):
@@ -137,7 +141,7 @@ class Task:
 
         if checker_result["return_code"]!=0:
             logger.warning("Checker compilation failed %s " % checker_result)
-            self.result.setCheckerCEFail(checker_result)
+            self.results.setCheckerCEFail(checker_result)
             return
 
         # Compile user solution
@@ -145,7 +149,7 @@ class Task:
         solution_result = compile(solution_conf)
 
         if solution_result["return_code"]!=0:
-            self.result.setCompileError(solution_result)
+            self.results.setCompileError(solution_result)
             logger.info("User solution compile error %s", self.lang)
             return
 
@@ -158,7 +162,7 @@ class Task:
 
             if not test['extracted']:
                 test_result = result.TestResult(test['id'], 'IE1', private=test["private"])
-                self.result.appendTestResult(test_result)
+                self.results.appendTestResult(test_result)
                 continue
 
             config = {
@@ -169,9 +173,9 @@ class Task:
                 "output": test["output_path"],
             }
 
-            test_result = ExecuteTest(config, test_config, wdir)
-            self.result.appendTestResult(test_result)
+            test_result = ExecuteTest(config, test_config, self.wdir)
+            self.results.appendTestResult(test_result)
 
-
-        return result
+        logging.info(self.results)
+        return self.results
 

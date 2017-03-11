@@ -72,6 +72,10 @@ class Submission extends Lucid {
     testset () {
         return this.belongsTo('App/Model/Testset')
     }
+
+    testresults () {
+        return this.hasMany('App/Model/Testresult', 'id', 'submission_id')
+    }
 }
 
 module.exports = Submission
