@@ -78,10 +78,11 @@ class JudgeController {
 
         output = {
             status: 'ok',
-            memorylimit: testset.timelimit,
-            timelimit: testset.memory,
+            memory_limit: testset.timelimit,
+            time_limit: testset.memory,
             checker_id: testset.checker_id,
             zip_id: testset.zip_id,
+            testset_id: testset.id,
             submission: {
                 id: submission.id,
                 type: submission.type,

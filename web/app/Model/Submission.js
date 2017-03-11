@@ -38,7 +38,8 @@ class Submission extends Lucid {
             1: "TESTING",
             2: "OK",
             3: "CE",
-            4: "IE"
+            16: "IE_1",
+            17: "IE_2"
         }
         return status_map[this.status]
     }
