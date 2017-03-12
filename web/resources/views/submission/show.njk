@@ -23,10 +23,18 @@
             <tr>
                 <td>{{ submission.id }}</td>
                 <td>{{ submission.created_at }}</td>
-                <td>{{ submission.assignment.group.name }}</td>
-                <td>{{ submission.assignment.problem.name }}</td>
+                <td>
+                    <a href="{{ 'GroupController.show' | action({id: submission.assignment.group.id }) }}">
+                    {{ submission.assignment.group.name }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ 'AssignmentController.show' | action({id: submission.assignment.id }) }}">
+                    {{ submission.assignment.problem.name }}
+                    </a>
+                </td>
                 <td class="{{ submission.statuscolor }}">{{ submission.statusname }}</td>
-                <td class="c_score">{% if submission.score %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
+                <td class="c_score">{% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
                 <td>{{ (submission.maxmemory / 1024 / 1024) | round(2) }}Mb</td>
                 <td>{{ submission.maxtime }}s</td>
                 <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
@@ -55,7 +63,7 @@
                 <th>{{ antl.formatMessage('messages.group') }}</th>
                 <th>{{ antl.formatMessage('messages.number') }}</th>
                 <th>{{ antl.formatMessage('messages.status') }}</th>
-                <th>{{ antl.formatMessage('messages.score') }}</th>
+                <th>{{ antl.formatMessage('messages.result') }}</th>
                 <th>{{ antl.formatMessage('messages.memory') }}</th>
                 <th>{{ antl.formatMessage('messages.time') }}</th>
             </tr>
@@ -73,12 +81,12 @@
                     <td>{{ test.time | float | round(2) }}</td>
                 </tr>
                 <tr>
-                    <td colspan=2>{{ antl.formatMessage('messages.message') }}</td>
+                    <td colspan=2 class="text-right">{{ antl.formatMessage('messages.message') }}</td>
                     <td colspan=4 class="message"><pre class="simple">{{ test.public }}</pre></td>
                 </tr>
                 {% if cUser.admin %}
                 <tr>
-                    <td colspan=2>{{ antl.formatMessage('messages.private') }}</td>
+                    <td colspan=2 class="text-right">{{ antl.formatMessage('messages.private') }}</td>
                     <td colspan=4 class="message"><pre class="simple">{{ test.private }}</pre></td>
                 </tr>
                 {% endif %}

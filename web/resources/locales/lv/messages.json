@@ -2,6 +2,13 @@
   "APTS": "APTS",
   "APTS_": "Automātiskā Programmu Testēšanas Sistēma",
 
+  "id": "id",
+  "number": "#",
+
+  "message": "Izvads",
+  "private": "Sistēmas izvads",
+  "source_code": "Pirmkods",
+
   "group": "Grupa",
   "groups": "Grupas",
   "task": "Uzdevums",
@@ -31,11 +38,13 @@
   "time": "Laiks",
   "status": "Status",
   "result": "Rezultāts",
+  "no_results": "Rezultātu nav",
 
   "logout": "Iziet",
   "login": "Ieiet",
   "register": "Reģistrēties",
 
+  "user": "Lietotājs",
   "menu_user": "Lietotājs: {user}",
 
   "task_submissions": "Uzdevuma iesūtījumi",

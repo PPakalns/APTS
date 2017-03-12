@@ -272,3 +272,8 @@ class C11(Compiler):
 class C(Compiler):
     def command(self):
         return ["/usr/bin/gcc", "-DEVAL", "-static", "-O2", "-o", self.executable(), self.source(), "-lm"]
+
+class FPC(Compiler):
+    def command(self):
+        return ["/usr/local/bin/fpc", "-dEVAL", "-XS", "-O2", "-o%s" % self.executable(), self.source()]
+

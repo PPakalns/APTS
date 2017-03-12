@@ -145,6 +145,16 @@ table.no-border td, table.no-border th{
   display: none;
 }
 
+/* Header colors */
+
+thead {
+    background-color: #f5fff5;
+}
+
+.h_green {
+    background-color: #eeffdd;
+}
+
 /* Submission colors */
 .cc{
     font-weight: bolder;

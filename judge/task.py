@@ -28,9 +28,12 @@ def compile(config):
         compiler = isolate.C11(config["source"], config["executable"])
     elif config["lang"] == "c":
         compiler = isolate.C(config["source"], config["executable"])
+    elif config["lang"] == "fpc":
+        compiler = isolate.FPC(config["source"], config["executable"])
     else:
         # Use default
-        compiler = isolate.Cpp11(config["source"], config["executable"])
+        logger.debug("Lang does not match any provided compilator, lang: %s", config['lang'])
+        compiler = isolate.Cpp11(config['source'], config['executable'])
 
     sandbox = isolate.Isolate(compiler.config)
     compile_result = compiler.compile(sandbox)

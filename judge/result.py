@@ -103,16 +103,14 @@ class Result:
         self.private = run_result.get('stderr', default="") + " " + run_result.get('output', default=" ")
 
 
+    def userSolutionCompiled(self, run_result):
+        self.public = run_result.get('stderr') + run_result.get('stdout')
+        self.private = run_result.get('output')
+
+
     def setCompileError(self, run_result):
         self.status = TASK_STATUS_MAP['CE']
-        self.public = run_result.get('stderr')
-        self.private = run_result.get('output')
-
-
-    def userSolutionCompiled(self, run_result):
-        self.status = TASK_STATUS_MAP['OK']
-        self.public = run_result.get('stderr')
-        self.private = run_result.get('output')
+        self.userSolutionCompiled(run_result)
 
 
     def getTestResult(self):

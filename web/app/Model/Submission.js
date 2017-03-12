@@ -19,7 +19,7 @@ class Submission extends Lucid {
 
     static get rules () {
         return {
-            type: 'required|in:cpp,cpp11,c,c11'
+            type: 'required|in:cpp,cpp11,c,c11,fpc'
         }
     }
 
