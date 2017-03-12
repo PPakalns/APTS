@@ -34,7 +34,10 @@ class SubmissionController {
             return
         }
 
-        const tests = yield Testresult.with('test').where('submission_id', id).fetch()
+        let query= Testresult.with('test').where('submission_id', id)
+        if (!req.cUser.admin)
+            query = query.where('visible', true)
+        let tests = yield query.fetch()
 
         yield submission.related('file', 'assignment','assignment.problem','assignment.group').load()
         yield res.sendView('submission/show', {submission: submission.toJSON(), tests: tests.toJSON()})

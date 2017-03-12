@@ -45,7 +45,7 @@ Stores one test result
 """
 class TestResult:
 
-    def __init__(self, id, status_code, public = "", private = "", memorykb = 0, time = 0):
+    def __init__(self, id, status_code, public = "", private = "", memorykb = 0, time = 0, visible=False):
         self.id = id
         self.status_code = status_code
         self.public = public
@@ -53,6 +53,7 @@ class TestResult:
         self.memory = int(memorykb) * 1024
         self.time = float(time)
         self.score = 1 if status_code == 'OK' else 0
+        self.visible = visible
 
 
     def getResult(self):
@@ -63,7 +64,8 @@ class TestResult:
             'private': self.private,
             'memory': self.memory,
             'time': self.time,
-            'score': self.score
+            'score': self.score,
+            'visible': self.visible
         }
 
 

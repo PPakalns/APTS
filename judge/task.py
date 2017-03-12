@@ -51,15 +51,16 @@ def ExecuteTest(test, isolate_config, wdir):
     test_result = sandbox.run(["solution"])
 
     # If user program did not exit correctly
-    if test_result["return_code"]!=0:
+    if test_result['return_code']!=0:
         logger.debug(test_result)
         return result.TestResult(
-            test["id"],
+            test['id'],
             test_result.get('status'),
             test_result.get('message'),
             test_result.get('output'),
             test_result.get('max-rss') or 0,
-            test_result.get('time')
+            test_result.get('time'),
+            test['visible']
         )
 
     output_file = os.path.join(wdir, "output.file")
@@ -84,9 +85,10 @@ def ExecuteTest(test, isolate_config, wdir):
             test["id"],
             'IE2',
             "Internal error",
-            "Checker: " + cres.get('message', ""),
-            int(test_result.get('max-rss'))*1024,
+            "Checker: " + cres.get('message', "") + "\n" + cres.get('stderr', ""),
+            test_result.get('max-rss'),
             test_result.get('time'),
+            test['visible']
         )
 
     tr_exit_code = result.translate(cres['exitcode']) if 'exitcode' in cres else 'OK'
@@ -97,7 +99,8 @@ def ExecuteTest(test, isolate_config, wdir):
         cres.get('stderr'),
         cres.get('message', ""),
         int(test_result.get('max-rss')),
-        test_result.get('time')
+        test_result.get('time'),
+        test['visible']
     )
 
 
@@ -114,15 +117,11 @@ def Tests(zip, tests, wdir):
     with zipfile.ZipFile(zip, 'r') as zf:
         for test in tests:
             try:
-                input_path = Extract(test["in"], extract_dir)
-                output_path = Extract(test["out"], extract_dir)
+                test['input_path'] = Extract(test["in"], extract_dir)
+                test['output_path'] = Extract(test["out"], extract_dir)
+                test['extracted'] = True
+                yield test
 
-                yield {
-                    "id"         : test['id'],
-                    "extracted"  : True,
-                    "input_path" : input_path,
-                    "output_path": output_path,
-                }
             except KeyError as e:
                 yield {
                     "id"         : test['id'],
@@ -167,15 +166,12 @@ class Task:
 
         self.results.userSolutionCompiled(solution_result)
 
-        test_config = isolate.IsolateConfig()
-        test_config.address_space = self.memory_limit
-        test_config.timeout = self.time_limit
-        test_config.extra_timeout = 0.3
+        test_config = isolate.IsolateConfig().initSolution(self.memory_limit, self.time_limit)
 
         for test in Tests(self.zip, self.tests, self.wdir):
 
             if not test['extracted']:
-                test_result = result.TestResult(test['id'], 'IE1', private=test["private"])
+                test_result = result.TestResult(test['id'], 'IE1', private=test["private"], visible=True)
                 self.results.appendTestResult(test_result)
                 continue
 
@@ -185,6 +181,7 @@ class Task:
                 "checker": checker_result["executable"],
                 "input": test["input_path"],
                 "output": test["output_path"],
+                "visible": test["visible"]
             }
 
             test_result = ExecuteTest(config, test_config, self.wdir)

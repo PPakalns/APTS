@@ -114,10 +114,17 @@ class JudgeController {
         let testset = yield problem.testset().fetch()
         let tests = yield testset.tests().fetch()
 
+        let publicset = Utility.getRangeSet(testset.public_range)
+
         let upd_tests = []
         for (let test of tests)
         {
-            upd_tests.push({id: test.id, in: test.input_file, out: test.output_file})
+            upd_tests.push({
+                id: test.id,
+                visible: publicset.hasOwnProperty(test.tid),
+                in: test.input_file,
+                out: test.output_file
+            })
         }
 
         output = {

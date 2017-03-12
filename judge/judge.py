@@ -89,7 +89,7 @@ def judgeSubmission():
         test_params[name] = file_path
         if not file_path:
             logger.error("File download failed with params %s", str(params))
-            results.setDownloadFail("File download failed %s" % name)
+            results.setDownloadFail("Downlaod failed for %s, check if added to task" % name)
             internal_error = True
             break
 

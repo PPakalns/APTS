@@ -39,7 +39,7 @@ class ProblemController {
     * show (req, res) {
         const id = req.param('id')
         const problem = yield Problem.findOrFail(id)
-        yield problem.related('testset').load()
+        yield problem.related('testset', 'testset.checker').load()
 
         yield res.sendView('problem/show', {problem: problem.toJSON()})
     }
@@ -157,10 +157,12 @@ class ProblemController {
     }
 
     * test_save_limits(req, res) {
-        let data = req.only("id", "timelimit", "memory")
+        let data = req.only("id", "timelimit", "memory", "public_range")
         const problem = yield Problem.findOrFail(data.id)
 
         let errors = []
+
+        data['public_range'] = Utility.parseRangeStr(data['public_range'], errors)
 
         // Check memory and time limits
         checkLimits(errors, data)
@@ -176,6 +178,7 @@ class ProblemController {
         testset.updated += 1
         testset.memory = data.memory
         testset.timelimit = data.timelimit
+        testset.public_range = data.public_range
 
         yield testset.save()
 
@@ -363,9 +366,10 @@ function* parseZipFile(zip_file, errors)
             break;
         }
         let testFileName = testFile.fileName;
-        let isInput = testFileName.match(/^(.+)\.(i|o)([\d]+)([A-Za-z]*)$/);
+        const patt = /^(.+)\.(i|o)(\d{1,3})([A-Za-z]?)$/
+        let isInput = testFileName.match(patt);
         if (isInput){
-            let testId = isInput[ 1 ] + "." + isInput[ 3 ] + isInput[ 4 ];
+            let testId = isInput[ 1 ] + "." + parseInt(isInput[ 3 ]) + isInput[ 4 ];
             if (completedTests.hasOwnProperty(testId) == false)
             {
                 completedTests[testId] = {}
@@ -382,10 +386,16 @@ function* parseZipFile(zip_file, errors)
             {
                 completedTests[testId].output_file = isInput[ 0 ]
             }
+            else
+            {
+                errors.push({msg: antl.formatMessage('messages.zip_bad_file', {filename: testFileName})})
+                break
+            }
         }
         else
         {
             errors.push({msg: antl.formatMessage('messages.zip_bad_file', {filename: testFileName})})
+            break
         }
     }
 

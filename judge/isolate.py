@@ -65,6 +65,12 @@ class IsolateConfig:
         self.stdin_file = None
         return self
 
+    def initSolution(self, memory_limit, time_limit):
+        self.address_space = memory_limit
+        self.timeout = time_limit
+        self.extra_timeout = 0.3
+        return self
+
     def getInitOptions(self):
         opt = []
         if self.cgroup:
