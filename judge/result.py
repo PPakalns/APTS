@@ -29,7 +29,6 @@ EXIT_CODE_MAP = {
     'UNKNOWN'        : 64
 }
 
-EXIT_TO_STATUS_MAP = {v: k for k, v in EXIT_CODE_MAP.items() }
 
 """
 Translates checker exit code to status message
@@ -46,13 +45,13 @@ Stores one test result
 """
 class TestResult:
 
-    def __init__(self, id, status_code, public = "", private = "", memory = 0, time = 0):
+    def __init__(self, id, status_code, public = "", private = "", memorykb = 0, time = 0):
         self.id = id
         self.status_code = status_code
         self.public = public
         self.private = private
-        self.memory = memory
-        self.time = time
+        self.memory = int(memorykb) * 1024
+        self.time = float(time)
         self.score = 1 if status_code == 'OK' else 0
 
 
@@ -87,8 +86,8 @@ class Result:
 
 
     def appendTestResult(self, test_result):
-        self.maxtime = max(self.maxtime, float(test_result.time))
-        self.maxmemory = max(self.maxmemory, int(test_result.memory))
+        self.maxtime = max(self.maxtime, test_result.time)
+        self.maxmemory = max(self.maxmemory, test_result.memory)
         self.maxscore += 1
         self.score += test_result.score
         self.tests.append(test_result)

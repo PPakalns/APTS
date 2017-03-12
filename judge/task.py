@@ -49,13 +49,14 @@ def ExecuteTest(test, isolate_config, wdir):
 
     # If user program did not exit correctly
     if test_result["return_code"]!=0:
+        logger.debug(test_result)
         return result.TestResult(
             test["id"],
             test_result.get('status'),
             test_result.get('message'),
             test_result.get('output'),
-            test_result.get('time'),
-            test_result.get('max-rss')
+            test_result.get('max-rss') or 0,
+            test_result.get('time')
         )
 
     output_file = os.path.join(wdir, "output.file")
@@ -92,7 +93,7 @@ def ExecuteTest(test, isolate_config, wdir):
         tr_exit_code,
         cres.get('stderr'),
         cres.get('message', ""),
-        int(test_result.get('max-rss'))*1024,
+        int(test_result.get('max-rss')),
         test_result.get('time')
     )
 
@@ -184,6 +185,7 @@ class Task:
             }
 
             test_result = ExecuteTest(config, test_config, self.wdir)
+            logger.debug("%s", test_result.getResult())
             self.results.appendTestResult(test_result)
 
         logging.info(self.results)

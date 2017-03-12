@@ -1,5 +1,7 @@
 'use strict'
 
+const path = require('path')
+
 /*
 |--------------------------------------------------------------------------
 | Application Providers
@@ -33,7 +35,8 @@ const providers = [
   'adonis-auth/providers/AuthManagerProvider',
   'adonis-websocket/providers/WsProvider',
   'adonis-validation-provider/providers/ValidatorProvider',
-  'adonis-antl/providers/AntlProvider'
+  'adonis-antl/providers/AntlProvider',
+   path.join(__dirname, '../providers/UtilityProvider.js')
 ]
 
 /*
@@ -85,7 +88,8 @@ const aliases = {
   Antl: 'Adonis/Addons/Antl',
   Formats: 'Adonis/Addons/AntlFormats',
   Encryption : 'Adonis/Src/Encryption',
-  Hash: 'Adonis/Src/Hash'
+  Hash: 'Adonis/Src/Hash',
+  Utility: 'Adonis/Utility'
 }
 
 /*

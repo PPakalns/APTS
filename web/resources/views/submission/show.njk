@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <table class="table">
+    <table class="table ftable">
         <thead>
             <tr>
                 <th>{{ antl.formatMessage('messages.id') }}</th>
@@ -25,7 +25,7 @@
                 <td>{{ submission.created_at }}</td>
                 <td>{{ submission.assignment.problem.name }}</td>
                 <td>{{ submission.statusname }}</td>
-                <td>{{ submission.score }}</td>
+                <td>{% if submission.score %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
                 <td>{{ submission.maxtime }}s</td>
                 <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
             </tr>
@@ -47,7 +47,7 @@
         <pre><code>{{ submission.file.file }}</code></pre>
     </div>
     <hr>
-    <table class="table">
+    <table class="table ftable">
         <thead>
             <tr>
                 <th>{{ antl.formatMessage('messages.group') }}</th>
@@ -66,7 +66,7 @@
                     <td>{{ test.status }}</td>
                     <td>{{ test.score }}</td>
                     <td>{{ ( test.memory / 1024 / 1024 ) | round(2) }}MB</td>
-                    <td>{{ test.time }}</td>
+                    <td>{{ test.time | float | round(2) }}</td>
                 </tr>
                 <tr>
                     <td colspan=2>{{ antl.formatMessage('messages.message') }}</td>

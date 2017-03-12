@@ -43,8 +43,11 @@ body {
 
 table {
     border-collapse: collapse;
-    table-layout:fixed;
     width:100%;
+}
+
+table.ftable {
+    table-layout: fixed;
 }
 
 table td,
@@ -78,7 +81,7 @@ pre.simple{
 
 td.message{
     vertical-align: center;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 td.message pre{

@@ -13,7 +13,11 @@ class SubmissionController {
 
 
     * index(req, res) {
-        let submissions = yield Submission.query().with('user', 'assignment', 'file', 'assignment.group', 'assignment.problem').fetch()
+        let submissions = null
+        if (req.cUser.admin)
+            submissions = yield Submission.query().with('user', 'file', 'assignment.group', 'assignment.problem').fetch()
+        else
+            submissions = yield Submission.query().where('user_id', req.cUser.user.id).with('user', 'file', 'assignment.group', 'assignment.problem').fetch()
         yield res.sendView('submission/index', {submissions: submissions.toJSON()})
     }
 

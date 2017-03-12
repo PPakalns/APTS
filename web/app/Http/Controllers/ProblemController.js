@@ -8,6 +8,7 @@ const Helpers = use('Helpers')
 const Validator = use('Validator')
 const Database = use('Database')
 const antl = use('Antl')
+const Utility = use('Utility')
 
 let uuid = require('node-uuid')
 let yauzl = require("yauzl");
@@ -38,6 +39,7 @@ class ProblemController {
     * show (req, res) {
         const id = req.param('id')
         const problem = yield Problem.findOrFail(id)
+        yield problem.related('testset').load()
 
         yield res.sendView('problem/show', {problem: problem.toJSON()})
     }
@@ -262,7 +264,7 @@ class ProblemController {
         {
             test.testset_id = ntestset.id
         }
-        yield Test.createMany(tests)
+        yield Utility.bulkInsert(Test, tests)
 
         // Update problem
         problem.testset_id = ntestset.id

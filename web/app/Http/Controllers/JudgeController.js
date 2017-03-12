@@ -5,6 +5,7 @@ const File = use('App/Model/File')
 const Problem = use('App/Model/Problem')
 const Submission = use('App/Model/Submission')
 const Testresult = use('App/Model/Testresult')
+const Utility = use('Utility')
 
 class JudgeController {
 
@@ -37,7 +38,7 @@ class JudgeController {
 
         if (submission.status != 1)
         {
-            throw Error("Judge: submission is not in testing state")
+            throw Error("Judge: submission is not in testing state" + submission.status)
         }
 
         submission.judge_id = req.judge.id
@@ -57,7 +58,6 @@ class JudgeController {
 
         // Prepare new testresults
         let testres = []
-        let bulk_size = 40
 
         for (let test of body.tests)
         {
@@ -71,16 +71,9 @@ class JudgeController {
             }
             res['submission_id'] = submission.id
             testres.push(res)
-
-            if (testres.length == bulk_size)
-            {
-                yield Testresult.query().insert(testres)
-                testres = []
-            }
         }
 
-        if (testres.length > 0)
-            yield Testresult.query().insert(testres)
+        yield Utility.bulkInsert(Testresult, testres)
 
         res.json({status: "ok"})
     }

@@ -2,7 +2,11 @@
 
 {% block header %}
     <h2>Iesūtījumi</h2>
-    <p>APTS lietotāju iesūtījumi</p>
+    {% if cUser.admin %}
+        <p>APTS lietotāju iesūtījumi</p>
+    {% else %}
+        <p>Mani iesūtījumi</p>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
@@ -34,7 +38,7 @@
                             {{ submission.statusname }}
                         </a>
                     </td>
-                    <td>{{ submission.score }}</td>
+                    <td>{% if submission.score %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
                     <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
                 </tr>
             {% endfor %}

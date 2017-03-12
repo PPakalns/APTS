@@ -11,7 +11,7 @@ class AssignmentController {
 
     const id = req.param('id')
     const assignment = yield Assignment.findOrFail(id)
-    yield assignment.related('group', 'problem').load()
+    yield assignment.related('group', 'problem', 'problem.testset').load()
     let jsonAssignment = assignment.toJSON()
 
     // Check if user is assigned to group

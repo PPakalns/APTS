@@ -2,6 +2,9 @@
 
 import urllib
 import requests
+from requests.packages.urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
+
 import os
 import time
 
@@ -15,6 +18,17 @@ class JudgeApi:
         self.base_url = base_url
         self.auth = (judge_name, judge_pass)
 
+        self.sess = requests.Session()
+
+        # Setup network connectivity problem strategy
+        retries = Retry(total=20,
+                        connect=20,
+                        read=20,
+                        backoff_factor=0.1,
+                        status_forcelist=[ 500, 502, 503, 504 ])
+
+        self.sess.mount('http://', HTTPAdapter(max_retries=retries))
+
 
     def _url(self, path):
         return urllib.parse.urljoin(self.base_url, path)
@@ -23,13 +37,13 @@ class JudgeApi:
     def _get(self):
         url = self._url('get')
         logger.debug("Getting submission %s", url)
-        return requests.get(url, auth=self.auth)
+        return self.sess.get(url, auth=self.auth)
 
 
     def _submit(self, result):
         url = self._url('submit')
         logger.debug("Submitting judge result %s", url)
-        return requests.post(url, auth=self.auth, json=result)
+        return self.sess.post(url, auth=self.auth, json=result)
 
 
     def _download(self, id, target_path):
@@ -38,7 +52,7 @@ class JudgeApi:
         start = time.time()
         try:
             with open(target_path, 'wb') as handle:
-                response = requests.get(url, stream=True, auth=self.auth)
+                response = self.sess.get(url, stream=True, auth=self.auth)
 
                 if not response.ok:
                     return False
