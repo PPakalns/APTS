@@ -36,9 +36,16 @@
                 </td>
                 <td>{{ submission.type }}</td>
                 <td class="{{ submission.statuscolor }}">{{ submission.statusname }}</td>
-                <td class="c_score">{% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
-                <td>{{ (submission.maxmemory / 1024 / 1024) | round(2) }}Mb</td>
-                <td>{{ submission.maxtime }}s</td>
+
+                {% if req.cUser.admin or submission.testset.all_tests_visible %}
+                  <td class="c_score">{% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
+                  <td>{{ (submission.maxmemory / 1024 / 1024) | round(2) }}Mb</td>
+                  <td>{{ submission.maxtime }}s</td>
+                {% else %}
+                  <td class="c_score">{% if submission.public_score or submission.public_score==0 %}**{{ submission.public_score }}/{{ submission.public_maxscore }}{%endif%}</td>
+                  <td>**{{ (submission.public_maxmemory / 1024 / 1024) | round(2) }}Mb</td>
+                  <td>**{{ submission.public_maxtime }}s</td>
+                {% endif %}
                 <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
             </tr>
             <tr>
@@ -59,6 +66,9 @@
         <pre><code>{{ submission.file.file }}</code></pre>
     </div>
     <hr>
+    <div class="text-right">
+      <h4><b>** Publiskie testi</b></h4>
+    </div>
     <table class="table ftable">
         <thead>
             <tr>
@@ -78,7 +88,7 @@
         <tbody>
             {% for test in tests %}
                 <tr class="initial">
-                    <td>{{ test.test.tid }}</td>
+                    <td>{{ "** " if test.visible else "" }}{{ test.test.tid }}</td>
                     <td>{{ test.test.gid }}</td>
                     <td class="cc_sub {{ "c_OK" if test.status=="OK" else "c_CE" }}">
                         {{ test.status }}

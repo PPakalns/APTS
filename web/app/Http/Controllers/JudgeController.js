@@ -6,6 +6,7 @@ const Problem = use('App/Model/Problem')
 const Submission = use('App/Model/Submission')
 const Testresult = use('App/Model/Testresult')
 const Utility = use('Utility')
+const Database = use('Database')
 
 class JudgeController {
 
@@ -42,14 +43,22 @@ class JudgeController {
         }
 
         submission.judge_id = req.judge.id
+        submission.testset_id = body.testset_id
+
         submission.status = body.status
         submission.public = body.public
         submission.private = body.private
+
         submission.score = body.score
         submission.maxscore = body.maxscore
         submission.maxtime = body.maxtime
         submission.maxmemory = body.maxmemory
-        submission.testset_id = body.testset_id
+
+        submission.public_score = body.public_score
+        submission.public_maxscore = body.public_maxscore
+        submission.public_maxtime = body.public_maxtime
+        submission.public_maxmemory = body.public_maxmemory
+
         yield submission.save()
 
         let judge = req.judge;

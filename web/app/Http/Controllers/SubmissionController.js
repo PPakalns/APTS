@@ -34,12 +34,14 @@ class SubmissionController {
             return
         }
 
+        yield submission.related('file', 'testset', 'assignment','assignment.problem','assignment.group').load()
         let query= Testresult.with('test').where('submission_id', id)
-        if (!req.cUser.admin)
+
+        if (!req.cUser.admin && !submission.testset.all_tests_visible)
             query = query.where('visible', true)
+
         let tests = yield query.fetch()
 
-        yield submission.related('file', 'testset', 'assignment','assignment.problem','assignment.group').load()
         yield res.sendView('submission/show', {submission: submission.toJSON(), tests: tests.toJSON()})
     }
 

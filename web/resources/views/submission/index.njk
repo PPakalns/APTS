@@ -44,7 +44,11 @@
                             {{ submission.statusname }}
                         </a>
                     </td>
-                    <td class="c_score">{% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
+                    {% if req.cUser.admin or submission.testset.all_tests_visible %}
+                      <td class="c_score">{% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
+                    {% else %}
+                      <td class="c_score">{% if submission.public_score or submission.public_score==0 %}**{{ submission.public_score }}/{{ submission.public_maxscore }}{%endif%}</td>
+                    {% endif %}
                     <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
                 </tr>
             {% endfor %}

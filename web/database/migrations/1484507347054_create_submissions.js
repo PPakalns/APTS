@@ -30,7 +30,6 @@ class SubmissionsTableSchema extends Schema {
 
             table.integer('score')
             table.integer('maxscore')
-
             table.decimal('maxtime', 5, 2)
             table.integer('maxmemory')
         })

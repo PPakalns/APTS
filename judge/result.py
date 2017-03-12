@@ -29,14 +29,16 @@ EXIT_CODE_MAP = {
     'UNKNOWN'        : 64
 }
 
+INV_EXIT_CODE_MAP = {v: k for k, v in EXIT_CODE_MAP.items()}
+
 
 """
 Translates checker exit code to status message
 """
 def translate(code):
     code = int(code)
-    if code in EXIT_TO_STATUS_MAP:
-        return EXIT_TO_STATUS_MAP[code]
+    if code in INV_EXIT_CODE_MAP:
+        return INV_EXIT_CODE_MAP[code]
     else:
         return 'UNKNOWN'
 
@@ -77,12 +79,19 @@ class Result:
     def __init__(self, submission_id, testset_id):
         self.submission_id = submission_id
         self.testset_id = testset_id
-        self.maxmemory = 0
-        self.maxtime = 0.0
         self.status = TASK_STATUS_MAP['OK']
         self.tests = []
+
+        self.maxmemory = 0
+        self.maxtime = 0.0
         self.maxscore = 0
         self.score = 0
+
+        self.public_maxmemory = 0
+        self.public_maxtime = 0.0
+        self.public_maxscore = 0
+        self.public_score = 0
+
         self.public = ""
         self.private = ""
 
@@ -92,6 +101,13 @@ class Result:
         self.maxmemory = max(self.maxmemory, test_result.memory)
         self.maxscore += 1
         self.score += test_result.score
+
+        if test_result.visible:
+            self.public_maxtime = max(self.public_maxtime, test_result.time)
+            self.public_maxmemory = max(self.public_maxmemory, test_result.memory)
+            self.public_maxscore += 1
+            self.public_score += test_result.score
+
         self.tests.append(test_result)
 
 
@@ -124,12 +140,20 @@ class Result:
             'status': self.status,
             'submission_id': self.submission_id,
             'testset_id': self.testset_id,
+
             'score': self.score,
             'maxscore': self.maxscore,
             'maxtime': self.maxtime,
             'maxmemory': self.maxmemory,
+
+            'public_score': self.public_score,
+            'public_maxscore': self.public_maxscore,
+            'public_maxtime': self.public_maxtime,
+            'public_maxmemory': self.public_maxmemory,
+
             'public': self.public,
             'private': self.private,
+
             'tests': self.getTestResult() if with_tests else None
         }
 
