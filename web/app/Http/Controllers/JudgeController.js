@@ -103,6 +103,21 @@ class JudgeController {
             return
         }
 
+        const affectedRows = yield Database
+            .table('submissions')
+            .where('id', submission.id)
+            .where('status', 0)
+            .update('status', 1)
+
+        if (affectedRows==0)
+        {
+            console.error("Race condition in JudgeController.getJob")
+            judge.status = "wait";
+            yield judge.save()
+            res.json({status: "wait"})
+            return
+        }
+
         submission.status = 1
         submission.judge_id = judge.id
         judge.submission_id = submission.id
