@@ -60,6 +60,11 @@
     <table class="table ftable">
         <thead>
             <tr>
+                <th colspan=4 class="text-right">Max:</th>
+                <th>{{ submission.testset.memory or 0 }}Mb</th>
+                <th>{{ submission.testset.timelimit or 0 }}s</th>
+            </tr>
+            <tr>
                 <th>{{ antl.formatMessage('messages.group') }}</th>
                 <th>{{ antl.formatMessage('messages.number') }}</th>
                 <th>{{ antl.formatMessage('messages.status') }}</th>

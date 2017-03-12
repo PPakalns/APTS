@@ -39,7 +39,7 @@ class SubmissionController {
             query = query.where('visible', true)
         let tests = yield query.fetch()
 
-        yield submission.related('file', 'assignment','assignment.problem','assignment.group').load()
+        yield submission.related('file', 'testset', 'assignment','assignment.problem','assignment.group').load()
         yield res.sendView('submission/show', {submission: submission.toJSON(), tests: tests.toJSON()})
     }
 

@@ -49,7 +49,11 @@ class JudgeController {
         submission.maxscore = body.maxscore
         submission.maxtime = body.maxtime
         submission.maxmemory = body.maxmemory
+        submission.testset_id = body.testset_id
         yield submission.save()
+
+        let judge = req.judge;
+        judge.tested = judge.tested + 1
 
         // Remove old testresults
         const affectedRows = yield Testresult.query()
@@ -74,6 +78,7 @@ class JudgeController {
         }
 
         yield Utility.bulkInsert(Testresult, testres)
+        yield judge.save()
 
         res.json({status: "ok"})
     }
@@ -92,9 +97,9 @@ class JudgeController {
         // No submission
         if (!submission)
         {
-            res.json({status: "wait"})
             judge.status = "wait";
             yield judge.save()
+            res.json({status: "wait"})
             return
         }
 
