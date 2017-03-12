@@ -59,8 +59,10 @@
             {{ form.open({action: 'SubmissionController.submit', params: {assignment_id: assignment.id}, class:"form-horizontal", files: true}) }}
             {{ csrfField }}
             <select name="type" class="form-control" style="width:100%; text-align: center;">
-                <option value="cpp11">C++11</option>
+                <option value="cpp11" >C++11</option>
                 <option value="cpp">C++</option>
+                <option value="c">C</option>
+                <option value="c11">C11</option>
             </select>
             <input type="file" name="solution" id="submit_file">
             <p>

@@ -14,6 +14,7 @@
                 <th>{{ antl.formatMessage('messages.task') }}</th>
                 <th>{{ antl.formatMessage('messages.status') }}</th>
                 <th>{{ antl.formatMessage('messages.result') }}</th>
+                <th>{{ antl.formatMessage('messages.time') }}</th>
                 <th>{{ antl.formatMessage('messages.size') }}</th>
             </tr>
         </thead>
@@ -25,24 +26,27 @@
                 <td>{{ submission.assignment.problem.name }}</td>
                 <td>{{ submission.statusname }}</td>
                 <td>{{ submission.score }}</td>
+                <td>{{ submission.maxtime }}s</td>
                 <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
             </tr>
             <tr>
                 <td colspan=2>{{ antl.formatMessage('messages.message') }}</td>
-                <td colspan=5 class="message"><pre class="simple">{{ submission.public }}</pre></td>
+                <td colspan=6 class="message"><pre class="simple">{{ submission.public | truncate(1020, true) }}</pre></td>
             </tr>
             {% if cUser.admin %}
                 <tr>
                     <td colspan=2>{{ antl.formatMessage('messages.private') }}</td>
-                    <td colspan=5 class="message"><pre class="simple">{{ submission.private }}</pre></td>
+                    <td colspan=6 class="message"><pre class="simple">{{ submission.private | truncate(1020, true) }}</pre></td>
                 </tr>
             {% endif %}
         </tbody>
     </table>
     <hr>
-    <div class="tex2jax_process prettycontent">
+    <button class="btn btn-danger" data-toggle="collapse" data-target="#source_code">{{ antl.formatMessage('messages.source_code') }}</button>
+    <div class="tex2jax_process prettycontent collapse" id="source_code">
         <pre><code>{{ submission.file.file }}</code></pre>
     </div>
+    <hr>
     <table class="table">
         <thead>
             <tr>
@@ -63,7 +67,6 @@
                     <td>{{ test.score }}</td>
                     <td>{{ ( test.memory / 1024 / 1024 ) | round(2) }}MB</td>
                     <td>{{ test.time }}</td>
-                    {#<td></td>#}
                 </tr>
                 <tr>
                     <td colspan=2>{{ antl.formatMessage('messages.message') }}</td>
@@ -72,7 +75,7 @@
                 {% if cUser.admin %}
                 <tr>
                     <td colspan=2>{{ antl.formatMessage('messages.private') }}</td>
-                    <td colspan=6 class="message"><pre class="simple">{{ test.private }}</pre></td>
+                    <td colspan=4 class="message"><pre class="simple">{{ test.private }}</pre></td>
                 </tr>
                 {% endif %}
             {% else %}

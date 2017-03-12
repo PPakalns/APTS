@@ -19,7 +19,7 @@ class Submission extends Lucid {
 
     static get rules () {
         return {
-            type: 'required|in:cpp,cpp11'
+            type: 'required|in:cpp,cpp11,c,c11'
         }
     }
 
@@ -41,7 +41,10 @@ class Submission extends Lucid {
             16: "IE_1",
             17: "IE_2"
         }
-        return status_map[this.status]
+        if (status_map.hasOwnProperty(this.status))
+            return status_map[this.status]
+        else
+            return 'UNKNOWN'
     }
 
 

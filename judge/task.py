@@ -22,8 +22,16 @@ def compile(config):
     logger.debug("Starting compilation of lang:%s, path: %s", config["lang"], config["source"])
     if config["lang"] == "cpp11":
         compiler = isolate.Cpp11(config["source"], config["executable"])
-    if config["lang"] == "cpp":
+    elif config["lang"] == "cpp":
         compiler = isolate.Cpp(config["source"], config["executable"])
+    elif config["lang"] == "c11":
+        compiler = isolate.C11(config["source"], config["executable"])
+    elif config["lang"] == "c":
+        compiler = isolate.C(config["source"], config["executable"])
+    else:
+        # Use default
+        compiler = isolate.Cpp11(config["source"], config["executable"])
+
     sandbox = isolate.Isolate(compiler.config)
     compile_result = compiler.compile(sandbox)
     sandbox.cleanUp()
@@ -152,6 +160,8 @@ class Task:
             self.results.setCompileError(solution_result)
             logger.info("User solution compile error %s", self.lang)
             return
+
+        self.results.userSolutionCompiled(solution_result)
 
         test_config = isolate.IsolateConfig()
         test_config.address_space = self.memory_limit

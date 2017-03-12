@@ -42,8 +42,11 @@ body {
 }
 
 table {
-  border-collapse: collapse;
+    border-collapse: collapse;
+    table-layout:fixed;
+    width:100%;
 }
+
 table td,
 table tr, table th {
   padding-left: 5px;
@@ -75,6 +78,11 @@ pre.simple{
 
 td.message{
     vertical-align: center;
+    overflow-x: scroll;
+}
+
+td.message pre{
+    max-width: 100%;
 }
 
 tr.initial{

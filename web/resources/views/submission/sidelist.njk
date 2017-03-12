@@ -3,20 +3,15 @@
 {% if cUser.auth %}
 
   {% set Submission = use('App/Model/Submission') %}
-  {% set squery = Submission  . query()
-                              . select("submissions.id", 'submissions.created_at', 'problems.name', 'submissions.status', 'submissions.score')
-                              . innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
-                              . innerJoin('problems', 'assignments.problem_id', 'problems.id')
-                              . orderBy('submissions.created_at', 'desc')
-                              . where('user_id', cUser.user.id)
-  %}
+
+  {% set squery = Submission.query().where('user_id', cUser.user.id) %}
   {% if assignment %}
-    {% set squery = squery.where('assignment_id',assignment.id)%}
+    {% set squery = squery.where('assignment_id', assignment.id) %}
   {% endif %}
+  {% yield local_submissions = squery.orderBy('submissions.id', 'desc').limit(10).fetch() %}
+  {% set local_submissions = local_submissions.toJSON() %}
 
-  {% yield submissions = squery.limit(10) %}
-
-  {% if submissions.length != 0 %}
+  {% if local_submissions %}
     <table class="table">
       <thead>
         <tr>
@@ -27,7 +22,7 @@
         </tr>
         <tr>
           {% if not assignment %}
-            <th>{{ antl.formatMessage('messages.task') }}</th>
+            <th>{{ antl.formatMessage('messages.id') }}</th>
           {% else %}
             <th>{{ antl.formatMessage('messages.time') }}</th>
           {% endif %}
@@ -36,16 +31,16 @@
         </tr>
       </thead>
       <tbody>
-        {% for submit in submissions %}
+        {% for submit in local_submissions %}
           <tr>
             {% if not assignment %}
-              <td>{{ submit.name }}</td>
+              <td>{{ submit.id }}</td>
             {% else %}
               <td>{{ submit.created_at }}</td>
             {% endif %}
             <td>
                 <a href="{{ 'SubmissionController.show' | action({id: submit.id}) }}">
-                    {{ submit.status }}
+                    {{ submit.statusname }}
                 </a>
             </td>
             <td>{{ submit.score or 0 }}</td>

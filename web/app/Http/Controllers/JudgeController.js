@@ -50,7 +50,14 @@ class JudgeController {
         submission.maxmemory = body.maxmemory
         yield submission.save()
 
+        // Remove old testresults
+        const affectedRows = yield Testresult.query()
+                                   .where('submission_id', submission.id)
+                                   .delete()
+
+        // Prepare new testresults
         let testres = []
+        let bulk_size = 40
 
         for (let test of body.tests)
         {
@@ -64,9 +71,16 @@ class JudgeController {
             }
             res['submission_id'] = submission.id
             testres.push(res)
+
+            if (testres.length == bulk_size)
+            {
+                yield Testresult.query().insert(testres)
+                testres = []
+            }
         }
 
-        yield Testresult.createMany(testres)
+        if (testres.length > 0)
+            yield Testresult.query().insert(testres)
 
         res.json({status: "ok"})
     }

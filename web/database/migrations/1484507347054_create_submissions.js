@@ -25,8 +25,8 @@ class SubmissionsTableSchema extends Schema {
 
             table.integer('status')  // See status_map in app/Model/Submission.js
 
-            table.string('public', 525) // Public testing message
-            table.string('private', 525) // Private testing message
+            table.string('public', 1023) // Public testing message
+            table.string('private', 1023) // Private testing message
 
             table.integer('score')
             table.integer('maxscore')

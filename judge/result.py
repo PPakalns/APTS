@@ -35,6 +35,7 @@ EXIT_TO_STATUS_MAP = {v: k for k, v in EXIT_CODE_MAP.items() }
 Translates checker exit code to status message
 """
 def translate(code):
+    code = int(code)
     if code in EXIT_TO_STATUS_MAP:
         return EXIT_TO_STATUS_MAP[code]
     else:
@@ -104,7 +105,13 @@ class Result:
 
 
     def setCompileError(self, run_result):
-        self.status = Status.CE
+        self.status = TASK_STATUS_MAP['CE']
+        self.public = run_result.get('stderr')
+        self.private = run_result.get('output')
+
+
+    def userSolutionCompiled(self, run_result):
+        self.status = TASK_STATUS_MAP['OK']
         self.public = run_result.get('stderr')
         self.private = run_result.get('output')
 

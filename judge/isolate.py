@@ -261,6 +261,14 @@ class Cpp11(Compiler):
     def command(self):
         return ["/usr/bin/g++", "-DEVAL", "-static", "-O2", "-std=c++11", "-o", self.executable(), self.source()]
 
-class C(Compiler):
+class Cpp(Compiler):
+    def command(self):
+        return ["/usr/bin/g++", "-DEVAL", "-static", "-O2", "-o", self.executable(), self.source()]
+
+class C11(Compiler):
     def command(self):
         return ["/usr/bin/gcc", "-DEVAL", "-static", "-O2", "-std=c11", "-o", self.executable(), self.source(), "-lm"]
+
+class C(Compiler):
+    def command(self):
+        return ["/usr/bin/gcc", "-DEVAL", "-static", "-O2", "-o", self.executable(), self.source(), "-lm"]
