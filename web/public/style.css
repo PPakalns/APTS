@@ -49,6 +49,9 @@ table {
 table.ftable {
     table-layout: fixed;
 }
+table.ftable td, table.ftable th{
+    overflow: hidden;
+}
 
 table td,
 table tr, table th {
