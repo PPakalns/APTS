@@ -1,34 +1,87 @@
 {% extends 'master' %}
 
 {% block header %}
-  <h2>{{ antl.formatMessage('messages.submission') }}</h2>
+    <h2>{{ antl.formatMessage('messages.submission') }}</h2>
 {% endblock %}
 
 {% block content %}
-  <table class="table">
-    <thead>
-      <tr>
-        <th>{{ antl.formatMessage('messages.group') }}</th>
-        <th>{{ antl.formatMessage('messages.time') }}</th>
-        <th>{{ antl.formatMessage('messages.task') }}</th>
-        <th>{{ antl.formatMessage('messages.status') }}</th>
-        <th>{{ antl.formatMessage('messages.result') }}</th>
-        <th>{{ antl.formatMessage('messages.size') }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{ submission.assignment.group.name }}</td>
-        <td>{{ submission.created_at }}</td>
-        <td>{{ submission.assignment.problem.name }}</td>
-        <td>{{ submission.statusname }}</td>
-        <td>{{ submission.score }}</td>
-        <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
-      </tr>
-    </tbody>
-  </table>
-  <hr>
-  <div class="tex2jax_process prettycontent">
-    <pre><code>{{ submission.file.file }}</code></pre>
-</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ antl.formatMessage('messages.id') }}</th>
+                <th>{{ antl.formatMessage('messages.group') }}</th>
+                <th>{{ antl.formatMessage('messages.time') }}</th>
+                <th>{{ antl.formatMessage('messages.task') }}</th>
+                <th>{{ antl.formatMessage('messages.status') }}</th>
+                <th>{{ antl.formatMessage('messages.result') }}</th>
+                <th>{{ antl.formatMessage('messages.size') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ submission.id }}</td>
+                <td>{{ submission.assignment.group.name }}</td>
+                <td>{{ submission.created_at }}</td>
+                <td>{{ submission.assignment.problem.name }}</td>
+                <td>{{ submission.statusname }}</td>
+                <td>{{ submission.score }}</td>
+                <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
+            </tr>
+            <tr>
+                <td colspan=2>{{ antl.formatMessage('messages.message') }}</td>
+                <td colspan=5 class="message"><pre class="simple">{{ submission.public }}</pre></td>
+            </tr>
+            {% if cUser.admin %}
+                <tr>
+                    <td colspan=2>{{ antl.formatMessage('messages.private') }}</td>
+                    <td colspan=5 class="message"><pre class="simple">{{ submission.private }}</pre></td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    <hr>
+    <div class="tex2jax_process prettycontent">
+        <pre><code>{{ submission.file.file }}</code></pre>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{{ antl.formatMessage('messages.group') }}</th>
+                <th>{{ antl.formatMessage('messages.number') }}</th>
+                <th>{{ antl.formatMessage('messages.status') }}</th>
+                <th>{{ antl.formatMessage('messages.score') }}</th>
+                <th>{{ antl.formatMessage('messages.memory') }}</th>
+                <th>{{ antl.formatMessage('messages.time') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for test in tests %}
+                <tr class="initial">
+                    <td>{{ test.test.tid }}</td>
+                    <td>{{ test.test.gid }}</td>
+                    <td>{{ test.status }}</td>
+                    <td>{{ test.score }}</td>
+                    <td>{{ ( test.memory / 1024 / 1024 ) | round(2) }}MB</td>
+                    <td>{{ test.time }}</td>
+                    {#<td></td>#}
+                </tr>
+                <tr>
+                    <td colspan=2>{{ antl.formatMessage('messages.message') }}</td>
+                    <td colspan=4 class="message"><pre class="simple">{{ test.public }}</pre></td>
+                </tr>
+                {% if cUser.admin %}
+                <tr>
+                    <td colspan=2>{{ antl.formatMessage('messages.private') }}</td>
+                    <td colspan=6 class="message"><pre class="simple">{{ test.private }}</pre></td>
+                </tr>
+                {% endif %}
+            {% else %}
+            <tr>
+                <td colspan=6>
+                    {{ antl.formatMessage('messages.no_results') }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

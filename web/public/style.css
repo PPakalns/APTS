@@ -65,6 +65,23 @@ pre code.hljs{
   background-color: white;
 }
 
+pre.simple{
+    padding: 2px;
+    margin:0px;
+    background-color: white;
+    border-radius: 0px;
+    border: 0px;
+}
+
+td.message{
+    vertical-align: center;
+}
+
+tr.initial{
+    border-top-width: 3px;
+    border-top-color: #ffaaff;
+}
+
 td.nocontent{
   color: darkred;
   font-style: italic;

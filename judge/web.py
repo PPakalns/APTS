@@ -55,6 +55,8 @@ class JudgeApi:
 
 
     def downloadFile(self, id, name, dir, suffix="", cache=False):
+        if id is None:
+            return False
         filename = name + suffix
         target_path = os.path.join(dir, filename)
         if cache:

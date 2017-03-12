@@ -4,6 +4,7 @@ const Database = use('Database')
 const Helpers = use('Helpers')
 const Assignment = use('App/Model/Assignment')
 const Submission = use('App/Model/Submission')
+const Testresult = use('App/Model/Testresult')
 const Validator = use('Validator')
 const File = use('App/Model/File')
 const antl = use('Antl')
@@ -30,8 +31,10 @@ class SubmissionController {
             return
         }
 
+        const tests = yield Testresult.with('test').where('submission_id', id).fetch()
+
         yield submission.related('file', 'assignment','assignment.problem','assignment.group').load()
-        yield res.sendView('submission/show', {submission: submission.toJSON()})
+        yield res.sendView('submission/show', {submission: submission.toJSON(), tests: tests.toJSON()})
     }
 
 

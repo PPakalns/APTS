@@ -50,12 +50,23 @@ class JudgeController {
         submission.maxmemory = body.maxmemory
         yield submission.save()
 
+        let testres = []
+
         for (let test of body.tests)
         {
-            test.submission_id = submission_id
+            let res = {}
+            for (let key in test)
+            {
+                if (test.hasOwnProperty(key))
+                {
+                    res[ key ] = test[ key ]
+                }
+            }
+            res['submission_id'] = submission.id
+            testres.push(res)
         }
 
-        yield Testset.createMany(body.tests)
+        yield Testresult.createMany(testres)
 
         res.json({status: "ok"})
     }

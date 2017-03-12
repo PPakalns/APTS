@@ -89,18 +89,13 @@ def judgeSubmission():
         test_params[name] = file_path
         if not file_path:
             logger.error("File download failed with params %s", str(params))
-            results.setDownloadFail("File download failed %s", name)
+            results.setDownloadFail("File download failed %s" % name)
             internal_error = True
             break
 
-
-    if internal_error:
-        logger.error("Internal error")
-        return False
-
-
-    submission_judge = task.Task(test_params, results)
-    submission_judge()
+    if not internal_error:
+        submission_judge = task.Task(test_params, results)
+        submission_judge()
 
     judge_api.submitResult(results.getResult())
     return True
