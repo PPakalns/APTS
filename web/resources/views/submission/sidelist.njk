@@ -31,19 +31,19 @@
         </tr>
       </thead>
       <tbody>
-        {% for submit in local_submissions %}
+        {% for submission in local_submissions %}
           <tr>
             {% if not assignment %}
-              <td>{{ submit.id }}</td>
+              <td>{{ submission.id }}</td>
             {% else %}
-              <td>{{ submit.created_at }}</td>
+              <td>{{ submission.created_at }}</td>
             {% endif %}
             <td>
-                <a href="{{ 'SubmissionController.show' | action({id: submit.id}) }}">
-                    {{ submit.statusname }}
+                <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}" class="{{ submission.statuscolor }}">
+                    {{ submission.statusname }}
                 </a>
             </td>
-            <td>{{ submit.score or 0 }}</td>
+            <td class="c_score">{% if submission.score %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
           </tr>
         {% endfor %}
       </tbody>

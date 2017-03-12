@@ -9,11 +9,12 @@
         <thead>
             <tr>
                 <th>{{ antl.formatMessage('messages.id') }}</th>
-                <th>{{ antl.formatMessage('messages.group') }}</th>
                 <th>{{ antl.formatMessage('messages.time') }}</th>
+                <th>{{ antl.formatMessage('messages.group') }}</th>
                 <th>{{ antl.formatMessage('messages.task') }}</th>
                 <th>{{ antl.formatMessage('messages.status') }}</th>
                 <th>{{ antl.formatMessage('messages.result') }}</th>
+                <th>{{ antl.formatMessage('messages.memory') }}</th>
                 <th>{{ antl.formatMessage('messages.time') }}</th>
                 <th>{{ antl.formatMessage('messages.size') }}</th>
             </tr>
@@ -21,22 +22,23 @@
         <tbody>
             <tr>
                 <td>{{ submission.id }}</td>
-                <td>{{ submission.assignment.group.name }}</td>
                 <td>{{ submission.created_at }}</td>
+                <td>{{ submission.assignment.group.name }}</td>
                 <td>{{ submission.assignment.problem.name }}</td>
-                <td>{{ submission.statusname }}</td>
-                <td>{% if submission.score %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
+                <td class="{{ submission.statuscolor }}">{{ submission.statusname }}</td>
+                <td class="c_score">{% if submission.score %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
+                <td>{{ (submission.maxmemory / 1024 / 1024) | round(2) }}Mb</td>
                 <td>{{ submission.maxtime }}s</td>
                 <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
             </tr>
             <tr>
                 <td colspan=2>{{ antl.formatMessage('messages.message') }}</td>
-                <td colspan=6 class="message"><pre class="simple">{{ submission.public | truncate(1020, true) }}</pre></td>
+                <td colspan=7 class="message"><pre class="simple">{{ submission.public | truncate(1020, true) }}</pre></td>
             </tr>
             {% if cUser.admin %}
                 <tr>
                     <td colspan=2>{{ antl.formatMessage('messages.private') }}</td>
-                    <td colspan=6 class="message"><pre class="simple">{{ submission.private | truncate(1020, true) }}</pre></td>
+                    <td colspan=7 class="message"><pre class="simple">{{ submission.private | truncate(1020, true) }}</pre></td>
                 </tr>
             {% endif %}
         </tbody>
@@ -63,7 +65,9 @@
                 <tr class="initial">
                     <td>{{ test.test.tid }}</td>
                     <td>{{ test.test.gid }}</td>
-                    <td>{{ test.status }}</td>
+                    <td class="cc_sub {{ "c_OK" if test.status=="OK" else "c_CE" }}">
+                        {{ test.status }}
+                    </td>
                     <td>{{ test.score }}</td>
                     <td>{{ ( test.memory / 1024 / 1024 ) | round(2) }}MB</td>
                     <td>{{ test.time | float | round(2) }}</td>

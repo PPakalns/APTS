@@ -28,9 +28,12 @@ class Submission extends Lucid {
 
 
     static get computed () {
-        return ['statusname']
+        return ['statusname', 'statuscolor']
     }
 
+    getStatuscolor() {
+        return "cc c_"+this.getStatusname()
+    }
 
     getStatusname () {
         const status_map = {

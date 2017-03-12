@@ -144,3 +144,37 @@ table.no-border td, table.no-border th{
 .alert-hidden, .button-hidden{
   display: none;
 }
+
+/* Submission colors */
+.cc{
+    font-weight: bolder;
+}
+
+.cc_sub{
+    font-weight: bolder;
+}
+
+.c_score{
+    font-weight: bolder;
+}
+
+.c_OK{
+    color: darkgreen;
+}
+
+.c_CE{
+    color: RED;
+}
+
+.c_WAIT{
+    color: black;
+}
+
+.c_TESTING{
+    color: darkblue;
+}
+
+.c_IE1, .c_IE2, .c_UNKNOWN{
+    color: purple;
+}
+

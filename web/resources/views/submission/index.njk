@@ -13,6 +13,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>{{ antl.formatMessage('messages.id') }}</th>
                 <th>{{ antl.formatMessage('messages.group') }}</th>
                 <th>{{ antl.formatMessage('messages.user') }}</th>
                 <th>{{ antl.formatMessage('messages.time') }}</th>
@@ -25,6 +26,7 @@
         <tbody>
             {% for submission in submissions %}
                 <tr>
+                    <td>{{ submission.id }}</td>
                     <td>{{ submission.assignment.group.name }}</td>
                     <td>{{ submission.user.email }}</td>
                     <td>
@@ -34,11 +36,11 @@
                     </td>
                     <td>{{ submission.assignment.problem.name }}</td>
                     <td>
-                        <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
+                        <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}" class="{{ submission.statuscolor }}">
                             {{ submission.statusname }}
                         </a>
                     </td>
-                    <td>{% if submission.score %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
+                    <td class="c_score">{% if submission.score %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
                     <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
                 </tr>
             {% endfor %}

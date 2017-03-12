@@ -167,7 +167,7 @@ class Task:
         test_config = isolate.IsolateConfig()
         test_config.address_space = self.memory_limit
         test_config.timeout = self.time_limit
-        test_config.extra_timeout = 0.5
+        test_config.extra_timeout = 0.3
 
         for test in Tests(self.zip, self.tests, self.wdir):
 
