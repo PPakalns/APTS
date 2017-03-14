@@ -28,6 +28,7 @@ const providers = [
   'adonis-framework/providers/ViewProvider',
   'adonis-framework/providers/EncryptionProvider',
   'adonis-framework/providers/HashProvider',
+  'adonis-mail-provider/providers/MailProvider',
   'adonis-lucid/providers/DatabaseProvider',
   'adonis-lucid/providers/LucidProvider',
   'adonis-lucid/providers/FactoryProvider',
@@ -89,7 +90,8 @@ const aliases = {
   Formats: 'Adonis/Addons/AntlFormats',
   Encryption : 'Adonis/Src/Encryption',
   Hash: 'Adonis/Src/Hash',
-  Utility: 'Adonis/Utility'
+  Utility: 'Adonis/Utility',
+  Mail: 'Adonis/Addons/Mail'
 }
 
 /*

@@ -19,6 +19,7 @@
     "adonis-fold": "^3.0.3",
     "adonis-framework": "^3.0.11",
     "adonis-lucid": "^3.0.14",
+    "adonis-mail-provider": "^2.0.2",
     "adonis-middleware": "^1.0.11",
     "adonis-validation-provider": "^3.0.5",
     "adonis-websocket": "^1.0.3",
