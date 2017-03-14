@@ -104,7 +104,6 @@ const aliases = {
 |
 */
 const commands = [
-  'App/Commands/Judge',
   'App/Commands/Greet',
   'Adonis/Commands/Auth:Setup',
   'Adonis/Commands/Repl',
@@ -125,7 +124,9 @@ const commands = [
   'Adonis/Commands/DB:Seed',
   'Adonis/Commands/Migration:Status',
   'Adonis/Commands/Key:Generate',
-  'Adonis/Commands/Antl:Setup'
+  'Adonis/Commands/Antl:Setup',
+  'App/Commands/Judge',
+  'App/Commands/EmailTest'
 ]
 
 module.exports = { providers, aceProviders, aliases, commands }
