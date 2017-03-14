@@ -30,24 +30,24 @@
                   {{ antl.formatMessage('messages.group') }}
                 </a>
               </li>
-            {% endif %}
-            {% if cUser.admin %}
+              {% if cUser.admin %}
+                <li>
+                  <a href="{{ 'problem/list' | route({}) }}">
+                    {{ antl.formatMessage('messages.tasks') }}
+                  </a>
+                </li>
+                <li>
+                  <a href="{{ 'PageController.index' | action({}) }}">
+                    {{ antl.formatMessage('messages.pages') }}
+                  </a>
+                </li>
+              {% endif %}
               <li>
-                <a href="{{ 'problem/list' | route({}) }}">
-                  {{ antl.formatMessage('messages.tasks') }}
-                </a>
-              </li>
-              <li>
-                <a href="{{ 'PageController.index' | action({}) }}">
-                  {{ antl.formatMessage('messages.pages') }}
-                </a>
-              </li>
-            {% endif %}
-            <li>
                 <a href="{{ 'SubmissionController.index' | action({}) }}">
-                    {{ antl.formatMessage('messages.submissions') }}
+                  {{ antl.formatMessage('messages.submissions') }}
                 </a>
-            </li>
+              </li>
+            {% endif %}
             <li>
               <a href="{{ 'PageController.show' | action({id: 'FAQ'}) }}">
                 {{ antl.formatMessage('messages.FAQ') }}
@@ -121,10 +121,10 @@
             <p>(c) Pēteris Pakalns</p>
           </div>
           <div class="col-md-1">
-              {#<p>
+            {#<p>
               <a href="?lang=lv" aria-label="Latviešu valoda">LV</a>
               <a href="?lang=en" aria-label="English valoda">EN</a>
-              </p>#}
+            </p>#}
           </div>
         </div>
       </div>
