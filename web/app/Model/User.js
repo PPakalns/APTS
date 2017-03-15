@@ -5,24 +5,20 @@ const Hash = use('Hash')
 
 class User extends Lucid {
 
-  static get rules () {
-    return {
-      email: 'required|email|unique:users',
-      password: 'required|min:8|max:30'
-    }
+  static get registration_messages () {
+      return {
+          'email.required': 'Nepieciešams norādīt epasta adresi.',
+          'email.email': 'Epasta adrese neatbilst epasta formātam.',
+          'email.unique': 'Lietotājs ar šādu epasta adresi jau eksistē.',
+          'email_confirm.same': 'Norādītās epasta adreses nesakrīt.'
+      }
   }
 
-  static boot () {
-    super.boot()
-
-    /**
-     * Hashing password before storing to the
-     * database.
-     */
-    this.addHook('beforeCreate', function * (next) {
-      this.password = yield Hash.make(this.password)
-      yield next
-    })
+  static get registration_rules () {
+    return {
+      email: 'required|email|unique:users|max:250',
+      email_confirm: 'same:email'
+    }
   }
 
   static get hidden () {

@@ -50,6 +50,11 @@ Http.handleError = function * (error, request, response) {
 Http.onStart = function () {
   const View = use('Adonis/Src/View')
 
+  const recaptcha = use('reCAPTCHA')
+  View.global('reCAPTCHA', function(){
+    return recaptcha.formElement()
+  })
+
   const marked = require('marked');
   marked.setOptions({
     renderer: new marked.Renderer(),

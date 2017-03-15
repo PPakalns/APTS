@@ -33,6 +33,7 @@ Route.get('/logout', 'AuthController.logout').as('logout')
 Route.group('register', function(){
     Route.get('/register', 'RegisterController.index').as('register')
     Route.post('/register', 'RegisterController.register')
+    Route.get('/register/activate/*', 'RegisterController.activate')
 }).middleware('notauth')
 
 Route.group('users', function(){

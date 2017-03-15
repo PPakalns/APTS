@@ -45,6 +45,10 @@
   "login": "Ieiet",
   "register": "Reģistrēties",
 
+  "registration_successfull" : "Reģistrācija bija veiksmīga. Uz {email} izsūtīta vēstule ar tālāk sekojošajām reģistrācijas instrukcijām.",
+  "registration_email_subject" : "Reģistrācija APTS sistēmā",
+  "registration_email_body" : "Lai pabeigtu reģistrāciju APTS sistēmā atveriez zemāk norādīto saiti.",
+
   "user": "Lietotājs",
   "menu_user": "Lietotājs: {user}",
 

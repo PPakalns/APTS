@@ -11,16 +11,22 @@
         {{ csrfField }}
 
         <div class="form-group">
-          {{ form.label('email', 'Epasta adrese', {class: 'col-md-4 control-label'}) }}
+          {{ form.label('email', 'Epasta adrese:', {class: 'col-md-4 control-label'}) }}
           <div class="col-md-6">
-            {{ form.email('email', null, {class: 'form-control'}) }}
+            {{ form.email('email', old('email') or null, {class: 'form-control'}) }}
           </div>
         </div>
 
         <div class="form-group">
-          {{ form.label('password', 'Parole', {class: 'col-md-4 control-label'}) }}
+          {{ form.label('email_confirm', 'Epasta adrese vēlreiz:', {class: 'col-md-4 control-label'}) }}
           <div class="col-md-6">
-            {{ form.password('password', null, {class: 'form-control', withOld: false}) }}
+            {{ form.email('email_confirm', null, {class: 'form-control'}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-4">
+            {{ reCAPTCHA() | safe }}
           </div>
         </div>
 

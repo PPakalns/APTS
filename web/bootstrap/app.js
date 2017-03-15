@@ -37,7 +37,8 @@ const providers = [
   'adonis-websocket/providers/WsProvider',
   'adonis-validation-provider/providers/ValidatorProvider',
   'adonis-antl/providers/AntlProvider',
-   path.join(__dirname, '../providers/UtilityProvider.js')
+   path.join(__dirname, '../providers/UtilityProvider.js'),
+   path.join(__dirname, '../providers/Recaptcha2Provider.js')
 ]
 
 /*
@@ -91,7 +92,8 @@ const aliases = {
   Encryption : 'Adonis/Src/Encryption',
   Hash: 'Adonis/Src/Hash',
   Utility: 'Adonis/Utility',
-  Mail: 'Adonis/Addons/Mail'
+  Mail: 'Adonis/Addons/Mail',
+  reCAPTCHA: 'Adonis/reCAPTCHA',
 }
 
 /*
