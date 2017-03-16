@@ -6,6 +6,7 @@ class UsersTableSchema extends Schema {
 
     up () {
         this.table('users', (table) => {
+            table.string('token', 24).notNullable().unique().defaultTo("")
             table.string('student_id')  // unique student identificator
 
             table.boolean('activated').notNullable().defaultTo(false)
@@ -23,6 +24,7 @@ class UsersTableSchema extends Schema {
 
     down () {
         this.table('users', (table) => {
+            table.dropColumn('token')
             table.dropColumn('student_id')
 
             table.dropColumn('activated')
