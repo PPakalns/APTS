@@ -35,6 +35,8 @@ Route.group('register', function(){
     Route.post('/register', 'RegisterController.register')
     Route.get('/register/activate/:token/:key', 'RegisterController.activate')
     Route.post('/register/activate', 'RegisterController.activate_post')
+    Route.get('/register/resend', 'RegisterController.resend_registration')
+    Route.post('/register/resend', 'RegisterController.resend_registration_post')
 }).middleware('notauth')
 
 Route.group('users', function(){

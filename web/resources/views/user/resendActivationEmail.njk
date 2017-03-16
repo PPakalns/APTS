@@ -4,9 +4,16 @@
 
 {% block content %}
   <div class="panel panel-default">
-    <div class="panel-heading">Reģistrēties sistēmā</div>
+    <div class="panel-heading">Reģistrācijas epasta atkārtota izsūtīšana!</div>
     <div class="panel-body">
-      {{ form.open({ action: 'RegisterController.register', class:"form-horizontal"}) }}
+      <div class="form-group">
+        <div class='col-md-10'>
+          <p class="text-info">
+          Reģistrācijas epastu lietotājam var izsūtīt maksimums vienu reizi 30 minūtēs.
+          </p>
+        </div>
+      </div>
+      {{ form.open({ action: 'RegisterController.resend_registration_post', class:"form-horizontal"}) }}
 
         {{ csrfField }}
 
@@ -32,15 +39,10 @@
 
         <div class="form-group">
           <div class="col-md-6 col-md-offset-4">
-            {{ form.button('Reģistrēties', 'Reģistrēties', {class: "btn btn-primary"}) }}
+            {{ form.button('Izsūtīt epastu', 'Izsūtīt epastu', {class: "btn btn-primary"}) }}
           </div>
         </div>
       {{ form.close() }}
-        <div class="form-group">
-          <div class="col-md-8 col-md-offset-4">
-            Nesaņēmāt reģistrācijas epastu: <a href="{{ 'RegisterController.resend_registration' | action({}) }}">Izsūtiet reģistrācijas epastu atkārtoti.</a>
-          </div>
-        </div>
     </div>
   </div>
 {% endblock %}

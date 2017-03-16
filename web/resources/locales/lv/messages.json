@@ -46,6 +46,7 @@
   "register": "Reģistrēties",
 
   "activation_successfull" : "Lietotāja reģistrācija pabeigta veiksmīgi. Varat tagad ieiet lietotājā \"{email}\".",
+  "resend_successfull" : "Reģistrācijas epasts atkārtoti izsūtīts uz \"{email}\".",
   "registration_successfull" : "Reģistrācija bija veiksmīga. Uz {email} izsūtīta vēstule ar tālāk sekojošajām reģistrācijas instrukcijām.",
   "registration_email_subject" : "Reģistrācija APTS sistēmā",
   "registration_email_body" : "Lai pabeigtu reģistrāciju APTS sistēmā atveriez zemāk norādīto saiti.",

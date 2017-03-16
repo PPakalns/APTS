@@ -1,7 +1,7 @@
 <h3>{{ antl.formatMessage('messages.registration_email_subject') }}</h3>
-<div>
+<p>
   {{ antl.formatMessage('messages.registration_email_body') }}
-</div>
-<div>
+</p>
+<p>
   {{ base }}{{ 'RegisterController.activate' | action({token: token, key: key})}}
-</div>
+</p>

@@ -30,9 +30,9 @@ class User extends Lucid {
         }
     }
 
-    static get registration_rules () {
+    static registration_rules (firm=true) {
         return {
-            email: 'required|email|unique:users|max:250',
+            email: 'required|email|max:250' + (firm ? '|unique:users' : ''),
             email_confirm: 'same:email'
         }
     }

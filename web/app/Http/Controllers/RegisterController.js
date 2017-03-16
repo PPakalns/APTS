@@ -17,6 +17,8 @@ const Token = require('rand-token').generate;
 const LEN_TOKEN = 24;
 const LEN_KEY = 48;
 
+const WAIT_TIME = 30 * 60 * 1000;
+
 class RegisterController {
 
     * index(req, res) {
@@ -26,7 +28,7 @@ class RegisterController {
     * register(req, res) {
         const userData = req.only('email', 'email_confirm')
 
-        const validation = yield Validator.validate(userData, User.registration_rules, User.registration_messages)
+        const validation = yield Validator.validate(userData, User.registration_rules(), User.registration_messages)
 
         if (validation.fails())
         {
@@ -68,13 +70,79 @@ class RegisterController {
         res.route('home')
     }
 
+    * resend_registration(req, res)
+    {
+        yield res.sendView('user/resendActivationEmail');
+    }
+
+    * resend_registration_post(req, res)
+    {
+        let errors = []
+        let user = null
+        const userData = req.only('email', 'email_confirm')
+
+        const validation = yield Validator.validate(userData, User.registration_rules(false), User.registration_messages)
+        if (validation.fails())
+        {
+            errors = errors.concat(validation.messages())
+        }
+
+        const recaptcha_key = req.input('g-recaptcha-response');
+
+        try{
+            yield reCAPTCHA.validate(recaptcha_key)
+        }catch(err){
+            console.log(reCAPTCHA.translateErrors(err));
+            errors.push({msg:"Nepareizi aizpildīts reCAPTCHA tests. Mēģiniet vēlreiz."})
+        }
+
+        if (errors.length == 0)
+        {
+            user = yield User.findBy('email', userData.email)
+            if (!user || user.activated)
+            {
+                errors.push({msg:"Lietotājs jau ir apstiprinājis reģistrācijas epastu vai nav reģistrējies sistēmā!"})
+            }
+            else
+            {
+                let diff = (new Date()) - user.email_change_time;
+                if ( diff < WAIT_TIME )
+                {
+                    errors.push({msg: "Reģistrācijas epastu varēs izsūtīt atkārtoti pēc "+Math.ceil(diff/60000.0)+" minūtēm." })
+                }
+            }
+        }
+
+        if (errors.length > 0)
+        {
+            yield req.withOnly('email').andWith({errors:errors}).flash()
+            res.redirect('back')
+            return
+        }
+
+        let key = String(Token(LEN_KEY))
+
+        user.email_change_hash = yield Hash.make(key, 5)
+        user.email_change_time = new Date()
+        yield user.save()
+
+        console.log("Registration email resended to ", user.email)
+        yield Mail.send('emails.registration', {base: BASE, email: user.email, token: user.token, key: key}, message => {
+            message.from(FROM_EMAIL, FROM_NAME)
+            message.to(user.email)
+            message.subject(Antl.formatMessage('messages.registration_email_subject'))
+        })
+
+        let message = {msg: Antl.formatMessage('messages.resend_successfull', {email: userData.email})}
+        yield req.with({successes:[message]}).flash()
+        res.route('home')
+    }
 
     * activate(req, res)
     {
         const key = req.param('key')
         const token = req.param('token')
         const user = yield User.findBy('token', token)
-        console.log(key, token, user)
         if (!user || user.activated==true)
         {
             yield req.with({errors: [{msg: "Lietotāju nevar aktivizēt."}]}).flash()
@@ -121,7 +189,7 @@ class RegisterController {
             }
             else if (!(yield Hash.verify(userData.key || "", user.email_change_hash)))
             {
-                errors.push({msg: "Kļūda, pārbaudiet vai lietotāja aktivizācijas linku atvērāt pareizi."})
+                errors.push({msg: "Kļūda, aktivizācijas saite nav pareiza. Pārbaudiet vai atvērāt jaunāko saiti pareizi."})
             }
         }
 
