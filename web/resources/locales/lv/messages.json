@@ -61,6 +61,7 @@
 
   "task_submissions": "Uzdevuma iesūtījumi",
   "last_submissions": "Pēdejie iesūtījumi",
+  "submission_submitted": "Risinājums pieņemts!",
 
   "zip_does_not_conaint_inout_files": "Iesūtītais arhīvs testam {testname} nesatur ievadfailu un/vai izvadfailu!",
   "zip_bad_file": "Iesūtītajā zip failā atrasts fails \"{filename}\", kas ir direktorija vai neatbilst pieprasītajam testu faila formātam"

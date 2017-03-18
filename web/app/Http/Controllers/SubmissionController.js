@@ -57,6 +57,7 @@ class SubmissionController {
         let jsonAssignment = assignment.toJSON()
 
         let errors = []
+        let up_file = null
 
         // Validate submission type
         const validation = yield Validator.validate(data, Submission.rules)
@@ -79,12 +80,28 @@ class SubmissionController {
             errors.push({msg: antl.formatMessage("messages.no_permission")})
         }
 
-        // Upload solution file
-        var solution_opt = {maxSize: '64kb'}
-        let up_file = yield File.uploadFile(req, 'solution', solution_opt, true)
-        if (!up_file)
+        // Allow user to submit only 1 submission per 60 sec
+        if (errors.length == 0)
         {
-            errors.push({msg: antl.formatMessage("messages.submission_upload_failed")})
+            let last_submission = yield Submission.query().where('user_id', req.cUser.user.id).orderBy('created_at', 'desc').limit(1).fetch()
+            last_submission = last_submission.head() // First element of loadash array
+            console.log(last_submission)
+
+            if (last_submission && !req.cUser.admin)
+            {
+                console.log(last_submission.created_at, last_submission.created_at - (new Date()))
+            }
+        }
+
+        if (errors.length == 0)
+        {
+            // Upload solution file
+            var solution_opt = {maxSize: '64kb'}
+            up_file = yield File.uploadFile(req, 'solution', solution_opt, true)
+            if (!up_file)
+            {
+                errors.push({msg: antl.formatMessage("messages.submission_upload_failed")})
+            }
         }
 
         if (errors.length > 0)

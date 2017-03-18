@@ -56,7 +56,7 @@ class RegisterController {
         user.token = token
         user.activated = false
         user.email_change_hash = yield Hash.make(key, 5)
-        user.email_change_time = new Date()
+        user.email_change_time = (new Date()).toISOString()
         yield user.save()
 
         yield Mail.send('emails.registration', {base: BASE, email: userData.email, token: token, key: key}, message => {
@@ -108,7 +108,7 @@ class RegisterController {
             {
                 if (user.password_reset_time)
                 {
-                    let diff = (new Date()) - user.password_reset_time;
+                    let diff = (new Date()) - Date.parse(user.password_reset_time);
                     if ( diff < WAIT_TIME )
                     {
                         diff = WAIT_TIME - diff;
@@ -128,7 +128,7 @@ class RegisterController {
         let key = String(Token(LEN_KEY))
 
         user.password_reset_hash = yield Hash.make(key, 5)
-        user.password_reset_time = new Date()
+        user.password_reset_time = (new Date()).toISOString()
         yield user.save()
 
         console.log("Passowrd reset email sent to ", user.email)
@@ -194,7 +194,7 @@ class RegisterController {
             }
             else if (user.password_reset_time)
             {
-                let diff = (new Date()) - user.password_reset_time;
+                let diff = (new Date()) - Date.parse(user.password_reset_time);
                 if ( diff > 2*WAIT_TIME )
                 {
                     errors.push({msg: "Paroles maiņas saite ir novecojusi. Lūdzu piesakiet aizmirstu paroli vēlreiz." })
@@ -253,7 +253,7 @@ class RegisterController {
             }
             else
             {
-                let diff = (new Date()) - user.email_change_time;
+                let diff = (new Date()) - Date.parse(user.email_change_time);
                 if ( diff < WAIT_TIME )
                 {
                     diff = WAIT_TIME - diff;
@@ -272,7 +272,7 @@ class RegisterController {
         let key = String(Token(LEN_KEY))
 
         user.email_change_hash = yield Hash.make(key, 5)
-        user.email_change_time = new Date()
+        user.email_change_time = (new Date()).toISOString()
         yield user.save()
 
         console.log("Registration email resended to ", user.email)
