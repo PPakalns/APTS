@@ -83,9 +83,7 @@ class SubmissionController {
         // Allow user to submit only 1 submission per 60 sec
         if (errors.length == 0)
         {
-            let last_submission = yield Submission.query().where('user_id', req.cUser.user.id).orderBy('created_at', 'desc').limit(1).fetch()
-            last_submission = last_submission.head() // First element of loadash array
-            console.log(last_submission)
+            let last_submission = yield Submission.query().where('user_id', req.cUser.user.id).orderBy('created_at', 'desc').first()
 
             if (last_submission && !req.cUser.admin)
             {
