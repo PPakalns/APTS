@@ -46,8 +46,8 @@
             <tbody>
               {% for sub in submissions %}
                 <tr>
-                  <td>{{ olds.name }}</td>
-                  <td>{{ olds['count(*)'] }}</td>
+                  <td>{{ sub.name }}</td>
+                  <td>{{ sub['count(*)'] }}</td>
                 </tr>
               {% endfor %}
             </tbody>
