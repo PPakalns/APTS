@@ -3,6 +3,7 @@
 const User = use('App/Model/User')
 const Hash = use('Hash')
 const Validator = use('Validator')
+const reCAPTCHA = use('reCAPTCHA')
 
 class AuthController {
 
@@ -10,37 +11,66 @@ class AuthController {
         yield response.sendView('login');
     }
 
-    * login(request, response) {
+    * login(req, res) {
 
-        const email = request.input('email')
-        const password = request.input('password')
+        let errors = []
+        let ewith = {}
+
+        const FAILED_LOGINS = 5
+        const email = req.input('email')
+        const password = req.input('password')
 
         let user = yield User.findBy('email', email)
-        let errormsg = {message: "Autentifikācija bija neveiksmīga!"}
 
-        if (!user || user.activated==false)
+        if (!user || !user.activated)
         {
-            yield request
-                .withOnly('email')
-                .andWith({errors: [errormsg]})
-                .flash()
-            return response.route('/login')
+            errors.push({message: "Autentifikācija bija neveiksmīga!"})
         }
 
-        try {
-            yield request.auth.attempt(email, password)
-        } catch (e) {
-            yield request
-                .withOnly('email')
-                .andWith({errors: [errormsg]})
-                .flash()
-            return response.route('/login')
+        if (user && user.failed_login > FAILED_LOGINS)
+        {
+            const recaptcha_key = req.input('g-recaptcha-response');
+
+            try{
+                yield reCAPTCHA.validate(recaptcha_key)
+            }catch(err){
+                console.log(reCAPTCHA.translateErrors(err));
+                errors.push({msg:"Nepareizi aizpildīts reCAPTCHA tests. Mēģiniet vēlreiz."})
+            }
         }
 
-        yield request
+        if (errors.length == 0)
+        {
+            try {
+                yield req.auth.attempt(email, password)
+            } catch (e) {
+                errors.push({message: "Autentifikācija bija neveiksmīga!"})
+            }
+        }
+
+        if (errors.length > 0)
+        {
+            if (user)
+            {
+                user.failed_login += 1
+                if (user.failed_login > FAILED_LOGINS)
+                    ewith['need_recaptcha'] = true
+                yield user.save()
+            }
+
+            ewith['errors'] = errors
+
+            yield req.withOnly('email').andWith(ewith).flash()
+            return res.route('/login')
+        }
+
+        user.failed_login = 0;
+        yield user.save()
+
+        yield req
             .with({successes: [{message: "Veiksmīgi ieiets lietotājā " + email}]})
             .flash()
-        response.redirect('back')
+        res.redirect('back')
     }
 
     * logout(request, response) {

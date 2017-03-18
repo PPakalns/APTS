@@ -24,6 +24,14 @@
           </div>
         </div>
 
+        {% if old('need_recaptcha') %}
+          <div class="form-group">
+            <div class="col-md-6 col-md-offset-4">
+              {{ reCAPTCHA() | safe }}
+            </div>
+          </div>
+        {% endif %}
+
         <div class="form-group">
           <div class="col-md-6 col-md-offset-4">
             {{ form.button('Ieiet', 'Ieiet', {class: "btn btn-primary"}) }}

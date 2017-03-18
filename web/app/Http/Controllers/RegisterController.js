@@ -108,6 +108,7 @@ class RegisterController {
                 let diff = (new Date()) - user.email_change_time;
                 if ( diff < WAIT_TIME )
                 {
+                    diff = WAIT_TIME - diff;
                     errors.push({msg: "Reģistrācijas epastu varēs izsūtīt atkārtoti pēc "+Math.ceil(diff/60000.0)+" minūtēm." })
                 }
             }

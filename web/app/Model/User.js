@@ -64,6 +64,14 @@ class User extends Lucid {
     groups () {
         return this.belongsToMany('App/Model/Group', 'user_group')
     }
+
+    creator () {
+        return this.belongsTo('App/Model/User', 'id', 'created_by_id')
+    }
+
+    created_users () {
+        return this.hasMany('App/Model/User', 'id', 'user_id')
+    }
 }
 
 module.exports = User

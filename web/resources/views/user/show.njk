@@ -1,0 +1,28 @@
+{% extends 'master' %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-3 text-right">EPasts:</div>
+        <div class="col-md-7">{{ user.email }}</div>
+      </div>
+      {% if user.student_id %}
+      <div class="row">
+        <div class="col-md-3 text-right">Studenta apl. nr.:</div>
+        <div class="col-md-7">{{ user.student_id }}</div>
+      </div>
+      {% endif %}
+      <div class="row">
+        <div class="col-md-3 text-right">Iesūtījumi:</div>
+        <div class="col-md-7">{{ data.submissions }}</div>
+      </div>
+      <div class="row">
+        <div class="col-md-3 text-right">Reģistrēts:</div>
+        <div class="col-md-7">{{ user.created_at }}</div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

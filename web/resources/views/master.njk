@@ -17,7 +17,7 @@
       <nav class="navbar navbar-default navbar-static-top h_green">
         <div class="container">
             <div class="navbar-header">
-            <a class="navbar-brand" href="{{ 'home' | route({}) }}">
+            <a class="navbar-brand" style="color: darkred; font-weight: bold;" href="{{ 'home' | route({}) }}">
               APTS
             </a>
 
@@ -58,7 +58,7 @@
           <ul class="nav navbar-nav navbar-right">
 
             {% if cUser.auth %}
-              <li class="navbar-text" style="padding-left:10px;">{{ antl.formatMessage( 'messages.menu_user', { user: cUser.user.email } ) }}</li>
+              <li style="padding-left:10px;"><a href="{{ 'UserController.show' | action({}) }}">{{ antl.formatMessage( 'messages.menu_user', { user: cUser.user.email } ) }}</a></li>
               <li><a href="{{ 'logout' | route({}) }}">{{ antl.formatMessage('messages.logout') }}</a></li>
             {% else %}
               <li><a href="{{ 'login' | route({}) }}">{{ antl.formatMessage('messages.login' )}}</a></li>

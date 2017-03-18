@@ -39,6 +39,10 @@ Route.group('register', function(){
     Route.post('/register/resend', 'RegisterController.resend_registration_post')
 }).middleware('notauth')
 
+Route.group('user', function(){
+    Route.get('/show/:user_id?', 'UserController.show').as('user/show')
+}).prefix('/user').middleware('auth')
+
 Route.group('users', function(){
     Route.get('', 'UserController.index').as('user/list')
     Route.get('/short/:not_group_id?', 'UserController.shortlist').as('user/shortlist')
