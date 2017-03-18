@@ -25,4 +25,48 @@
       </div>
     </div>
   </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Nomainīt paroli
+    </div>
+    <div class="panel-body">
+      {{ form.open({ action: 'UserController.change_password', params: {user_id: user.id}, class:"form-horizontal"}) }}
+
+        {{ csrfField }}
+
+        <div class="form-group">
+          {{ form.label('old_pass', 'Pašreizējā parole:', {class: 'col-md-4 control-label'}) }}
+          <div class="col-md-6">
+            {{ form.password('old_pass', null, {class: 'form-control'}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          {{ form.label('pass', 'Jaunā parole:', {class: 'col-md-4 control-label'}) }}
+          <div class="col-md-6">
+            {{ form.password('pass', null, {class: 'form-control'}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          {{ form.label('pass_confirm', 'Jaunā parole atkārtoti:', {class: 'col-md-4 control-label'}) }}
+          <div class="col-md-6">
+            {{ form.password('pass_confirm', null, {class: 'form-control'}) }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-4">
+            {{ reCAPTCHA() | safe }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-4">
+            {{ form.button('Nomainīt paroli', 'Nomainīt paroli', {class: "btn btn-primary"}) }}
+          </div>
+        </div>
+      {{ form.close() }}
+    </div>
+  </div>
 {% endblock %}

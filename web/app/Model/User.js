@@ -10,7 +10,7 @@ class User extends Lucid {
             'pass.required': 'Lūdzu norādiet paroli!',
             'pass.min': 'Parolei jābūt vismaz 8 zīmes garai!',
             'pass.max': 'Paroles garums nedrīkst pārsniegt 40 zīmes.',
-            'pass_confirm.same': 'Ievadītajām parolēm jāsakrīt!'
+            'pass_confirm.same': 'Norādītās jaunās parolēm jāsakrīt!'
         }
     }
 

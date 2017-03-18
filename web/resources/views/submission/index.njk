@@ -51,6 +51,12 @@
                     {% endif %}
                     <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
                 </tr>
+              {% else %}
+                <tr>
+                  <td colspan=8>
+                    Jūs neesat veicis nevienu iesūtījumu.
+                  </td>
+                </td>
             {% endfor %}
         </tbody>
     </table>
