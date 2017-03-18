@@ -6,36 +6,36 @@
 {% endblock %}
 
 {% block content %}
-  {% if oldsubmissions.length > 0 %}
-    <div class="panel panel-default">
-      <div class="bold panel-heading">Testu konfigurācijas stāvoklis</div>
-      <div class="panel-body">
-        <div class="row top-buffer">
-          <div class="col-md-4 text-right bold">
-            Pievienots čekeris:
-          </div>
-          <div class="col-md-6">
-            {{ "IR" if testset.checker else " - " }}
-          </div>
+  <div class="panel panel-default">
+    <div class="bold panel-heading">Testu konfigurācijas stāvoklis</div>
+    <div class="panel-body">
+      <div class="row top-buffer">
+        <div class="col-md-4 text-right bold">
+          Pievienots čekeris:
         </div>
-        <div class="row top-buffer">
-          <div class="col-md-4 text-right bold">
-            Pievienoti testi:
-          </div>
-          <div class="col-md-6">
-            <td>{{ "IR" if testset.zip else "" }}</td>
-          </div>
+        <div class="col-md-6">
+          {{ "IR" if testset.checker else " - " }}
         </div>
-        <div class="row top-buffer">
-          <div class="col-md-4 text-right bold">
-            Testu skaits:
-          </div>
-          <div class="col-md-6">
-            <td>{{ testset.tests.length if testset.tests else "0"}}</td>
-          </div>
+      </div>
+      <div class="row top-buffer">
+        <div class="col-md-4 text-right bold">
+          Pievienoti testi:
         </div>
-        {% if submissions.length > 0 %}
-          <strong style="padding: 20px;">Iesūtītie risinājumi pa grupām</strong>
+        <div class="col-md-6">
+          <td>{{ "IR" if testset.zip else "" }}</td>
+        </div>
+      </div>
+      <div class="row top-buffer">
+        <div class="col-md-4 text-right bold">
+          Testu skaits:
+        </div>
+        <div class="col-md-6">
+          <td>{{ testset.tests.length if testset.tests else "0"}}</td>
+        </div>
+      </div>
+      {% if submissions.length > 0 %}
+        <div class="top-buffer">
+          <strong style="padding: 20px;">Iesūtītie risinājumi pa grupām:</strong>
           <table style="background-color: white; margin-top: 10px;">
             <thead>
               <tr>
@@ -52,31 +52,31 @@
               {% endfor %}
             </tbody>
           </table>
-        {% endif %}
-        {% if oldsubmissions.length > 0 %}
-          <div class="bg-danger top-buffer">
-            <strong style="padding: 20px;">Risinājumi, kas ir testēti ar novecojušu testu konfigurāciju.</strong>
-            <table style="background-color: white; margin-top: 10px;">
-              <thead>
+        </div>
+      {% endif %}
+      {% if oldsubmissions.length > 0 %}
+        <div class="bg-danger top-buffer">
+          <strong style="padding: 20px;">Risinājumi, kas ir testēti ar novecojušu testu konfigurāciju:</strong>
+          <table style="background-color: white; margin-top: 10px;">
+            <thead>
+              <tr>
+                <th>Grupa</th>
+                <th>Risinājumu Skaits</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for olds in oldsubmissions %}
                 <tr>
-                  <th>Grupa</th>
-                  <th>Risinājumu Skaits</th>
+                  <td>{{ olds.name }}</td>
+                  <td>{{ olds['count(*)'] }}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {% for olds in oldsubmissions %}
-                  <tr>
-                    <td>{{ olds.name }}</td>
-                    <td>{{ olds['count(*)'] }}</td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        {% endif %}
-      </div>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
     </div>
-  {% endif %}
+  </div>
 
   <div class="panel panel-default">
     <div class="panel-heading">Uzdevuma limiti</div>
