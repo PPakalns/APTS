@@ -38,6 +38,16 @@
           </div>
         </div>
       {{ form.close() }}
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-4">
+            <a href="{{ 'RegisterController.resend_password' | action({}) }}">Aizmirsi paroli?</a>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-8 col-md-offset-4">
+            Nesaņēmāt reģistrācijas epastu: <a href="{{ 'RegisterController.resend_registration' | action({}) }}">Izsūtiet reģistrācijas epastu atkārtoti.</a>
+          </div>
+        </div>
     </div>
   </div>
 {% endblock %}

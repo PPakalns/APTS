@@ -51,6 +51,11 @@
   "registration_email_subject" : "Reģistrācija APTS sistēmā",
   "registration_email_body" : "Lai pabeigtu reģistrāciju APTS sistēmā atveriez zemāk norādīto saiti.",
 
+  "password_changed_successfully": "Parole nomainīta veiksmīgi! Varat ieiet savā profilā.",
+  "password_reset_successful" : "Paroles attiestatīšana bija veiksmīga. Uz {email} izsūtīta vēstule ar tālāk sekojošajām paroles nomaiņas instrukcijām.",
+  "password_reset_subject" : "Paroles maiņa Automātiskajā Programmu Testēšanas Sistēmā APTS",
+  "password_reset_body" : "Lai nomainītu paroli APTS sistēmā atveriet zemāk norādīto saiti.",
+
   "user": "Lietotājs",
   "menu_user": "Lietotājs: {user}",
 

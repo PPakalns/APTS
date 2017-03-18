@@ -4,9 +4,9 @@
 
 {% block content %}
   <div class="panel panel-default">
-    <div class="panel-heading">Lietotāja reģistrācija</div>
+    <div class="panel-heading">{{ header }}</div>
     <div class="panel-body">
-      {{ form.open({ action: 'RegisterController.activate_post', class:"form-horizontal"}) }}
+      {{ form.open({ action: action, class:"form-horizontal"}) }}
 
         {{ csrfField }}
 
@@ -42,7 +42,7 @@
 
         <div class="form-group">
           <div class="col-md-6 col-md-offset-4">
-            {{ form.button('Pabeigt reģistrāciju', 'Pabeigt reģistrāciju', {class: "btn btn-primary"}) }}
+            {{ form.button(submit_button, submit_button, {class: "btn btn-primary"}) }}
           </div>
         </div>
       {{ form.close() }}

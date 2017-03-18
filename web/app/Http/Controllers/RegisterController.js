@@ -70,9 +70,164 @@ class RegisterController {
         res.route('home')
     }
 
+
+    // Password reset email request form
+    * resend_password(req, res)
+    {
+        yield res.sendView('user/request_email',
+            {
+                action: "RegisterController.resend_password_post",
+                header: "Pieteikt aizmirstu paroli",
+                lead: "Uz epastu tiks nosūtīta saite ar paroles nomaiņas formu."
+            }
+        );
+    }
+
+    * resend_password_post(req, res)
+    {
+        let errors = []
+        let user = null
+        const userData = req.only('email', 'email_confirm')
+
+        const validation = yield Validator.validate(userData, User.registration_rules(false), User.registration_messages)
+        if (validation.fails())
+        {
+            errors = errors.concat(validation.messages())
+        }
+
+        yield validate_reCAPTCHA(errors, req.input('g-recaptcha-response'))
+
+        if (errors.length == 0)
+        {
+            user = yield User.findBy('email', userData.email)
+            if (!user || !user.activated)
+            {
+                errors.push({msg:"Lietotājs nav reģistrējies sistēmā!"})
+            }
+            else
+            {
+                if (user.password_reset_time)
+                {
+                    let diff = (new Date()) - user.password_reset_time;
+                    if ( diff < WAIT_TIME )
+                    {
+                        diff = WAIT_TIME - diff;
+                        errors.push({msg: "Paroles maiņas epastu varēs izsūtīt atkārtoti tikai pēc "+Math.ceil(diff/60000.0)+" minūtēm." })
+                    }
+                }
+            }
+        }
+
+        if (errors.length > 0)
+        {
+            yield req.withOnly('email').andWith({errors:errors}).flash()
+            res.redirect('back')
+            return
+        }
+
+        let key = String(Token(LEN_KEY))
+
+        user.password_reset_hash = yield Hash.make(key, 5)
+        user.password_reset_time = new Date()
+        yield user.save()
+
+        console.log("Passowrd reset email sent to ", user.email)
+        yield Mail.send('emails.passwordReset', {base: BASE, email: user.email, token: user.token, key: key}, message => {
+            message.from(FROM_EMAIL, FROM_NAME)
+            message.to(user.email)
+            message.subject(Antl.formatMessage('messages.password_reset_subject'))
+        })
+
+        let message = {msg: Antl.formatMessage('messages.password_reset_successful', {email: userData.email})}
+        yield req.with({successes:[message]}).flash()
+        res.route('home')
+
+    }
+
+
+    * reset_password(req, res)
+    {
+        const key = req.param('key')
+        const token = req.param('token')
+        const user = yield User.findBy('token', token)
+        if (!user)
+        {
+            yield req.with({errors: [{msg: "Diemžēl atvērtā saite bija kļūdaina, pārbaudiet vai saiti atvērāt pareizi."}]}).flash()
+            res.route('home')
+            return
+        }
+        yield res.sendView('user/respond_email', {
+            email: user.email, key: key, token: token,
+            header: "Paroles maiņa",
+            action: "RegisterController.reset_password_post",
+            submit_button: "Nomainīt paroli"
+        });
+    }
+
+
+    * reset_password_post(req, res)
+    {
+        const userData = req.only('pass', 'pass_confirm', 'key', 'token')
+
+        let errors = []
+        let user = null
+
+        const validation = yield Validator.validate(userData, User.activation_rules, User.activation_messages)
+        if (validation.fails())
+        {
+            errors = errors.concat(validation.messages())
+        }
+
+        yield validate_reCAPTCHA(errors, req.input('g-recaptcha-response'))
+
+        // PAPILDUS VALIDĀCIJAS SOĻI
+        if (errors.length == 0)
+        {
+            user = yield User.findBy('token', userData.token)
+            if (user == null || user.activated==false || !user.password_reset_hash)
+            {
+                errors.push({msg: "Atvērtā saite ir kļūdaina vai novecojusi, mēģiniet vēlreiz."})
+            }
+            else if (!(yield Hash.verify(userData.key || "", user.password_reset_hash)))
+            {
+                errors.push({msg: "Kļūda, aktivizācijas saite nav pareiza. Pārbaudiet vai atvērāt jaunāko saiti pareizi."})
+            }
+            else if (user.password_reset_time)
+            {
+                let diff = (new Date()) - user.password_reset_time;
+                if ( diff > 2*WAIT_TIME )
+                {
+                    errors.push({msg: "Paroles maiņas saite ir novecojusi. Lūdzu piesakiet aizmirstu paroli vēlreiz." })
+                }
+            }
+        }
+
+        if (errors.length > 0)
+        {
+            yield req.with({errors: errors}).flash()
+            res.redirect('back')
+            return
+        }
+
+        user.password = yield Hash.make(userData.pass)
+        user.password_reset_hash = null
+        // user.password_reset_time = null // Because potentially user could spam multiple times with password reset
+        yield user.save()
+
+        let message = {msg: Antl.formatMessage('messages.password_changed_successfully', {email: user.email})}
+        yield req.with({successes:[message]}).flash()
+        res.route('login')
+    }
+
+
     * resend_registration(req, res)
     {
-        yield res.sendView('user/resendActivationEmail');
+        yield res.sendView('user/request_email',
+            {
+                action: "RegisterController.resend_registration_post",
+                header: "Ŗeģistrācijas epasta atkārtota izsūtīšana",
+                lead: "Reģistrācijas epastu lietotājam var izsūtīt maksimums vienu reizi 30 minūtēs."            }
+        );
     }
 
     * resend_registration_post(req, res)
@@ -87,14 +242,7 @@ class RegisterController {
             errors = errors.concat(validation.messages())
         }
 
-        const recaptcha_key = req.input('g-recaptcha-response');
-
-        try{
-            yield reCAPTCHA.validate(recaptcha_key)
-        }catch(err){
-            console.log(reCAPTCHA.translateErrors(err));
-            errors.push({msg:"Nepareizi aizpildīts reCAPTCHA tests. Mēģiniet vēlreiz."})
-        }
+        yield validate_reCAPTCHA(errors, req.input('g-recaptcha-response'))
 
         if (errors.length == 0)
         {
@@ -150,7 +298,12 @@ class RegisterController {
             res.route('home')
             return
         }
-        yield res.sendView('user/activate', {email: user.email, key: key, token: token});
+        yield res.sendView('user/respond_email', {
+            email: user.email, key: key, token: token,
+            header: "Lietotāja reģistrācija",
+            action: "RegisterController.activate_post",
+            submit_button: "Pabeigt reģistrāciju"
+        });
     }
 
 
@@ -167,14 +320,7 @@ class RegisterController {
             errors = errors.concat(validation.messages())
         }
 
-        const recaptcha_key = req.input('g-recaptcha-response');
-
-        try{
-            yield reCAPTCHA.validate(recaptcha_key)
-        }catch(err){
-            console.log(reCAPTCHA.translateErrors(err));
-            errors.push({msg:"Nepareizi aizpildīts reCAPTCHA tests. Mēģiniet vēlreiz."})
-        }
+        yield validate_reCAPTCHA(errors, req.input('g-recaptcha-response'))
 
         // PAPILDUS VALIDĀCIJAS SOĻI
         if (errors.length == 0)
@@ -182,7 +328,7 @@ class RegisterController {
             user = yield User.findBy('token', userData.token)
             if (user == null)
             {
-                errors.push({msg: "Lietotājs ar norādīto epasta adresi nav atrasts"})
+                errors.push({msg: "Atvērtā saite ir kļūdaina vai novecojusi, mēģiniet vēlreiz."})
             }
             else if (user.activated == true)
             {
@@ -210,6 +356,16 @@ class RegisterController {
         let message = {msg: Antl.formatMessage('messages.activation_successfull', {email: user.email})}
         yield req.with({successes:[message]}).flash()
         res.route('login')
+    }
+}
+
+function * validate_reCAPTCHA(errors, recaptcha_key)
+{
+    try{
+        yield reCAPTCHA.validate(recaptcha_key)
+    }catch(err){
+        console.log(reCAPTCHA.translateErrors(err));
+        errors.push({msg:"Nepareizi aizpildīts reCAPTCHA tests. Mēģiniet vēlreiz."})
     }
 }
 

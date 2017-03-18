@@ -37,6 +37,10 @@ Route.group('register', function(){
     Route.post('/register/activate', 'RegisterController.activate_post')
     Route.get('/register/resend', 'RegisterController.resend_registration')
     Route.post('/register/resend', 'RegisterController.resend_registration_post')
+    Route.get('/reset/password', 'RegisterController.resend_password').as('user/reset/password')
+    Route.post('/reset/password', 'RegisterController.resend_password_post')
+    Route.get('/reset/password/:token/:key', 'RegisterController.reset_password')
+    Route.post('/reset/setpassword', 'RegisterController.reset_password_post')
 }).middleware('notauth')
 
 Route.group('user', function(){
