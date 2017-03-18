@@ -69,7 +69,7 @@ def judgeSubmission():
         "zip": (sub["zip_id"], str(sub["zip_id"]), SDIR, ".zip", True)
     }
 
-    results = result.Result(sub['submission']['id'], sub['testset_id'] )
+    results = result.Result(sub['submission']['id'], sub['testset_id'], sub['testset_update'] )
 
     test_params = {
         'lang': sub['submission']['type'],

@@ -76,9 +76,10 @@ Stores task test result
 """
 class Result:
 
-    def __init__(self, submission_id, testset_id):
+    def __init__(self, submission_id, testset_id, testset_update):
         self.submission_id = submission_id
         self.testset_id = testset_id
+        self.testset_update = testset_update
         self.status = TASK_STATUS_MAP['OK']
         self.tests = []
 
@@ -140,6 +141,7 @@ class Result:
             'status': self.status,
             'submission_id': self.submission_id,
             'testset_id': self.testset_id,
+            'testset_update': self.testset_update,
 
             'score': self.score,
             'maxscore': self.maxscore,
