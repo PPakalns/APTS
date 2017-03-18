@@ -89,7 +89,11 @@ class SubmissionController {
 
             if (last_submission && !req.cUser.admin)
             {
-                console.log(last_submission.created_at, last_submission.created_at - (new Date()))
+                let diff = 60 - Math.floor((new Date() - Date.parse(last_submission.created_at)) / 1000)
+                if (diff > 1)
+                {
+                    errors.push({msg: "Nākamo iesūtījumu varēsiet iesūtīt pēc " + diff + " sekundēm! Lūdzu mēģiniet vēlreiz!"})
+                }
             }
         }
 
