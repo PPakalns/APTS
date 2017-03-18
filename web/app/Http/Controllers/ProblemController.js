@@ -137,7 +137,29 @@ class ProblemController {
             return (a.gid || "").localeCompare(b.gid || "")
         })
 
-        yield res.sendView('problem/test/list', {testset: json_testset, problem: problem.toJSON()})
+        let submissions = yield Database
+             .table('submissions')
+             .select('assignment_id', 'groups.name')
+             .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
+             .innerJoin('groups', 'groups.id', 'assignments.group_id')
+             .where('assignments.problem_id', problem.id)
+             .groupBy('assignment_id', 'groups.name')
+             .count()
+
+        let oldsubmissions = yield Database
+             .table('submissions')
+             .select('assignment_id', 'groups.name')
+             .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
+             .innerJoin('groups', 'groups.id', 'assignments.group_id')
+             .where('assignments.problem_id', problem.id)
+             .where(function(){
+                 this.whereNot('submissions.testset_id',  testset.id)
+                     .orWhereNot('submissions.testset_update', testset.updated)
+             })
+             .groupBy('assignment_id', 'groups.name')
+             .count()
+
+        yield res.sendView('problem/test/list', {testset: json_testset, problem: problem.toJSON(), oldsubmissions, submissions})
     }
 
 

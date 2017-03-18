@@ -17,12 +17,11 @@ class SubmissionController {
         let page = Validator.sanitizor.toInt(req.param('page', 1), 10)
         page = isNaN(page) ? 1 : Math.max(page,1)
 
-        let query = Submission.query().with('user', 'file', 'assignment.group', 'assignment.problem')
+        let query = Submission.query().orderBy('id', 'desc').with('user', 'file', 'assignment.group', 'assignment.problem')
         if (!req.cUser.admin)
             query = query.where('user_id', req.cUser.user.id)
         let sub_paginated = yield query.paginate(page,20)
         yield res.sendView('submission/index', {sub_paginated: sub_paginated.toJSON()})
-        console.log(sub_paginated.toJSON())
     }
 
 

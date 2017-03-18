@@ -44,6 +44,7 @@ class JudgeController {
 
         submission.judge_id = req.judge.id
         submission.testset_id = body.testset_id
+        submission.testset_update = body.testset_update
 
         submission.status = body.status
         submission.public = body.public
@@ -163,6 +164,7 @@ class JudgeController {
             checker_id: testset.checker_id,
             zip_id: testset.zip_id,
             testset_id: testset.id,
+            testset_update: testset.updated,
             submission: {
                 id: submission.id,
                 type: submission.type,

@@ -191,3 +191,10 @@ thead {
     color: purple;
 }
 
+.bold{
+    font-weight: bold;
+}
+
+.top-buffer{
+    margin-top:10px;
+}
