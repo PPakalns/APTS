@@ -1,63 +1,66 @@
 {% extends 'master' %}
+{% from 'macro.paginator' import paginator %}
 
 {% block header %}
-    <h2>Iesūtījumi</h2>
-    {% if cUser.admin %}
-        <p>APTS lietotāju iesūtījumi</p>
-    {% else %}
-        <p>Mani iesūtījumi</p>
-    {% endif %}
+  <h2>Iesūtījumi</h2>
+  {% if cUser.admin %}
+    <p>APTS lietotāju iesūtījumi</p>
+  {% else %}
+    <p>Mani iesūtījumi</p>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>{{ antl.formatMessage('messages.id') }}</th>
-                <th>{{ antl.formatMessage('messages.group') }}</th>
-                <th>{{ antl.formatMessage('messages.user') }}</th>
-                <th>{{ antl.formatMessage('messages.time') }}</th>
-                <th>{{ antl.formatMessage('messages.task') }}</th>
-                <th>{{ antl.formatMessage('messages.status') }}</th>
-                <th>{{ antl.formatMessage('messages.result') }}</th>
-                <th>{{ antl.formatMessage('messages.size') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for submission in submissions %}
-                <tr>
-                    <td>
-                        <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
-                            {{ submission.id }}
-                        </a>
-                    </td>
-                    <td>{{ submission.assignment.group.name }}</td>
-                    <td>{{ submission.user.email }}</td>
-                    <td>
-                        <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
-                            {{ submission.created_at }}
-                        </a>
-                    </td>
-                    <td>{{ submission.assignment.problem.name }}</td>
-                    <td>
-                        <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}" class="{{ submission.statuscolor }}">
-                            {{ submission.statusname }}
-                        </a>
-                    </td>
-                    {% if req.cUser.admin or submission.testset.all_tests_visible %}
-                      <td class="c_score">{% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
-                    {% else %}
-                      <td class="c_score">{% if submission.public_score or submission.public_score==0 %}**{{ submission.public_score }}/{{ submission.public_maxscore }}{%endif%}</td>
-                    {% endif %}
-                    <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
-                </tr>
-              {% else %}
-                <tr>
-                  <td colspan=8>
-                    Jūs neesat veicis nevienu iesūtījumu.
-                  </td>
-                </td>
-            {% endfor %}
-        </tbody>
-    </table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>{{ antl.formatMessage('messages.id') }}</th>
+        <th>{{ antl.formatMessage('messages.group') }}</th>
+        <th>{{ antl.formatMessage('messages.user') }}</th>
+        <th>{{ antl.formatMessage('messages.time') }}</th>
+        <th>{{ antl.formatMessage('messages.task') }}</th>
+        <th>{{ antl.formatMessage('messages.status') }}</th>
+        <th>{{ antl.formatMessage('messages.result') }}</th>
+        <th>{{ antl.formatMessage('messages.size') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for submission in sub_paginated.data %}
+        <tr>
+          <td>
+            <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
+              {{ submission.id }}
+            </a>
+          </td>
+          <td>{{ submission.assignment.group.name }}</td>
+          <td>{{ submission.user.email }}</td>
+          <td>
+            <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
+              {{ submission.created_at }}
+            </a>
+          </td>
+          <td>{{ submission.assignment.problem.name }}</td>
+          <td>
+            <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}" class="{{ submission.statuscolor }}">
+              {{ submission.statusname }}
+            </a>
+          </td>
+          {% if req.cUser.admin or submission.testset.all_tests_visible %}
+            <td class="c_score">{% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
+          {% else %}
+            <td class="c_score">{% if submission.public_score or submission.public_score==0 %}**{{ submission.public_score }}/{{ submission.public_maxscore }}{%endif%}</td>
+          {% endif %}
+          <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
+        </tr>
+      {% endfor %}
+      {% if sub_paginated.total == 0 %}
+        <tr>
+          <td colspan=8>
+            Jūs neesat veicis nevienu iesūtījumu.
+          </td>
+        </td>
+      {% endif %}
+    </tbody>
+  </table>
+  {{ paginator(sub_paginated) }}
 {% endblock %}
