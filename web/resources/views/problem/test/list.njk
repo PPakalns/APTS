@@ -33,14 +33,16 @@
           <td>{{ testset.tests.length if testset.tests else "0"}}</td>
         </div>
       </div>
-      <div class="row top-buffer">
-        <div class="col-md-4 text-right bold">
-          Pašlaik testē:
+      {% for state in status_state %}
+        <div class="row top-buffer">
+          <div class="col-md-4 text-right">
+            {{ state['name'] }}:
+          </div>
+          <div class="col-md-6">
+            <td>{{ state.cnt }}</td>
+          </div>
         </div>
-        <div class="col-md-6">
-          <td>{{ testing.cnt }}</td>
-        </div>
-      </div>
+      {% endfor %}
       {% if submissions.length > 0 %}
         <div class="top-buffer">
           <strong style="padding: 20px;">Iesūtītie risinājumi pa grupām:</strong>

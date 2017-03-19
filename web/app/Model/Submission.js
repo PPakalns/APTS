@@ -2,6 +2,15 @@
 
 const Lucid = use('Lucid')
 
+const STATUS_MAP = {
+    0: "WAIT",
+    1: "TESTING",
+    2: "OK",
+    3: "CE",
+    16: "IE_1",
+    17: "IE_2"
+}
+
 class Submission extends Lucid {
 
     // #######################################
@@ -11,6 +20,14 @@ class Submission extends Lucid {
     {
         let submission = yield this.query().where('status', 0).first();
         return submission
+    }
+
+    static getStatus(status)
+    {
+        if (STATUS_MAP.hasOwnProperty(status))
+            return STATUS_MAP[status]
+        else
+            return 'UNKNOWN'
     }
 
 
@@ -36,20 +53,8 @@ class Submission extends Lucid {
     }
 
     getStatusname () {
-        const status_map = {
-            0: "WAIT",
-            1: "TESTING",
-            2: "OK",
-            3: "CE",
-            16: "IE_1",
-            17: "IE_2"
-        }
-        if (status_map.hasOwnProperty(this.status))
-            return status_map[this.status]
-        else
-            return 'UNKNOWN'
+        return Submission.getStatus(this.status)
     }
-
 
     // ########################################
     // SCHEME RELATIONSHIPS

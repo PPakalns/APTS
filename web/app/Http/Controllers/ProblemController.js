@@ -4,6 +4,7 @@ const Test = use('App/Model/Test')
 const File = use('App/Model/File')
 const Testset = use('App/Model/Testset')
 const Assignment = use('App/Model/Assignment')
+const Submission = use('App/Model/Submission')
 const Problem = use('App/Model/Problem')
 const Helpers = use('Helpers')
 const Validator = use('Validator')
@@ -164,14 +165,20 @@ class ProblemController {
              .count()
 
         // Retrieves count of submissions that are being tested now
-        let testing = (yield Database
+        let status_state = yield Database
             .table('submissions')
+            .select('status')
             .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
             .where('assignments.problem_id', problem.id)
-            .where('status', 1)
-            .count('* as cnt'))[ 0 ]
+            .groupBy('status')
+            .count('* as cnt')
 
-        yield res.sendView('problem/test/list', {testset: json_testset, problem: problem.toJSON(), oldsubmissions, submissions, testing})
+        for (let test of status_state)
+        {
+            test['name'] = Submission.getStatus(test['status'])
+        }
+
+        yield res.sendView('problem/test/list', {testset: json_testset, problem: problem.toJSON(), oldsubmissions, submissions, status_state})
     }
 
 
