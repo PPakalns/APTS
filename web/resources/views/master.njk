@@ -87,21 +87,27 @@
 
           <div class="col-md-9 col-md-pull-3 content">
 
-            {% for error in old('errors') %}
-              <p class="bg-danger">
-                {{ error.msg if error.msg else error.message}}
-              </p>
-            {% endfor %}
-
             {% for warning in old('warnings') %}
               <p class="bg-warning">
                 {{ warning.msg if warning.msg else warning.message }}
               </p>
             {% endfor %}
 
+            {% for info in old('infos') %}
+              <p class="bg-info">
+                {{ info.msg if info.msg else info.message }}
+              </p>
+            {% endfor %}
+
             {% for success in old('successes') %}
               <p class="bg-success">
                 {{ success.msg if success.msg else success.message }}
+              </p>
+            {% endfor %}
+
+            {% for error in old('errors') %}
+              <p class="bg-danger">
+                {{ error.msg if error.msg else error.message}}
               </p>
             {% endfor %}
 

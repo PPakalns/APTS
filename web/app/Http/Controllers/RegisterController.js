@@ -28,6 +28,10 @@ class RegisterController {
     * register(req, res) {
         const userData = req.only('email', 'email_confirm')
 
+        // normalize email addresses
+        userData.email = Validator.sanitizor.normalizeEmail(userData.email || "", ['!rd'])
+        userData.email_confirm = Validator.sanitizor.normalizeEmail(userData.email_confirm || "", ['!rd'])
+
         const validation = yield Validator.validate(userData, User.registration_rules(), User.registration_messages)
 
         if (validation.fails())

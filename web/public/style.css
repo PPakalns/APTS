@@ -37,7 +37,7 @@ body {
   list-style-position: inside;
 }
 
-.bg-success, .bg-danger, .bg-info {
+.bg-success, .bg-danger, .bg-info, .bg-warning {
   padding: 10px;
 }
 

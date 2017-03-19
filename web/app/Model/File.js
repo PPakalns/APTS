@@ -33,7 +33,7 @@ class File extends Lucid {
         }
     }
 
-    static * uploadFile (req, id, options, save_content=false) {
+    static * uploadFile (req, id, options, save_content=false, errors=null) {
         // getting file instance
         let req_file = req.file(id, options)
 
@@ -42,6 +42,8 @@ class File extends Lucid {
             || req_file.file == null
             || req_file.file.size == 0){
             // User did not choose file
+            if (errors)
+                errors.push({msg: "Nav norādīts fails"})
             return null
         }
 
@@ -51,6 +53,10 @@ class File extends Lucid {
         yield req_file.move(storagePath, newTestFileName)
 
         if (!req_file.moved()) {
+            if (errors)
+            {
+                errors.push.apply(errors, req_file.errors())
+            }
             return false
         }
 

@@ -5,6 +5,10 @@ const User = use('App/Model/User')
 const Validator = use('Validator')
 const Database = use('Database')
 const Assignment = use('App/Model/Assignment')
+const File = use('App/Model/File')
+
+const parse = require('csv-parse')
+const fs = require('fs');
 
 class GroupController {
 
@@ -152,6 +156,111 @@ class GroupController {
 
     res.route('group/users', {id: formData.group_id})
   }
+
+
+    * users_add_csv(req, res){
+        const group_id = req.input('group_id')
+        let group = yield Group.findOrFail(group_id)
+        const email = req.input('email', '')
+        const student_id = req.input('student_id', '')
+
+        let errors = []
+
+        if (!Validator.is.string(email) || !Validator.is.string(student_id))
+            errors.push({msg: "Nekorekti kolumnu nosaukumi!"})
+        else if (email == student_id)
+            errors.push({msg: "Nav norādīts epasta kolumnas vārds"})
+        else if (email.length == 0)
+            errors.push({msg: "Nav norādīta epasta kolumna!"})
+
+        let csv_opt = {
+            maxSize: '10mb',
+            allowedExtensions: ['csv']
+        }
+
+        let file = yield File.uploadFile(req, 'csv', csv_opt, false, errors)
+
+        if (!file || errors.length>0)
+        {
+            if (file)
+                yield file.delete()
+            yield req.withAll().andWith({errors: errors}).flash()
+            return res.redirect('back')
+        }
+
+        let async_csv_parser = new Promise(function(resolve, reject){
+            let stats = {
+                data: [],
+                student_id_column: false,
+                email_column: false,
+                lines: 0,
+                good: 0
+            }
+            fs.createReadStream(file.path).pipe(parse({columns: true}))
+                .on('data', (row) => {
+                    stats.lines += 1
+                    if (row.hasOwnProperty(email))
+                    {
+                        if (!Validator.is.email(row[email]))
+                            return
+
+                        let row_email = Validator.sanitizor.normalizeEmail(row[email], ['!rd'])
+
+                        stats.email_column = true
+                        let row_student_id = undefined
+
+                        if (row.hasOwnProperty(student_id))
+                        {
+                            stats.student_id_column = true
+                            row_student_id = String(row[student_id]).trim()
+                        }
+                        stats.data.push({email: row_email, student_id: row_student_id})
+                        stats.good += 1
+                    }
+                })
+                .on('error', e => {
+                    reject(e);
+                })
+                .on('end', () => {
+                    resolve(stats);
+                });
+        })
+
+        let stats = null
+        try{
+            stats = yield async_csv_parser
+        }catch (e){
+            console.error(e)
+            errors.push({msg: "Kļūda csv faila apstrādē"})
+        }finally{
+            if (file)
+                yield file.delete()
+        }
+
+        if (errors.length > 0)
+        {
+            yield req.withAll().andWith({errors: errors}).flash()
+            return res.redirect('back')
+        }
+
+        let warnings = []
+        if (stats.lines - stats.good > 0)
+            warnings.push({msg: String(stats.lines - stats.good) + " rindas nesaturēja epasta adresi csv failā."})
+
+        let infos = [{msg: "Apstrādātas "+stats.good+" rindas!"}]
+        let successes = [{msg: "Lietotāji veiksmīgi pievienoti"}]
+
+        for (let user of stats.data)
+        {
+            // Find if this user exist - then add to group,
+            // else register user and add to group
+            console.log(user)
+        }
+
+        yield req.withAll().andWith({warnings, infos, successes}).flash()
+        res.redirect('back')
+    }
+
 
   * users_remove(req, res){
 

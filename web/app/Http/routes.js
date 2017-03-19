@@ -68,6 +68,7 @@ Route.group('group forAdmin', function(){
     Route.get('/users/:id', 'GroupController.users').as('group/users')
     Route.post('/users/remove', 'GroupController.users_remove').as('group/users/remove')
     Route.post('/users/add', 'GroupController.users_add').as('group/users/add')
+    Route.post('/users/add/csv', 'GroupController.users_add_csv').as('group/users/add/csv')
     Route.post('/assignments/create', 'AssignmentController.create').as('assignment/create')
     Route.get('/assignments/manage/:group_id', 'AssignmentController.group_management').as('group/assignment')
     Route.post('/assignments/options/update/:id', 'AssignmentController.options_update').as('assignment/options/update')

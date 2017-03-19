@@ -29,6 +29,43 @@
         </table>
       </div>
     </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Dalībnieku pievienošana no csv faila</div>
+        <div class="panel-body">
+          {{ form.open({route: 'group/users/add/csv', class:"form-horizontal", files: true}) }}
+          {{ form.hidden('group_id', group.id ) }}
+
+          {{ csrfField }}
+          <div class="form-group">
+            {{ form.label('email', 'Epasta kolumna', {class: 'col-md-5 control-label', required: true}) }}
+            <div class="col-md-6">
+              {{ form.text('email', old('email'), {class: 'form-control'}) }}
+            </div>
+          </div>
+          <div class="form-group">
+            {{ form.label('student_id', 'Stud. apl. nr. kolumna', {class: 'col-md-5 control-label'}) }}
+            <div class="col-md-6">
+              {{ form.text('student_id', old('student_id'), {class: 'form-control'}) }}
+            </div>
+          </div>
+          <div class="form-group">
+            {{ form.label('csv', 'CSV fails:', {class: 'col-md-3 control-label'}) }}
+            <div class="col-md-8">
+              {{ form.file('csv', old('csv'), {class: "form-control", required: true} ) }}
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-6 col-md-offset-6 text-right">
+              {{ form.button('Pievienot', 'Pievienot', {class: "btn btn-primary"}) }}
+            </div>
+          </div>
+          {{ form.close() }}
+        </div>
+        <table class="table table-condensed no-border table-hover" id="preview_table">
+        </table>
+      </div>
+    </div>
   </div>
 
   <hr>
