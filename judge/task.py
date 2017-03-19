@@ -57,7 +57,7 @@ def ExecuteTest(test, isolate_config, wdir):
             test['id'],
             test_result.get('status'),
             public = test_result.get('message'),
-            private = test_result.get('output') + test_result.get('stderr', ""),
+            private = test_result.get('output'),
             memorykb = test_result.get('max-rss') or 0,
             time = test_result.get('time'),
             visible = test['visible']
@@ -97,7 +97,7 @@ def ExecuteTest(test, isolate_config, wdir):
         test["id"],
         tr_exit_code,
         cres.get('stderr'),
-        cres.get('message', ""),
+        cres.get('message', "") + cres.get('stdout', ""),
         int(test_result.get('max-rss')),
         test_result.get('time'),
         test['visible']
