@@ -68,9 +68,9 @@ Route.group('group forAdmin', function(){
     Route.get('/users/:id', 'GroupController.users').as('group/users')
     Route.post('/users/remove', 'GroupController.users_remove').as('group/users/remove')
     Route.post('/users/add', 'GroupController.users_add').as('group/users/add')
-    Route.get('/assignments/manage/:group_id', 'AssignmentController.group_management').as('group/assignment')
     Route.post('/assignments/create', 'AssignmentController.create').as('assignment/create')
-    Route.post('/assignments/options/update', 'AssignmentController.options_update').as('assignment/options/update')
+    Route.get('/assignments/manage/:group_id', 'AssignmentController.group_management').as('group/assignment')
+    Route.post('/assignments/options/update/:id', 'AssignmentController.options_update').as('assignment/options/update')
 }).prefix('/group').middleware('admin')
 
 Route.group('problem forAdmin', function(){

@@ -11,9 +11,6 @@ class SubmissionsTableSchema extends Schema {
         table.decimal('public_maxtime', 5, 2)
         table.integer('public_maxmemory')
     })
-    this.table('assignments', (table) => {
-        table.boolean('all_tests_visible').notNullable().defaultTo(false)
-    })
   }
 
   down () {
@@ -23,11 +20,7 @@ class SubmissionsTableSchema extends Schema {
         table.dropColumn('public_maxtime')
         table.dropColumn('public_maxmemory')
     })
-    this.table('assignments', (table) => {
-        table.dropColumn('all_tests_visible')
-    })
   }
-
 }
 
 module.exports = SubmissionsTableSchema

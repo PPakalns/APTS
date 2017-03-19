@@ -4,6 +4,7 @@ const Group = use('App/Model/Group')
 const User = use('App/Model/User')
 const Validator = use('Validator')
 const Database = use('Database')
+const Assignment = use('App/Model/Assignment')
 
 class GroupController {
 
@@ -43,7 +44,17 @@ class GroupController {
       return
     }
 
-    yield res.sendView('group/show', {group: group.toJSON(), participantCount: participantCount })
+    let aquery = Assignment.query().with('problem').where('group_id', group.id)
+    if (!req.cUser.admin)
+        aquery = aquery.visible()
+
+    let assignments = yield aquery.fetch()
+
+    yield res.sendView('group/show', {
+        group: group.toJSON(),
+        participantCount: participantCount,
+        assignments: assignments.toJSON()
+    })
   }
 
   * edit(req, res) {

@@ -198,3 +198,11 @@ thead {
 .top-buffer{
     margin-top:10px;
 }
+
+.panel-heading{
+    font-weight: bold;
+}
+
+.checkbox{
+    margin-left: 20px;
+}

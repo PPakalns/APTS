@@ -4,6 +4,14 @@ const Group = use('App/Model/Group')
 const Problem = use('App/Model/Problem')
 const Assignment = use('App/Model/Assignment')
 const Database = use('Database')
+const Validator = use('Validator')
+
+const score_vis_types = {
+    0: "Publisko grupu rezultāts, publisko grupu testi detalizēti",
+    4: "Pilnais rezultāts, publisko grupu testi detalizēti",
+    8: "Pilnais rezultāts, visi testi, publiskie testi detalizēti",
+    12: "Pilnais rezultāts, visi testi detalizēti"
+}
 
 class AssignmentController {
 
@@ -48,79 +56,74 @@ class AssignmentController {
 
     const assignments = yield group.assignments().with('problem').fetch()
 
-    yield res.sendView('assignment/manage', {group: group.toJSON(), assignments: assignments.toJSON()})
-  }
-
-  * create(req, res){
-    const formData = req.only('group_id', 'problem_id')
-    const group = yield Group.findOrFail(formData.group_id)
-    const problem = yield Problem.findOrFail(formData.problem_id)
-
-    const alreadyOwn = yield group.assignments().where('problem_id', problem.id).fetch()
-
-    if (alreadyOwn.size() == 0)
-    {
-      const assignment = new Assignment();
-      assignment.problem_id = problem.id;
-      assignment.group_id = group.id;
-      assignment.visible = true;
-      yield assignment.save()
-
-      yield req.with({successes: [{message:"Uzdevums jau grupai ir pievienots!"}]}).flash()
-    }
-    else
-    {
-      yield req.with({errors: [{message:"Uzdevums jau grupai ir pievienots!"}]}).flash()
-    }
-
-    res.route('group/assignment', {group_id: group.id})
-  }
-
-  * options_update(req, res){
-    // When visibility or other assignment options are updated
-
-    const formData = req.all();
-    const group = yield Group.findOrFail(formData.group_id)
-
-    let visible_tasks = []
-    let visibility_regex = /^vis_(\d+)$/
-
-    for (let property in formData) {
-      if (formData.hasOwnProperty(property))
+    yield res.sendView('assignment/manage',
       {
-        let key = property+''
-        let match = key.match(visibility_regex)
-        if (match)
-        {
-          visible_tasks.push(parseInt(match[1]));
-        }
+        group: group.toJSON(),
+        assignments: assignments.toJSON(),
+        score_vis_types
       }
+    )
+  }
+
+    * create(req, res){
+        const formData = req.only('group_id', 'problem_id')
+        const group = yield Group.findOrFail(formData.group_id)
+        const problem = yield Problem.findOrFail(formData.problem_id)
+
+        const alreadyOwn = yield group.assignments().where('problem_id', problem.id).fetch()
+
+        if (alreadyOwn.size() == 0)
+        {
+            const assignment = new Assignment();
+            assignment.problem_id = problem.id;
+            assignmet.score_visibility = 0
+            assignment.group_id = group.id;
+            assignment.visible = true;
+            yield assignment.save()
+
+            yield req.with({successes: [{message:"Uzdevums jau grupai ir pievienots!"}]}).flash()
+        }
+        else
+        {
+            yield req.with({errors: [{message:"Uzdevums jau grupai ir pievienots!"}]}).flash()
+        }
+
+        res.route('group/assignment', {group_id: group.id})
     }
 
-    const notVisibleAssignmentCount = yield Database
-      .table('assignments')
-      .update('visible', false)
-      .where('group_id', group.id)
-      .whereNotIn('id', visible_tasks)
+    * options_update(req, res){
+        // When visibility or other assignment options are updated
+        const id = req.param('id')
+        let data = req.only('score_vis', 'vis');
+        let assignment = yield Assignment.findOrFail(id)
 
-    const visibleAssignmentCount = yield Database
-      .table('assignments')
-      .update('visible', true)
-      .where('group_id', group.id)
-      .whereIn('id', visible_tasks)
+        data.score_vis = Validator.sanitizor.toInt(data.score_vis, 10)
+        data.vis = data.vis ? true : false;
 
-    yield req
-      .with({successes:
-        [
-          {message: "Dati atjaunoti veiksmīgi!"},
-          {message: "Grupas dalībniekiem redzami "+visibleAssignmentCount+" uzdevumi!"},
-          {message: "Grupas dalībniekiem paslēpti "+notVisibleAssignmentCount+" uzdevumi!"},
-        ]
-      })
-      .flash()
+        let errors = []
 
-    res.route('group/assignment', {group_id: group.id})
-  }
+        // Validate submission type
+        const validation = yield Validator.validate(data, Assignment.options_rules)
+        if (validation.fails()) {
+            errors.push.apply(errors, validation.messages())
+        }
+
+        if (errors.length > 0)
+        {
+            yield req.with({errors: errors}).flash()
+            res.route('group/assignment', {group_id: assignment.group_id})
+            return
+        }
+
+        assignment.score_visibility = data.score_vis
+        assignment.visible = data.vis
+        yield assignment.save()
+        let problem = yield assignment.problem().fetch()
+
+
+        yield req.with({successes: [{msg: "Uzstādījumi atjaunoti uzdevumam: " + problem.name }]}).flash()
+        res.route('group/assignment', {group_id: assignment.group_id})
+    }
 }
 
 module.exports = AssignmentController
