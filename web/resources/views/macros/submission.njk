@@ -72,13 +72,13 @@
     {% if cUser.admin or detailed %}
     <tr class="{{ "partially_hidden" if not detailed else "" }}">
         <td colspan=2 class="text-right">{{ antl.formatMessage('messages.message') }}</td>
-        <td colspan=4 class="message"><pre class="simple">{{ test.public }} </pre></td>
+        <td colspan=4 class="message"><pre class="simple">{{ test.public or " "}}</pre></td>
     </tr>
     {% endif %}
     {% if cUser.admin %}
       <tr class="partially_hidden">
         <td colspan=2 class="text-right">{{ antl.formatMessage('messages.private') }}</td>
-        <td colspan=4 class="message"><pre class="simple">{{ test.private }} </pre></td>
+        <td colspan=4 class="message"><pre class="simple">{{ test.private or " " }}</pre></td>
       </tr>
     {% endif %}
   {% endif %}
