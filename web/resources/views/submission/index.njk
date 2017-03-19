@@ -1,5 +1,6 @@
 {% extends 'master' %}
-{% from 'macro.paginator' import paginator %}
+{% from 'macros.paginator' import paginator %}
+{% import 'macros.submission' as sub %}
 
 {% block header %}
   <h2>Iesūtījumi</h2>
@@ -41,16 +42,12 @@
           </td>
           <td>{{ submission.assignment.problem.name }}</td>
           <td>
-            <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}" class="{{ submission.statuscolor }}">
-              {{ submission.statusname }}
-            </a>
+            {{ sub.status(submission) }}
           </td>
-          {% if req.cUser.admin or submission.testset.all_tests_visible %}
-            <td class="c_score">{% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
-          {% else %}
-            <td class="c_score">{% if submission.public_score or submission.public_score==0 %}**{{ submission.public_score }}/{{ submission.public_maxscore }}{%endif%}</td>
-          {% endif %}
-          <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
+          <td class="c_score">
+            {{ sub.score(submission) }}
+          </td>
+          <td>{{ sub.filesize(submission) }}</td>
         </tr>
       {% endfor %}
       {% if sub_paginated.total == 0 %}

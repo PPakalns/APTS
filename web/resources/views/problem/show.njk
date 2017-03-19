@@ -22,7 +22,9 @@
       <a href="{{ 'group/show' | route({id: assignment.group_id}) }}" class="list-group-item active">
         <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{assignment.group.name}}
       </a>
-      <div class="list-group-item">{{problem.name}}</div>
+      <a href="{{ 'assignment/show' | route({id: assignment.id}) }}" class="list-group-item">
+        {{problem.name}}
+      </a>
     </div>
   {% endif %}
 

@@ -1,0 +1,85 @@
+{% macro status(submission, td=false) %}
+{% if td %}
+  <td class="{{ submission.statuscolor }}">{{ submission.statusname }}</td>
+{%else%}
+  <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}" class="{{ submission.statuscolor }}">
+    {{ submission.statusname }}
+  </a>
+{% endif %}
+{% endmacro %}
+
+{% macro score(submission) %}
+{% if submission.status >= 2 %}
+  {% if submission.assignment.score_visibility >= 4 %}
+    {% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}
+  {% else %}
+    {% if submission.public_score or submission.public_score==0 %}**{{ submission.public_score }}/{{ submission.public_maxscore }}{%endif%}
+    {% if cUser.admin %}
+      {% if submission.score or submission.score==0 %}
+        <span style="font-style: italic; font-weight: normal;">
+          ({{ submission.score }}/{{ submission.maxscore }})
+        </span>
+      {%endif%}
+    {% endif %}
+  {% endif %}
+{% endif %}
+{% endmacro %}
+
+{% macro memory(submission) %}
+{% if submission.status >= 2 %}
+  {% if submission.assignment.score_visibility  >= 4 %}
+    {{ (submission.maxmemory / 1024 / 1024) | round(2) }}Mb
+  {% else %}
+    **{{ (submission.public_maxmemory / 1024 / 1024) | round(2) }}Mb
+    {% if cUser.admin %}
+    ({{ (submission.maxmemory / 1024 / 1024) | round(2) }}Mb)
+    {% endif %}
+  {% endif %}
+{% endif %}
+{% endmacro %}
+
+{% macro time(submission) %}
+{% if submission.status >= 2 %}
+  {% if submission.assignment.score_visibility >= 4 %}
+    {{submission.maxtime}}s
+  {% else %}
+    **{{submission.public_maxtime}}s
+    {% if cUser.admin %}
+    ({{submission.maxtime}}s)
+    {% endif %}
+  {% endif %}
+{% endif %}
+{% endmacro %}
+
+{% macro filesize(submission) %}
+{{ ( submission.file.size / 1024 ) | round(2) }}kB
+{% endmacro %}
+
+{% macro show(test, assignment) %}
+  {% set visible = (test.visible or assignment.score_visibility>=8) %}
+  {% if cUser.admin or visible %}
+     <tr class="initial{{ " partially_hidden" if not visible else ""}}">
+      <td>{{ "** " if test.visible else "" }}{{ test.test.tid }}</td>
+      <td>{{ test.test.gid }}</td>
+      <td class="cc_sub {{ "c_OK" if test.status=="OK" else "c_CE" }}">
+          {{ test.status }}
+      </td>
+      <td>{{ test.score }}</td>
+      <td>{{ ( test.memory / 1024 / 1024 ) | round(2) }}MB</td>
+      <td>{{ test.time | float | round(2) }}</td>
+    </tr>
+    {% set detailed = (test.visible or assignment.score_visibility >= 12) %}
+    {% if cUser.admin or detailed %}
+    <tr class="{{ "partially_hidden" if not detailed else "" }}">
+        <td colspan=2 class="text-right">{{ antl.formatMessage('messages.message') }}</td>
+        <td colspan=4 class="message"><pre class="simple">{{ test.public }} </pre></td>
+    </tr>
+    {% endif %}
+    {% if cUser.admin %}
+      <tr class="partially_hidden">
+        <td colspan=2 class="text-right">{{ antl.formatMessage('messages.private') }}</td>
+        <td colspan=4 class="message"><pre class="simple">{{ test.private }} </pre></td>
+      </tr>
+    {% endif %}
+  {% endif %}
+{% endmacro %}

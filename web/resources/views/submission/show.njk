@@ -1,5 +1,7 @@
 {% extends 'master' %}
 
+{% import 'macros.submission' as sub %}
+
 {% block header %}
     <h2>{{ antl.formatMessage('messages.submission') }}</h2>
 {% endblock %}
@@ -35,18 +37,11 @@
                     </a>
                 </td>
                 <td>{{ submission.type }}</td>
-                <td class="{{ submission.statuscolor }}">{{ submission.statusname }}</td>
-
-                {% if req.cUser.admin or submission.testset.all_tests_visible %}
-                  <td class="c_score">{% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
-                  <td>{{ (submission.maxmemory / 1024 / 1024) | round(2) }}Mb</td>
-                  <td>{{ submission.maxtime }}s</td>
-                {% else %}
-                  <td class="c_score">{% if submission.public_score or submission.public_score==0 %}**{{ submission.public_score }}/{{ submission.public_maxscore }}{%endif%}</td>
-                  <td>**{{ (submission.public_maxmemory / 1024 / 1024) | round(2) }}Mb</td>
-                  <td>**{{ submission.public_maxtime }}s</td>
-                {% endif %}
-                <td>{{ ( submission.file.size / 1024 ) | round(2) }}kB</td>
+                {{ sub.status(submission, true) }} {# Created table cell #}
+                <td class="c_score">{{ sub.score(submission) }}</td>
+                <td>{{ sub.memory(submission) }}</td>
+                <td>{{ sub.time(submission) }}</td>
+                <td>{{ sub.filesize(submission) }}</td>
             </tr>
             <tr>
                 <td colspan=2>{{ antl.formatMessage('messages.message') }}</td>
@@ -69,6 +64,15 @@
     <div class="text-right">
       <h4><b>** Publiskie testi</b></h4>
     </div>
+    <div class="text-right">
+      <h4>
+      {% if cUser.admin %}
+        <div class='rectangle partially_hidden border'>
+        </div>
+        Slēpta informācija lietotājam
+      {% endif %}
+      </h4>
+    </div>
     <table class="table ftable">
         <thead>
             <tr>
@@ -87,26 +91,7 @@
         </thead>
         <tbody>
             {% for test in tests %}
-                <tr class="initial">
-                    <td>{{ "** " if test.visible else "" }}{{ test.test.tid }}</td>
-                    <td>{{ test.test.gid }}</td>
-                    <td class="cc_sub {{ "c_OK" if test.status=="OK" else "c_CE" }}">
-                        {{ test.status }}
-                    </td>
-                    <td>{{ test.score }}</td>
-                    <td>{{ ( test.memory / 1024 / 1024 ) | round(2) }}MB</td>
-                    <td>{{ test.time | float | round(2) }}</td>
-                </tr>
-                <tr>
-                    <td colspan=2 class="text-right">{{ antl.formatMessage('messages.message') }}</td>
-                    <td colspan=4 class="message"><pre class="simple">{{ test.public }}</pre></td>
-                </tr>
-                {% if cUser.admin %}
-                <tr>
-                    <td colspan=2 class="text-right">{{ antl.formatMessage('messages.private') }}</td>
-                    <td colspan=4 class="message"><pre class="simple">{{ test.private }}</pre></td>
-                </tr>
-                {% endif %}
+              {{ sub.show(test, submission.assignment) }}
             {% else %}
             <tr>
                 <td colspan=6>

@@ -41,7 +41,7 @@ class SubmissionController {
         yield submission.related('file', 'testset', 'assignment','assignment.problem','assignment.group').load()
         let query= Testresult.with('test').where('submission_id', id)
 
-        if (!req.cUser.admin && !submission.testset.all_tests_visible)
+        if (!req.cUser.admin && submission.assignment.score_visibility <= 4 )
             query = query.where('visible', true)
 
         let tests = yield query.fetch()

@@ -1,4 +1,5 @@
 {# DISPLAY USER SUBMISSIONS #}
+{% import 'macros.submission' as sub %}
 
 {% if cUser.auth %}
 
@@ -8,7 +9,7 @@
   {% if assignment %}
     {% set squery = squery.where('assignment_id', assignment.id) %}
   {% endif %}
-  {% yield local_submissions = squery.orderBy('submissions.id', 'desc').limit(10).fetch() %}
+  {% yield local_submissions = squery.orderBy('submissions.id', 'desc').with('assignment').limit(10).fetch() %}
   {% set local_submissions = local_submissions.toJSON() %}
 
   {% if local_submissions %}
@@ -43,15 +44,11 @@
                   </a>
               </td>
             <td>
-                <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}" class="{{ submission.statuscolor }}">
-                    {{ submission.statusname }}
-                </a>
+              {{ sub.status(submission) }}
             </td>
-            {% if req.cUser.admin or submission.testset.all_tests_visible %}
-              <td class="c_score">{% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}</td>
-            {% else %}
-              <td class="c_score">{% if submission.public_score or submission.public_score==0 %}**{{ submission.public_score }}/{{ submission.public_maxscore }}{%endif%}</td>
-            {% endif %}
+            <td class="c_score">
+              {{ sub.score(submission) }}
+            </td>
           </tr>
         {% endfor %}
       </tbody>

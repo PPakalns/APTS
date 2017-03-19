@@ -56,11 +56,11 @@ def ExecuteTest(test, isolate_config, wdir):
         return result.TestResult(
             test['id'],
             test_result.get('status'),
-            test_result.get('message'),
-            test_result.get('output'),
-            test_result.get('max-rss') or 0,
-            test_result.get('time'),
-            test['visible']
+            public = test_result.get('message'),
+            private = test_result.get('output') + test_result.get('stderr', ""),
+            memorykb = test_result.get('max-rss') or 0,
+            time = test_result.get('time'),
+            visible = test['visible']
         )
 
     output_file = os.path.join(wdir, "output.file")

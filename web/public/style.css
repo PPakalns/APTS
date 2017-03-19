@@ -206,3 +206,14 @@ thead {
 .checkbox{
     margin-left: 20px;
 }
+
+.partially_hidden{
+    background-color: #eeeeff;
+}
+
+.rectangle{
+    width:20px;
+    height:20px;
+    display: inline-block;
+    border: 2px dotted;
+}
