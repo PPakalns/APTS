@@ -52,24 +52,9 @@ class RegisterController {
             return
         }
 
-        let token = String(Token(LEN_TOKEN))
-        let key = String(Token(LEN_KEY))
+        let user = yield new_user(userData.email)
 
-        let user = new User()
-        user.email = userData.email
-        user.token = token
-        user.activated = false
-        user.email_change_hash = yield Hash.make(key, 5)
-        user.email_change_time = (new Date()).toISOString()
-        yield user.save()
-
-        yield Mail.send('emails.registration', {base: BASE, email: userData.email, token: token, key: key}, message => {
-            message.from(FROM_EMAIL, FROM_NAME)
-            message.to(userData.email)
-            message.subject(Antl.formatMessage('messages.registration_email_subject'))
-        })
-
-        let message = {msg: Antl.formatMessage('messages.registration_successfull', {email: userData.email})}
+        let message = {msg: Antl.formatMessage('messages.registration_successfull', {email: user.email})}
         yield req.with({successes:[message]}).flash()
         res.route('home')
     }
@@ -360,6 +345,31 @@ class RegisterController {
         let message = {msg: Antl.formatMessage('messages.activation_successfull', {email: user.email})}
         yield req.with({successes:[message]}).flash()
         res.route('login')
+    }
+
+
+
+    // Helper functions
+
+    static * new_user(email){
+        let token = String(Token(LEN_TOKEN))
+        let key = String(Token(LEN_KEY))
+
+        let user = new User()
+        user.email = email.trim()
+        user.token = token
+        user.activated = false
+        user.email_change_hash = yield Hash.make(key, 5)
+        user.email_change_time = (new Date()).toISOString()
+        yield user.save()
+
+        yield Mail.send('emails.registration', {base: BASE, email: user.email, token: token, key: key}, message => {
+            message.from(FROM_EMAIL, FROM_NAME)
+            message.to(user.email)
+            message.subject(Antl.formatMessage('messages.registration_email_subject'))
+        })
+
+        return user
     }
 }
 

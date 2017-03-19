@@ -6,6 +6,7 @@ const Validator = use('Validator')
 const Database = use('Database')
 const Assignment = use('App/Model/Assignment')
 const File = use('App/Model/File')
+const RegisterController = use('App/Http/Controllers/RegisterController')
 
 const parse = require('csv-parse')
 const fs = require('fs');
@@ -192,7 +193,6 @@ class GroupController {
             let stats = {
                 data: [],
                 student_id_column: false,
-                email_column: false,
                 lines: 0,
                 good: 0
             }
@@ -204,9 +204,8 @@ class GroupController {
                         if (!Validator.is.email(row[email]))
                             return
 
-                        let row_email = Validator.sanitizor.normalizeEmail(row[email], ['!rd'])
+                        let row_email = Validator.sanitizor.normalizeEmail(row[email], ['!rd']).trim()
 
-                        stats.email_column = true
                         let row_student_id = undefined
 
                         if (row.hasOwnProperty(student_id))
@@ -243,19 +242,61 @@ class GroupController {
             return res.redirect('back')
         }
 
+        let old_cnt = 0, new_cnt = 0, new_student_id_cnt = 0, added = 0
+
+        // Parse list of emails and student_id
+        for (let user of stats.data)
+        {
+            let fuser = yield User.findBy('email', user.email)
+            console.log(user, fuser)
+            if (fuser)
+            {
+                old_cnt += 1
+            }
+            else
+            {
+                // Create new user and send registration email
+                fuser = yield RegisterController.new_user(user.email)
+                new_cnt += 1
+            }
+
+            // Add student id
+            if (user.student_id && user.student_id != fuser.student_id)
+            {
+                fuser.student_id = user.student_id
+                new_student_id_cnt += 1
+                yield fuser.save()
+            }
+
+            // Add user to group
+            const isowned = yield group.users().where("users.id", fuser.id).fetch()
+            if (isowned.size() == 0)
+            {
+                added += 1
+                yield group.users().attach([fuser.id])
+            }
+        }
+
+        let successes = [{msg: "Lietotāji veiksmīgi pievienoti"}]
+
+        let infos = [{msg: "Apstrādātas "+stats.good+" rindas!"}]
+        if (new_cnt)
+            infos.push({msg: "Sistēmā piereģistrēti " + new_cnt + " jauni lietotāji"})
+        if (new_student_id_cnt)
+            infos.push({msg: new_student_id_cnt + " lietotājiem pievienots studenta apliecības numurs"})
+        infos.push({msg: "Grupai pievienot papildus " + added + " lietotāji"})
+
         let warnings = []
+
+        if (stats.student_id_column == false)
+            warnings.push({msg: "Nevienam ierakstam csv failā nav piesaistīts studenta apliecības numurs."})
+
+        if (stats.good == 0)
+            warnings.push({msg: "Fails nesaturēja nevienu rindu ar korektu epasta adresi"})
+
         if (stats.lines - stats.good > 0)
             warnings.push({msg: String(stats.lines - stats.good) + " rindas nesaturēja epasta adresi csv failā."})
 
-        let infos = [{msg: "Apstrādātas "+stats.good+" rindas!"}]
-        let successes = [{msg: "Lietotāji veiksmīgi pievienoti"}]
-
-        for (let user of stats.data)
-        {
-            // Find if this user exist - then add to group,
-            // else register user and add to group
-            console.log(user)
-        }
 
         yield req.withAll().andWith({warnings, infos, successes}).flash()
         res.redirect('back')
