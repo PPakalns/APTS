@@ -3,6 +3,7 @@
 const Test = use('App/Model/Test')
 const File = use('App/Model/File')
 const Testset = use('App/Model/Testset')
+const Assignment = use('App/Model/Assignment')
 const Problem = use('App/Model/Problem')
 const Helpers = use('Helpers')
 const Validator = use('Validator')
@@ -137,6 +138,7 @@ class ProblemController {
             return (a.gid || "").localeCompare(b.gid || "")
         })
 
+        // Retrieves basic info about submissions
         let submissions = yield Database
              .table('submissions')
              .select('assignment_id', 'groups.name')
@@ -146,12 +148,14 @@ class ProblemController {
              .groupBy('assignment_id', 'groups.name')
              .count()
 
+        // Retrieves submissions that are tested with old testsets
         let oldsubmissions = yield Database
              .table('submissions')
              .select('assignment_id', 'groups.name')
              .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
              .innerJoin('groups', 'groups.id', 'assignments.group_id')
              .where('assignments.problem_id', problem.id)
+             .whereNotIn('status', [0, 1])
              .where(function(){
                  this.whereNot('submissions.testset_id',  testset.id)
                      .orWhereNot('submissions.testset_update', testset.updated)
@@ -159,7 +163,15 @@ class ProblemController {
              .groupBy('assignment_id', 'groups.name')
              .count()
 
-        yield res.sendView('problem/test/list', {testset: json_testset, problem: problem.toJSON(), oldsubmissions, submissions})
+        // Retrieves count of submissions that are being tested now
+        let testing = (yield Database
+            .table('submissions')
+            .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
+            .where('assignments.problem_id', problem.id)
+            .where('status', 1)
+            .count('* as cnt'))[ 0 ]
+
+        yield res.sendView('problem/test/list', {testset: json_testset, problem: problem.toJSON(), oldsubmissions, submissions, testing})
     }
 
 
@@ -297,6 +309,30 @@ class ProblemController {
 
         yield req.with({"successes": [{msg:antl.formatMessage("messages.tests_updated_successfully")}]}).flash()
         return res.route('problem/test/list', {id: data.id})
+    }
+
+    * test_retest (req, res)
+    {
+        let id = req.param('id')
+        let assignment_id = req.param('assignment_id')
+
+        let problem = yield Problem.findOrFail(id)
+        let assignment = yield Assignment.findOrFail(id)
+
+        let testset = yield problem.testset().fetch()
+
+        const affectedRows = yield Database
+            .table('submissions')
+            .update('status', 0)
+            .where('assignment_id', assignment.id)
+            .whereNotIn('status', [0,1])
+            .where(function(){
+                this.whereNot('testset_id',  testset.id)
+                    .orWhereNot('testset_update', testset.updated)
+            })
+
+        yield req.with({"successes": [{msg: "Pārtestēs "+affectedRows+" risinājumus."}]}).flash()
+        return res.redirect('back')
     }
 }
 

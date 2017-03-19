@@ -49,7 +49,7 @@
   "resend_successfull" : "Reģistrācijas epasts atkārtoti izsūtīts uz \"{email}\".",
   "registration_successfull" : "Reģistrācija bija veiksmīga. Uz {email} izsūtīta vēstule ar tālāk sekojošajām reģistrācijas instrukcijām.",
   "registration_email_subject" : "Reģistrācija APTS sistēmā",
-  "registration_email_body" : "Lai pabeigtu reģistrāciju APTS sistēmā atveriez zemāk norādīto saiti.",
+  "registration_email_body" : "Lai pabeigtu reģistrāciju APTS sistēmā atveriet zemāk norādīto saiti.",
 
   "password_changed_successfully": "Parole nomainīta veiksmīgi! Varat ieiet savā profilā.",
   "password_reset_successful" : "Paroles attiestatīšana bija veiksmīga. Uz {email} izsūtīta vēstule ar tālāk sekojošajām paroles nomaiņas instrukcijām.",

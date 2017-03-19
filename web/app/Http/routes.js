@@ -86,6 +86,7 @@ Route.group('problem forAdmin', function(){
     Route.post('/test/limits/:id', 'ProblemController.test_save_limits').as('problem/test/limits')
     Route.post('/test/checker/:id', 'ProblemController.test_save_checker').as('problem/test/checker')
     Route.post('/test/tests/:id', 'ProblemController.test_save_tests').as('problem/test/tests')
+    Route.post('/test/retest/:assignment_id/:id', 'ProblemController.test_retest').as('problem/test/retest')
 
     Route.get('/test/download/zip/:testset_id', 'ProblemController.download_zip').as('problem/download/zip')
     Route.get('/test/download/checker/:testset_id', 'ProblemController.download_checker').as('problem/download/checker')

@@ -217,3 +217,20 @@ thead {
     display: inline-block;
     border: 2px dotted;
 }
+
+tr.hover-row:hover{
+    background-color: #fafafa;
+}
+
+.no-padding{
+    padding: 0px;
+}
+
+.full-cell{
+    width: 100%;
+    margin: 0px;
+    height: 100%;
+    background-color: transparent;
+    border: 0px;
+    font-weight: bold;
+}

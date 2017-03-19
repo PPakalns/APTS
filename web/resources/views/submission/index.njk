@@ -33,14 +33,22 @@
               {{ submission.id }}
             </a>
           </td>
-          <td>{{ submission.assignment.group.name }}</td>
+          <td>
+            <a href="{{ 'GroupController.show' | action({id: submission.assignment.group.id }) }}">
+              {{ submission.assignment.group.name }}
+            </a>
+          </td>
           <td>{{ submission.user.email }}</td>
           <td>
             <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
               {{ submission.created_at }}
             </a>
           </td>
-          <td>{{ submission.assignment.problem.name }}</td>
+          <td>
+            <a href="{{ 'AssignmentController.show' | action({id: submission.assignment.id }) }}">
+              {{ submission.assignment.problem.name }}
+            </a>
+          </td>
           <td>
             {{ sub.status(submission) }}
           </td>

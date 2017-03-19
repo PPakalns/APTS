@@ -33,6 +33,14 @@
           <td>{{ testset.tests.length if testset.tests else "0"}}</td>
         </div>
       </div>
+      <div class="row top-buffer">
+        <div class="col-md-4 text-right bold">
+          Pašlaik testē:
+        </div>
+        <div class="col-md-6">
+          <td>{{ testing.cnt }}</td>
+        </div>
+      </div>
       {% if submissions.length > 0 %}
         <div class="top-buffer">
           <strong style="padding: 20px;">Iesūtītie risinājumi pa grupām:</strong>
@@ -62,13 +70,20 @@
               <tr>
                 <th>Grupa</th>
                 <th>Risinājumu Skaits</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {% for olds in oldsubmissions %}
-                <tr>
+                <tr class="hover-row">
                   <td>{{ olds.name }}</td>
                   <td>{{ olds['count(*)'] }}</td>
+                  <td class="no-padding">
+                    {{ form.open({route: 'problem/test/retest', params: {id: problem.id, assignment_id: olds.assignment_id}, class:"form-horizontal"}) }}
+                    {{ csrfField }}
+                    {{ form.button('Pārtestēt', 'retest', {class: "full-cell"}) }}
+                    {{ form.close() }}
+                  </td>
                 </tr>
               {% endfor %}
             </tbody>

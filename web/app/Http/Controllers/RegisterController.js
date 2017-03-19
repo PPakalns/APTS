@@ -52,7 +52,7 @@ class RegisterController {
             return
         }
 
-        let user = yield new_user(userData.email)
+        let user = yield RegisterController.new_user(userData.email)
 
         let message = {msg: Antl.formatMessage('messages.registration_successfull', {email: user.email})}
         yield req.with({successes:[message]}).flash()
