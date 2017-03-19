@@ -11,20 +11,24 @@
   </h2>
   <hr>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">Dalībnieku pievienošana</div>
-    <div class="panel-body">
-      <div class="form-horizontal">
-        <div class="form-group">
-          {{ form.label('email', 'Lietotāja epasts', {class: 'col-md-4 control-label'}) }}
-          <div class="col-md-4">
-            {{ form.text('email', old('email') or null, {class: 'form-control'}) }}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">Dalībnieku pievienošana</div>
+        <div class="panel-body">
+          <div class="form-horizontal">
+            <div class="form-group">
+              {{ form.label('search', 'Meklēt', {class: 'col-md-4 control-label'}) }}
+              <div class="col-md-6">
+                {{ form.text('search', old('search') or null, {class: 'form-control'}) }}
+              </div>
+            </div>
           </div>
         </div>
+        <table class="table table-condensed no-border table-hover" id="preview_table">
+        </table>
       </div>
     </div>
-    <table class="table table-condensed no-border table-hover" id="preview_table">
-    </table>
   </div>
 
   <hr>
@@ -50,6 +54,7 @@
           <thead>
             <tr>
               <th>#</td>
+              <th>Stud. apl. nr.</td>
               <th>Dalībnieks</td>
               <th>
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Noņemt
@@ -63,6 +68,9 @@
                 <td>
                   {% set i=i+1 %}
                   {{ i }}
+                </td>
+                <td>
+                  {{ user.student_id }}
                 </td>
                 <td>
                   {{ user.email }}
@@ -104,7 +112,7 @@
 
       var update = function(){
 
-        var text = $("#email").val()
+        var text = $("#search").val()
 
         if (timer == null && text!=last_search)
         {
@@ -125,7 +133,7 @@
               var thead = document.createElement("thead")
               var tr = document.createElement("tr")
               var th = document.createElement("th")
-              th.setAttribute("colspan", 2)
+              th.setAttribute("colspan", 3)
               $(th).text("Atrastie grupai nepievienotie lietotāji:")
               tr.append(th)
               thead.append(tr)
@@ -138,10 +146,13 @@
                 var td1 = document.createElement("td")
                 $(td1).text(data[ i ].email)
                 var td2 = document.createElement("td")
-                td2.setAttribute("class", "text-right")
+                $(td2).text(data[ i ].student_id)
+                var td3 = document.createElement("td")
+                td3.setAttribute("class", "text-right")
 
                 tr.append(td1)
                 tr.append(td2)
+                tr.append(td3)
 
                 var form = document.createElement("form")
                 form.setAttribute("method", "post")
@@ -150,7 +161,7 @@
                 $(form).append("<input type='hidden' name='group_id' value='{{ group.id }}'>")
                 $(form).append("<input type='hidden' name='user_id' value='"+data[ i ].id+"'>")
                 $(form).append("<button type='submit' name='create' class='btn btn-xs btn-default'>Pievienot grupai</button>")
-                td2.append(form)
+                td3.append(form)
 
                 tbody.append(tr);
               }
@@ -163,7 +174,7 @@
       }
 
       // Start
-      $("#email").keypress(update)
+      $("#search").keypress(update)
       update();
     })
   </script>

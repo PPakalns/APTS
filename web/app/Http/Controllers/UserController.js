@@ -84,9 +84,12 @@ class UserController {
         const notGroupId = req.param("not_group_id")
 
         let query = Database
-            .select('email', 'id')
+            .select('email', 'id', 'student_id')
             .from('users')
-            .whereRaw("INSTR(email,?) > 0",[search])
+            .where(function(){
+                this.whereRaw("INSTR(email,?) > 0",[search])
+                    .orWhereRaw("INSTR(student_id,?) > 0",[search])
+            })
             .limit(10)
 
         if (notGroupId)
