@@ -234,3 +234,10 @@ tr.hover-row:hover{
     border: 0px;
     font-weight: bold;
 }
+
+/* Small++ Devices, Desktops */
+@media only screen and (min-width : 768px) {
+    .text-keep-right{
+        text-align: right;
+    }
+}

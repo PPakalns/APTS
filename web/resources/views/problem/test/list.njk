@@ -9,40 +9,46 @@
   <div class="panel panel-default">
     <div class="bold panel-heading">Testu konfigurācijas stāvoklis</div>
     <div class="panel-body">
-      <div class="row top-buffer">
-        <div class="col-md-4 text-right bold">
-          Pievienots čekeris:
-        </div>
-        <div class="col-md-6">
-          {{ "IR" if testset.checker else " - " }}
-        </div>
-      </div>
-      <div class="row top-buffer">
-        <div class="col-md-4 text-right bold">
-          Pievienoti testi:
-        </div>
-        <div class="col-md-6">
-          <td>{{ "IR" if testset.zip else "" }}</td>
-        </div>
-      </div>
-      <div class="row top-buffer">
-        <div class="col-md-4 text-right bold">
-          Testu skaits:
-        </div>
-        <div class="col-md-6">
-          <td>{{ testset.tests.length if testset.tests else "0"}}</td>
-        </div>
-      </div>
-      {% for state in status_state %}
-        <div class="row top-buffer">
-          <div class="col-md-4 text-right">
-            {{ state['name'] }}:
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="row top-buffer">
+            <div class="col-sm-6 text-keep-right bold">
+              Pievienots čekeris:
+            </div>
+            <div class="col-sm-6">
+              {{ "IR" if testset.checker else " - " }}
+            </div>
           </div>
-          <div class="col-md-6">
-            <td>{{ state.cnt }}</td>
+          <div class="row top-buffer">
+            <div class="col-sm-6 text-keep-right bold">
+              Pievienoti testi:
+            </div>
+            <div class="col-sm-6">
+              <td>{{ "IR" if testset.zip else "" }}</td>
+            </div>
+          </div>
+          <div class="row top-buffer">
+            <div class="col-sm-6 text-keep-right bold">
+              Testu skaits:
+            </div>
+            <div class="col-sm-6">
+              <td>{{ testset.tests.length if testset.tests else "0"}}</td>
+            </div>
           </div>
         </div>
-      {% endfor %}
+        <div class="col-sm-6">
+          {% for state in status_state %}
+            <div class="row">
+              <div class="col-sm-4 text-keep-right">
+                {{ state['name'] }}:
+              </div>
+              <div class="col-sm-6">
+                <td>{{ state.cnt }}</td>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
       {% if submissions.length > 0 %}
         <div class="top-buffer">
           <strong style="padding: 20px;">Iesūtītie risinājumi pa grupām:</strong>
