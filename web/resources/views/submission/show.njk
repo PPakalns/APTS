@@ -56,7 +56,7 @@
         </tbody>
     </table>
     {% if cUser.admin %}
-      <!-- <a class="btn btn&#45;default" href="#" role="button">Eksportēt csv</a> -->
+      <a class="btn btn-default" href="{{ "SubmissionController.export" | action({id: submission.id}) }}" role="button">Eksportēt uz csv</a>
       {% if submission.status >= 2 %}
         <a class="btn btn-danger pull-right" href="{{ "SubmissionController.retest" | action({id: submission.id}) }}" role="button">Pārtestēt</a>
       {% endif %}

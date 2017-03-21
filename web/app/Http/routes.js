@@ -112,4 +112,6 @@ Route.group('submission', function(){
     Route.get('/submission/list/:page?', 'SubmissionController.index').as('submission/list')
     Route.get('/submission/show/:id', 'SubmissionController.show').as('submission/show')
     Route.get('/submission/retest/:id', 'SubmissionController.retest').as('submission/retest').middleware('admin')
+    Route.get('/submission/export/:id', 'SubmissionController.export').as('submission/export').middleware('admin')
 }).middleware('auth')
+

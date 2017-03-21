@@ -9,6 +9,8 @@ const Validator = use('Validator')
 const File = use('App/Model/File')
 const antl = use('Antl')
 
+let stringify = require('csv-stringify');
+
 class SubmissionController {
 
 
@@ -66,6 +68,67 @@ class SubmissionController {
             yield req.with({error:[{msg: "Lai pārtestētu risinājumu, risinājumam ir jābūt notestētam."}]}).flash()
         }
         res.redirect('back')
+    }
+
+
+    * export(req, res)
+    {
+        const id = req.param('id')
+        let submission = yield Submission.findOrFail(id)
+
+        if (submission.status < 2)
+        {
+            yield req.with({error:[{msg: "Eksportēt uz csv nav iespējams, jo risinājums nav notestēts."}]}).flash()
+            return res.redirect('back')
+        }
+
+        yield submission.related('testset', 'testresults.test', 'assignment.problem', 'assignment.group').load()
+        submission = submission.toJSON()
+
+        var columns = [
+            'submission_id',
+            'problem_name',
+            'group_name',
+            'status',
+            'score',
+            'maxscore',
+            'test_count'
+        ]
+
+        let data = {
+            problem_name: submission.assignment.problem.name,
+            group_name: submission.assignment.group.name,
+            submission_id: submission.id,
+            status: submission.status,
+            score: submission.score,
+            maxscore: submission.maxscore,
+            test_count: submission.testset.test_count,
+        }
+
+        for (let testr of submission.testresults)
+        {
+            let tid = testr.test.tid + (testr.test.gid || "");
+            let t_tid = tid + "_t"
+            let m_tid = tid + "_m"
+            let s_tid = tid + "_s"
+            columns.push(tid)
+            columns.push(s_tid)
+            columns.push(t_tid)
+            columns.push(m_tid)
+            data[tid] = testr.score
+            data[m_tid] = testr.memory / 1024.0 / 1024.0
+            data[t_tid] = testr.time
+            data[s_tid] = testr.status
+        }
+
+        let stringifier = stringify({ header: true, columns: columns })
+
+        res.header('Content-type', 'application/csv; charset=utf-8')
+        res.header("Content-Disposition", "attachment;filename="+String(submission.id)+".csv");
+        stringifier.pipe(res.response)
+
+        stringifier.write(data);
+        stringifier.end();
     }
 
     /*
