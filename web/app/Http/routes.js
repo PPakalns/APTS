@@ -107,6 +107,9 @@ Route.group('judge', function(){
     Route.post('judge/submit', 'JudgeController.submitResult')
 }).middleware('judge')
 
-Route.post('/submit/:assignment_id', 'SubmissionController.submit').as('submission/submit').middleware('auth')
-Route.get('/submission/list/:page?', 'SubmissionController.index').as('submission/list').middleware('auth')
-Route.get('/submission/show/:id', 'SubmissionController.show').as('submission/show').middleware('auth')
+Route.group('submission', function(){
+    Route.post('/submit/:assignment_id', 'SubmissionController.submit').as('submission/submit')
+    Route.get('/submission/list/:page?', 'SubmissionController.index').as('submission/list')
+    Route.get('/submission/show/:id', 'SubmissionController.show').as('submission/show')
+    Route.get('/submission/retest/:id', 'SubmissionController.retest').as('submission/retest').middleware('admin')
+}).middleware('auth')

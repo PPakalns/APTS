@@ -28,11 +28,11 @@
 {% macro memory(submission) %}
 {% if submission.status >= 2 %}
   {% if submission.assignment.score_visibility  >= 4 %}
-    {{ (submission.maxmemory / 1024 / 1024) | round(2) }}Mb
+    {{ (submission.maxmemory / 1024 / 1024) | round() }}Mb
   {% else %}
-    **{{ (submission.public_maxmemory / 1024 / 1024) | round(2) }}Mb
+    **{{ (submission.public_maxmemory / 1024 / 1024) | round() }}Mb
     {% if cUser.admin %}
-    ({{ (submission.maxmemory / 1024 / 1024) | round(2) }}Mb)
+    ({{ (submission.maxmemory / 1024 / 1024) | round() }}Mb)
     {% endif %}
   {% endif %}
 {% endif %}
@@ -43,9 +43,9 @@
   {% if submission.assignment.score_visibility >= 4 %}
     {{submission.maxtime}}s
   {% else %}
-    **{{submission.public_maxtime}}s
+    **{{submission.public_maxtime | round(2)}}s
     {% if cUser.admin %}
-    ({{submission.maxtime}}s)
+    ({{submission.maxtime | round(2) }}s)
     {% endif %}
   {% endif %}
 {% endif %}

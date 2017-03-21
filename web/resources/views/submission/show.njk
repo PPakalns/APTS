@@ -55,9 +55,15 @@
             {% endif %}
         </tbody>
     </table>
+    {% if cUser.admin %}
+      <!-- <a class="btn btn&#45;default" href="#" role="button">Eksportēt csv</a> -->
+      {% if submission.status >= 2 %}
+        <a class="btn btn-danger pull-right" href="{{ "SubmissionController.retest" | action({id: submission.id}) }}" role="button">Pārtestēt</a>
+      {% endif %}
+    {% endif %}
+    <div class="clearfix"></div>
     <hr>
-    <button class="btn btn-danger" data-toggle="collapse" data-target="#source_code">{{ antl.formatMessage('messages.source_code') }}</button>
-    <div class="tex2jax_process prettycontent collapse" id="source_code">
+    <div class="tex2jax_process prettycontent" id="source_code">
         <pre><code>{{ submission.file.file }}</code></pre>
     </div>
     <hr>
