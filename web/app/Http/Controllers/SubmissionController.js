@@ -197,7 +197,7 @@ class SubmissionController {
                 yield up_file.delete()
 
             yield req.with({errors: errors}).flash()
-            res.route('assignment/show', {id: assignment.id})
+            res.route('assignment/show', {assignment_id: assignment.id})
             return
         }
 
@@ -211,7 +211,7 @@ class SubmissionController {
 
         yield req.withAll()
             .andWith({'successes': [{msg: antl.formatMessage("messages.submission_submitted")}]}).flash()
-        res.route('assignment/show', {id: assignment.id})
+        res.route('assignment/show', {assignment_id: assignment.id})
         return
     }
 }
