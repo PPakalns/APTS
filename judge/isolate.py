@@ -178,7 +178,7 @@ class Isolate:
                 trunc -= len(byte_s)
                 if not byte_s:
                     break
-        return output.decode()
+        return output.decode('latin-1')
 
     def readStdOut(self):
         file = os.path.join(self.getSandboxBoxDir(), self.config.stdout_file)
