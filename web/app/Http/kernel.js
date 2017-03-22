@@ -17,6 +17,8 @@ const globalMiddleware = [
   'Adonis/Middleware/Shield',
   'Adonis/Middleware/Flash',
   'Adonis/Middleware/AuthInit',
+
+  'App/Http/Middleware/LocalViewVariables',
   'App/Http/Middleware/AuthenticatedUserPopulate',
   // 'Adonis/Middleware/DetectLocale'
 ]
