@@ -78,6 +78,11 @@
 
         <div class="row">
           <div class="col-md-3 col-md-push-9 sidebar">
+            <ul class="list-group">
+              <li class="list-group-item text-center" id="clock-wrapper">
+                <span id="clock"></span>
+              </li>
+            </ul>
             {% block sidebar %}
             {% endblock %}
             {% include 'submission/sidelist' %}
@@ -146,7 +151,7 @@
     </script>
     <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="/marked.js"></script>
-    <script>
+    <script type="text/javascript">
       hljs.initHighlightingOnLoad();
 
 marked.setOptions({
@@ -160,6 +165,29 @@ marked.setOptions({
   smartypants: false
 });
     </script>
+<script type="text/javascript">
+$(document).ready(function(){
+  var serverTime = Date.parse("{{ server_time }}");
+  var serverTimeOffset = {{server_time_offset}};
+  var userTime = new Date();
+
+  function Time() {
+    var diff = new Date() - userTime;
+    var currentTime = new Date(serverTime + diff - serverTimeOffset*60000)
+
+    var hours = currentTime.getUTCHours();
+    var minutes = currentTime.getUTCMinutes();
+    var seconds = currentTime.getUTCSeconds();
+
+    var clock = document.getElementById('clock');
+
+    clock.innerText = ("0" + hours).slice(-2) + ":" + ("0" + minutes).slice(-2) + ":" + ("0" + seconds).slice(-2);
+  }
+
+  Time();
+  setInterval(Time, 1000);
+})
+</script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
     {% block customscript %}{% endblock %}
   </body>

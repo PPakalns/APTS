@@ -52,7 +52,6 @@ class PageController {
     if ( path === null )
     {
       path = "apts";
-      if ( Antl.getLocale() == "en" ) path = "aptsen";
     }
 
     let page;

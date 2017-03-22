@@ -8,12 +8,12 @@ class LocalViewVariables {
         // TODO: Remove when there is new update for adonis-framwork
 
         res.__oldSendView = res.sendView
-        req.localView = {}
+        req.localView = {server_time_offset: (new Date()).getTimezoneOffset()}
 
         res.sendView = function * (){
             let obj = arguments[ 1 ] || {}
-            Object.assign(obj, req.localView)
-            yield res.__oldSendView(...arguments)
+            Object.assign(obj, req.localView, {server_time: (new Date()).toISOString()})
+            yield res.__oldSendView(arguments[ 0 ], obj)
         }
         yield next
     }

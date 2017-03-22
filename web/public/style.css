@@ -235,9 +235,23 @@ tr.hover-row:hover{
     font-weight: bold;
 }
 
+#clock-wrapper {
+    background-color: #ccccff;
+}
+
+#clock {
+    font-family: courier, monospace;
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+    text-shadow: 0px 0px 5px rgba(150, 150, 150, 1);
+}
+
 /* Small++ Devices, Desktops */
 @media only screen and (min-width : 768px) {
     .text-keep-right{
         text-align: right;
     }
 }
+
+
