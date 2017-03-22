@@ -78,14 +78,14 @@
 
         <div class="row">
           <div class="col-md-3 col-md-push-9 sidebar">
+            {% block sidebar %}
+            {% endblock %}
+            {% include 'submission/sidelist' %}
             <ul class="list-group">
               <li class="list-group-item text-center" id="clock-wrapper">
                 <span id="clock"></span>
               </li>
             </ul>
-            {% block sidebar %}
-            {% endblock %}
-            {% include 'submission/sidelist' %}
           </div> {# sidebar #}
 
           <div class="col-md-9 col-md-pull-3 content">

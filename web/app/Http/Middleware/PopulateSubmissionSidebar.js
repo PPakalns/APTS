@@ -15,7 +15,7 @@ class PopulateSubmissionSidebar {
                 .where('user_id', req.cUser.user.id)
                 .orderBy('submissions.id', 'desc')
                 .with('assignment')
-                .limit(10)
+                .limit(5)
 
             if (Validator.is.string(assignment_id))
                 squery = squery.where('assignment_id', assignment_id)
