@@ -20,6 +20,7 @@ const globalMiddleware = [
 
   'App/Http/Middleware/LocalViewVariables',
   'App/Http/Middleware/AuthenticatedUserPopulate',
+  'App/Http/Middleware/PopulateSubmissionSidebar'
   // 'Adonis/Middleware/DetectLocale'
 ]
 

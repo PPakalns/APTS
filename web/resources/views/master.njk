@@ -80,9 +80,7 @@
           <div class="col-md-3 col-md-push-9 sidebar">
             {% block sidebar %}
             {% endblock %}
-            {% asyncAll fix in [0] %}
             {% include 'submission/sidelist' %}
-            {% endall %}
           </div> {# sidebar #}
 
           <div class="col-md-9 col-md-pull-3 content">

@@ -3,16 +3,7 @@
 
 {% if cUser.auth %}
 
-  {% set Submission = use('App/Model/Submission') %}
-
-  {% set squery = Submission.query().where('user_id', cUser.user.id) %}
-  {% if assignment %}
-    {% set squery = squery.where('assignment_id', assignment.id) %}
-  {% endif %}
-  {% yield local_submissions = squery.orderBy('submissions.id', 'desc').with('assignment').limit(10).fetch() %}
-  {% set local_submissions = local_submissions.toJSON() %}
-
-  {% if local_submissions %}
+  {% if sidebar_submissions and sidebar_submissions.length %}
     <table class="table">
       <thead>
         <tr>
@@ -32,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        {% for submission in local_submissions %}
+        {% for submission in sidebar_submissions %}
           <tr>
               <td>
                   <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">

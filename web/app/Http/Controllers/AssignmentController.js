@@ -17,7 +17,7 @@ class AssignmentController {
 
   * show(req, res){
 
-    const id = req.param('id')
+    const id = req.param('assignment_id')
     const assignment = yield Assignment.findOrFail(id)
     yield assignment.related('group', 'problem', 'problem.testset').load()
     let jsonAssignment = assignment.toJSON()

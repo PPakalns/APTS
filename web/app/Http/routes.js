@@ -56,7 +56,7 @@ Route.group('users', function(){
 Route.group('group', function(){
     Route.get('/', 'GroupController.index').as('group/list')
     Route.get('/show/:id', 'GroupController.show').as('group/show')
-    Route.get('/assignment/:id', 'AssignmentController.show').as('assignment/show')
+    Route.get('/assignment/:assignment_id', 'AssignmentController.show').as('assignment/show')
 }).prefix('/group').middleware('auth')
 
 Route.group('group forAdmin', function(){
