@@ -6,6 +6,20 @@
 {% endblock %}
 
 {% block content %}
+
+  <div class="progress">
+    <div class="progress-bar progress-bar-warning" style="width: {{ statistics[ 0 ].width }}%">
+      <span>Rindā {{ statistics[ 0 ].cnt }}</span>
+    </div>
+    <div class="progress-bar progress-bar-success progress-bar-striped" style="width: {{ statistics[ 1 ].width }}%">
+      <span>Testējas {{ statistics[ 1 ].cnt }}</span>
+    </div>
+    {% if statistics.total == 0 %}
+    <div class="progress-bar progress-bar-success" style="width: 100%">
+    </div>
+    {% endif %}
+  </div>
+
   <table class="table ftable">
     <thead>
       <tr>

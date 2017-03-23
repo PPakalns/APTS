@@ -13,7 +13,40 @@ class JudgeController {
     * status(req, res)
     {
         let judges = yield Judge.with('submission').fetch()
-        yield res.sendView('judge/list', {judges: judges.toJSON()})
+
+        // Retrieves basic info about submissions
+        let tmp_statistics = yield Database
+             .table('submissions')
+             .select('status')
+             .where('status', '<=', 1)
+             .groupBy('status')
+             .count('* as cnt')
+
+        let statistics = {
+            total: 0,
+            0: {cnt: 0, name: "WAIT", width: 0},
+            1: {cnt: 0, name: "TESTING", width: 0}
+        }
+
+        for (let stats of tmp_statistics)
+        {
+            let id = stats['status']
+            if (id != 0 && id != 1)
+                continue;
+
+            statistics[ id ] = statistics[ id ] || {}
+            statistics[ id ].name = Submission.getStatus(stats['status'])
+            statistics[ id ].cnt = stats['cnt']
+            statistics.total += stats['cnt']
+        }
+
+        if (statistics.total > 0)
+        {
+            statistics[ 0 ].width = Math.floor(100 * statistics[ 0 ].cnt / statistics.total)
+            statistics[ 1 ].width = 100 - statistics[ 0 ].width
+        }
+
+        yield res.sendView('judge/list', {judges: judges.toJSON(), statistics: statistics})
     }
 
 
@@ -21,8 +54,10 @@ class JudgeController {
     {
         let judge = req.judge;
 
-        judge.status = "NOT WORKING"
         yield clearJudge(judge)
+
+        judge.status = "STOPPED"
+        yield judge.save()
 
         res.json({status: "ok"})
     }
