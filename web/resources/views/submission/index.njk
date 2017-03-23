@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block content %}
+  <div class="pull-right bold">**Publiskie testi</div>
   <table class="table">
     <thead>
       <tr>
@@ -22,6 +23,8 @@
         <th>{{ antl.formatMessage('messages.task') }}</th>
         <th>{{ antl.formatMessage('messages.status') }}</th>
         <th>{{ antl.formatMessage('messages.result') }}</th>
+        <th>{{ antl.formatMessage('messages.memory') }}</th>
+        <th>{{ antl.formatMessage('messages.time') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -53,6 +56,12 @@
           </td>
           <td class="c_score">
             {{ sub.score(submission) }}
+          </td>
+          <td>
+            {{ sub.memory(submission) }}
+          </td>
+          <td>
+            {{ sub.time(submission) }}
           </td>
         </tr>
       {% endfor %}
