@@ -22,7 +22,6 @@
         <th>{{ antl.formatMessage('messages.task') }}</th>
         <th>{{ antl.formatMessage('messages.status') }}</th>
         <th>{{ antl.formatMessage('messages.result') }}</th>
-        <th>{{ antl.formatMessage('messages.size') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -55,7 +54,6 @@
           <td class="c_score">
             {{ sub.score(submission) }}
           </td>
-          <td>{{ sub.filesize(submission) }}</td>
         </tr>
       {% endfor %}
       {% if sub_paginated.total == 0 %}
