@@ -10,6 +10,13 @@ const Database = use('Database')
 
 class JudgeController {
 
+    * status(req, res)
+    {
+        let judges = yield Judge.with('submission').fetch()
+        yield res.sendView('judge/list', {judges: judges.toJSON()})
+    }
+
+
     * stop(req, res)
     {
         let judge = req.judge;

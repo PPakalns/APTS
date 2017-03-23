@@ -1,0 +1,39 @@
+{% extends 'master' %}
+
+{% block header %}
+  <h2>Testētāji</h2>
+  <p class="lead">Testēšanas sistēmu stāvoklis</p>
+{% endblock %}
+
+{% block content %}
+  <table class="table ftable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Apraksts</th>
+        <th>Pēdējās izmaiņas</th>
+        <th>Notestēti</th>
+        <th>Status</th>
+        <th>Testē</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for judge in judges %}
+        <tr>
+          <td>{{ judge.name }}</td>
+          <td>{{ judge.description }}</td>
+          <td>{{ judge.updated_at }}</td>
+          <td>{{ judge.tested }}</td>
+          <td>{{ judge.status }}</td>
+          <td>
+            {% if judge.submission_id %}
+              <a href="{{ 'SubmissionController.show' | action({id: judge.submission_id}) }}">
+                {{ judge.submission_id }}
+              </a>
+            {% endif %}
+          </td>
+        </tr>
+      </tbody>
+      {% endfor %}
+    </table>
+{% endblock %}

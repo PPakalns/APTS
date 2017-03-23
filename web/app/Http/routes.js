@@ -107,6 +107,8 @@ Route.group('judge', function(){
     Route.post('judge/submit', 'JudgeController.submitResult')
 }).middleware('judge')
 
+Route.get('judge/status', 'JudgeController.status').middleware('admin')
+
 Route.group('submission', function(){
     Route.post('/submit/:assignment_id', 'SubmissionController.submit').as('submission/submit')
     Route.get('/submission/list/:page?', 'SubmissionController.index').as('submission/list')
