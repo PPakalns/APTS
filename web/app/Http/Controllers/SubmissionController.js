@@ -131,6 +131,111 @@ class SubmissionController {
         stringifier.end();
     }
 
+
+    * export_assignment(req, res)
+    {
+        const assignment_id = req.param('assignment_id')
+        let assignment = yield Assignment.findOrFail(assignment_id)
+        yield assignment.related('group', 'problem', 'problem.testset.tests').load()
+        assignment = assignment.toJSON()
+
+        // PREPARE COLUMNS FOR DATA OUPUT
+        let columns = [
+            'submission_id',
+            'problem_name',
+            'group_name',
+            'student_id',
+            'email',
+            'status',
+            'score',
+            'maxscore',
+            'test_count'
+        ]
+
+        let testIdToTest = {} // Will hold info about tests
+
+        for (let test of assignment.problem.testset.tests)
+        {
+            testIdToTest[ test.id ] = test
+
+            let tid = test.tid + (test.gid || "");
+            let t_tid = tid + "_t"
+            let m_tid = tid + "_m"
+            let s_tid = tid + "_s"
+            columns.push(tid)
+            columns.push(s_tid)
+            columns.push(t_tid)
+            columns.push(m_tid)
+        }
+
+        // Retrieve last OK submission id for all participants
+        let submissions = yield Database
+            .table('submissions as s1')
+            .select('s1.id')
+            .leftJoin('submissions as s2', function() {
+                this.on('s1.user_id', 's2.user_id')
+                    .andOn('s1.id', '<', 's2.id')
+                    .andOn('s2.status', 2)
+                    .andOn('s2.assignment_id', assignment.id)
+            })
+            .where('s1.status', 2)
+            .where('s1.assignment_id', assignment.id)
+            .whereNull('s2.id')
+
+        // Prepare stream for output
+        let stringifier = stringify({ header: true, columns: columns })
+
+        res.header('Content-type', 'application/csv; charset=utf-8')
+        res.header("Content-Disposition", "attachment;filename=task"+String(assignment.id)+".csv");
+        stringifier.pipe(res.response)
+
+        // ITERATE OVER DATA AND CONVERT TO CSV
+        for (let idobj of submissions)
+        {
+            let id = idobj['id']
+
+            let submission = yield Submission.findOrFail(id)
+            yield submission.related('testset',
+                                     'testresults',
+                                     'user'
+                                     )
+                            .load()
+
+            submission = submission.toJSON()
+
+            let data = {
+                problem_name: assignment.problem.name,
+                group_name: assignment.group.name,
+                submission_id: submission.id,
+                status: submission.status,
+                score: submission.score,
+                maxscore: submission.maxscore,
+                test_count: submission.testset.test_count,
+                student_id: submission.user.student_id,
+                email: submission.user.email
+            }
+
+            for (let testr of submission.testresults)
+            {
+                if (testIdToTest.hasOwnProperty(testr.test_id) == false)
+                    continue
+                testr.test = testIdToTest[testr.test_id]
+
+                let tid = testr.test.tid + (testr.test.gid || "");
+                let t_tid = tid + "_t"
+                let m_tid = tid + "_m"
+                let s_tid = tid + "_s"
+                data[tid] = testr.score
+                data[m_tid] = testr.memory / 1024.0 / 1024.0
+                data[t_tid] = testr.time
+                data[s_tid] = testr.status
+            }
+            stringifier.write(data);
+        }
+        stringifier.end();
+    }
+
+
     /*
      * Submit user solution program file / Create submission
      */

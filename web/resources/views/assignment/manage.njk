@@ -77,6 +77,9 @@
               <div class="form-group">
                 <div class="col-md-6 col-md-offset-4">
                   {{ form.button('Saglabāt uzstādījumus', 'save', {class: "btn btn-primary"}) }}
+                  <a class="btn btn-default" href="{{ "SubmissionController.export_assignment" | action({ assignment_id: assignment.id }) }}">
+                    Eksportēt CSV
+                  </a>
                 </div>
               </div>
               {{ form.close() }}

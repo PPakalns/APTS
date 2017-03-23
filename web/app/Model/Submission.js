@@ -81,7 +81,7 @@ class Submission extends Lucid {
     }
 
     testset () {
-        return this.belongsTo('App/Model/Testset')
+        return this.belongsTo('App/Model/Testset', 'id', 'testset_id')
     }
 
     testresults () {
