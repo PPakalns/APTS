@@ -13,13 +13,13 @@ class JudgeController {
     * stop(req, res)
     {
         let judge = req.judge;
-        yield clearJudge(judge)
 
         judge.status = "NOT WORKING"
-        yield judge.save()
+        yield clearJudge(judge)
 
         res.json({status: "ok"})
     }
+
 
     * getFile(req, res)
     {
@@ -37,9 +37,9 @@ class JudgeController {
         let body = req.all()
         let submission = yield Submission.findOrFail(body.submission_id)
 
-        if (submission.status != 1)
+        if (submission.status >= 2)
         {
-            throw Error("Judge: submission is not in testing state" + submission.status)
+            throw Error("Judge: submission already tested" + submission.status)
         }
 
         submission.judge_id = req.judge.id

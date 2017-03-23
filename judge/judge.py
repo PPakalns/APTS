@@ -14,14 +14,17 @@ import task
 import result
 
 # Stop judge safely with signal
+class JudgeStopException(Exception):
+    pass
 
 def signal_handler(signal, frame):
     global interrupted
     interrupted = True
+    raise JudgeStopException()
 
 interrupted = False  # Program is interrupted
 signal.signal(signal.SIGINT, signal_handler)
-
+signal.signal(signal.SIGTERM, signal_handler)
 
 # Read config
 config = ConfigParser()
@@ -102,15 +105,18 @@ def judgeSubmission():
 
 
 def main():
-    while True:
-        if interrupted:
-            logger.info("Judge stopped by SIGINT signal")
-            break
+    while not interrupted:
+        try:
+            # Get submission
+            if not judgeSubmission():
+                goodSleep(config['Internal']['sleep'])
+        except JudgeStopException as e:
+            logger.info("Stoping judge")
+            judge_api.stop()
+        except e:
+            logger.critical("Unexpected exception %s", e)
 
-        # Get submission
-        if not judgeSubmission():
-            goodSleep(config['Internal']['sleep'])
-
+    logger.info("Gracefull stop")
 
 if __name__ == "__main__":
     main()

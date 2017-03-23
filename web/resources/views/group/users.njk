@@ -107,10 +107,14 @@
                   {{ i }}
                 </td>
                 <td>
-                  {{ user.student_id }}
+                  <a href="{{ 'UserController.show' | action({id : user.id}) }}" >
+                    {{ user.student_id }}
+                  </a>
                 </td>
                 <td>
-                  {{ user.email }}
+                  <a href="{{ 'UserController.show' | action({id : user.id}) }}" >
+                    {{ user.email }}
+                  </a>
                 </td>
                 <td>
                   <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:lightgray;"></span>

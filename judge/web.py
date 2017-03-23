@@ -16,6 +16,7 @@ class JudgeApi:
 
     def __init__(self, base_url, judge_name, judge_pass):
         self.base_url = base_url
+        self.judge_name = judge_name
         self.auth = (judge_name, judge_pass)
 
         self.sess = requests.Session()
@@ -37,6 +38,13 @@ class JudgeApi:
     def _get(self):
         url = self._url('get')
         logger.debug("Getting submission %s", url)
+        return self.sess.get(url, auth=self.auth)
+
+
+    def _stop(self):
+        url = self._url('stop')
+        logger.info("Stoping juge %s", self.judge_name)
+        self.sess.mount('http://', HTTPAdapter(max_retries=False))
         return self.sess.get(url, auth=self.auth)
 
 
@@ -67,6 +75,17 @@ class JudgeApi:
         logger.debug("Downloaded in %f", end-start)
         return target_path
 
+    def stop(self):
+        resp = self._stop()
+        if (resp.status_code != 200):
+            logger.warn("Judge stop error %d", resp.status_code)
+            return False
+        sub = resp.json()
+        if sub['status'] == "ok":
+            logger.debug("Judge stopped")
+            return sub
+        logger.warn("Judge stopping received bad status %s", sub['status'])
+        return False
 
     def downloadFile(self, id, name, dir, suffix="", cache=False):
         if id is None:
