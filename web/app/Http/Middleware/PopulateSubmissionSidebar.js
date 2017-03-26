@@ -22,7 +22,7 @@ class PopulateSubmissionSidebar {
 
             let submissions = yield squery.fetch()
 
-            req.localView.sidebar_submissions = submissions.toJSON()
+            res.viewInstance.global('sidebar_submissions', submissions.toJSON())
         }
 
         yield next

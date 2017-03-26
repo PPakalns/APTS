@@ -9,10 +9,10 @@
 
   <div class="progress">
     <div class="progress-bar progress-bar-warning" style="width: {{ statistics[ 0 ].width }}%">
-      <span>{{ statistics[ 0 ].cnt }} RINDĀ</span>
+      <span class="bold">{{ statistics[ 0 ].cnt }} RINDĀ</span>
     </div>
     <div class="progress-bar progress-bar-success progress-bar-striped" style="width: {{ statistics[ 1 ].width }}%">
-      <span>{{ statistics[ 1 ].cnt }} TESTĒJAS</span>
+      <span class="bold">{{ statistics[ 1 ].cnt }} TESTĒJAS</span>
     </div>
     {% if statistics.total == 0 %}
     <div class="progress-bar progress-bar-success" style="width: 100%">

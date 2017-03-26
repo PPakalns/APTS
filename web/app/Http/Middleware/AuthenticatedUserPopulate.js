@@ -42,7 +42,7 @@ class AuthenticatedUserPopulate {
             }
         }
 
-        req.localView.cUser = req.cUser;
+        res.viewInstance.global('cUser', req.cUser)
 
         yield next
     }
