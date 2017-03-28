@@ -21,6 +21,7 @@ class UserController {
             id = req.param('user_id', id)
         }
         let user = yield User.findOrFail(id)
+        yield user.related('groups').load()
         let data = {}
         const sub_cnt = yield Database.table('submissions').where('user_id', id).count()
         data.submissions = sub_cnt[ 0 ]['count(*)']
