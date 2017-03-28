@@ -45,7 +45,7 @@ Route.group('register', function(){
 
 Route.group('user', function(){
     Route.get('/show/:user_id?', 'UserController.show').as('user/show')
-    Route.get('/change_password/:user_id?', 'UserController.change_password').as('user/change/password')
+    Route.get('/change_password', 'UserController.change_password').as('user/change/password')
 }).prefix('/user').middleware('auth')
 
 Route.group('users', function(){

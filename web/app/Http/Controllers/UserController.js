@@ -30,11 +30,9 @@ class UserController {
     }
 
     * change_password(req, res) {
-        // If user is not an admin - show only users own page
+        // Every user can change only its own password
         let id = req.cUser.ruser.id
-        if (req.cUser.admin){
-            id = req.param('user_id', id)
-        }
+
         let user = yield User.findOrFail(id)
 
         const userData = req.only('pass', 'pass_confirm', 'old_pass')
