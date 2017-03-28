@@ -57,8 +57,11 @@
 
           <ul class="nav navbar-nav navbar-right">
 
-            {% if cUser.auth %}
+            {% if cUser.admin %}
               <li><a href="{{ 'JudgeController.status' | action({}) }}">Testēšanas stāvoklis</a></li>
+            {% endif %}
+
+            {% if cUser.auth %}
               <li style="padding-left:10px;"><a href="{{ 'UserController.show' | action({}) }}">{{ antl.formatMessage( 'messages.menu_user', { user: cUser.ruser.email } ) }}</a></li>
               <li><a href="{{ 'logout' | route({}) }}">{{ antl.formatMessage('messages.logout') }}</a></li>
             {% else %}
