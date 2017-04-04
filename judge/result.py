@@ -47,11 +47,12 @@ Stores one test result
 """
 class TestResult:
 
-    def __init__(self, id, status_code, public = "", private = "", memorykb = 0, time = 0, visible=False):
+    def __init__(self, id, status_code, public = "", private = "", stderr = "", memorykb = 0, time = 0, visible=False):
         self.id = id
         self.status_code = status_code
         self.public = public
         self.private = private
+        self.stderr = stderr
         self.memory = int(memorykb) * 1024
         self.time = float(time)
         self.score = 1 if status_code == 'OK' else 0
@@ -63,6 +64,7 @@ class TestResult:
             'test_id': self.id,
             'status': self.status_code,
             'public': self.public,
+            'stderr': self.stderr if self.public else None, # Output stderr only for public tests
             'private': self.private,
             'memory': self.memory,
             'time': self.time,

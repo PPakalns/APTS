@@ -168,12 +168,12 @@ class Isolate:
         return self.config.isolate_dir
 
     def readFile(self, file):
-        trunc = 1000
+        trunc = 5000
         output = b""
         logger.log(logging.DEBUG, "Reading file %s", file)
         with open(file, 'rb') as f:
             while trunc > 0:
-                byte_s = f.read(100)
+                byte_s = f.read(trunc)
                 output += byte_s
                 trunc -= len(byte_s)
                 if not byte_s:

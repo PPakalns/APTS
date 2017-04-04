@@ -58,6 +58,7 @@ def ExecuteTest(test, isolate_config, wdir):
             test_result.get('status'),
             public = test_result.get('message'),
             private = test_result.get('output'),
+            stderr = test_result.get('stderr'),
             memorykb = test_result.get('max-rss') or 0,
             time = test_result.get('time'),
             visible = test['visible']
@@ -84,11 +85,12 @@ def ExecuteTest(test, isolate_config, wdir):
         return result.TestResult(
             test["id"],
             'IE2',
-            "Internal error",
-            "Checker: " + cres.get('message', "") + "\n" + cres.get('stderr', ""),
-            test_result.get('max-rss'),
-            test_result.get('time'),
-            test['visible']
+            public = "Internal error",
+            private = "Checker: " + cres.get('message', "") + "\n" + cres.get('stderr', ""),
+            memorykb = test_result.get('max-rss'),
+            time = test_result.get('time'),
+            visible = test['visible'],
+            stderr = test_result.get('stderr')
         )
 
     tr_exit_code = result.translate(cres['exitcode']) if 'exitcode' in cres else 'OK'
@@ -96,11 +98,12 @@ def ExecuteTest(test, isolate_config, wdir):
     return result.TestResult(
         test["id"],
         tr_exit_code,
-        cres.get('stderr'),
-        cres.get('message', "") + cres.get('stdout', ""),
-        int(test_result.get('max-rss')),
-        test_result.get('time'),
-        test['visible']
+        public = cres.get('stderr'),
+        private = cres.get('message', "") + cres.get('stdout', ""),
+        memorykb = int(test_result.get('max-rss')),
+        time = test_result.get('time'),
+        visible = test['visible'],
+        stderr = test_result.get('stderr')
     )
 
 

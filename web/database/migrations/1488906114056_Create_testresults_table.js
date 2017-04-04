@@ -15,6 +15,7 @@ class TestresultsTableSchema extends Schema {
       table.string('status', 10)
       table.decimal('memory', 6, 2)
       table.decimal('time', 6, 3)
+      table.string('stderr', 5000)
       table.string('public', 1000)
       table.string('private', 1000)
       table.integer('score')

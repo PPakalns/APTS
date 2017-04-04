@@ -36,6 +36,10 @@
   "login": "Login",
   "register": "Sign up",
 
+  "message": "System output",
+  "private": "Private",
+  "stderr": "stderr",
+
   "menu_user": "User: {user}",
 
   "task_submissions": "Task submissions",

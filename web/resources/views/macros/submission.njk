@@ -74,6 +74,12 @@
         <td colspan=2 class="text-right">{{ antl.formatMessage('messages.message') }}</td>
         <td colspan=4 class="message"><pre class="simple">{{ test.public or " "}}</pre></td>
     </tr>
+      {% if test.visible %}
+      <tr class="{{ "partially_hidden" if not detailed else "" }}">
+          <td colspan=2 class="text-right">{{ antl.formatMessage('messages.stderr') }}</td>
+          <td colspan=4 class="message"><pre class="simple">{{ (test.stderr or " ") | truncate(4000, true) }}</pre></td>
+      </tr>
+      {% endif %}
     {% endif %}
     {% if cUser.admin %}
       <tr class="partially_hidden">
