@@ -13,18 +13,36 @@ const fs = require('fs');
 
 class GroupController {
 
-  * index(req, res) {
-    const groups = yield req.currentUser.groups().fetch()
+    * index(req, res) {
 
-    // Group list for admins
-    let agroups = []
-    if (req.cUser.admin)
-    {
-      agroups = (yield Group.all()).toJSON()
+        let groups = []
+        if (req.cUser.auth)
+            groups = (yield req.currentUser.groups().fetch()).toJSON()
+
+        // Public group list
+        let pgroups = null
+        if (req.cUser.auth)
+        {
+            let subquery = Database.select('id').from('user_group')
+                .where('user_id', req.cUser.user.id).whereRaw('user_group.group_id = groups.id')
+            pgroups = (
+                yield Group.query().where('public', true).whereNotExists(subquery).fetch()
+            ).toJSON()
+        }
+        else
+        {
+            pgroups = (
+                yield Group.query().where('public', true).fetch()
+            ).toJSON()
+        }
+
+        // Group list for admins
+        let agroups = []
+        if (req.cUser.admin)
+            agroups = (yield Group.all()).toJSON()
+
+        yield res.sendView('group/list', {groups: groups, agroups: agroups, pgroups: pgroups})
     }
-
-    yield res.sendView('group/list', {groups: groups.toJSON(), agroups: agroups})
-  }
 
   * show(req, res) {
     const id = req.param('id')
@@ -70,7 +88,8 @@ class GroupController {
   }
 
   * edit_save(req, res) {
-    const groupData = req.only('id', 'name', 'description')
+    const groupData = req.only('id', 'name', 'description', 'public')
+    groupData.public = Validator.sanitizor.toBoolean(groupData.public)
 
     const validation = yield Validator.validate(groupData, Group.rules)
     if (validation.fails())
@@ -86,13 +105,14 @@ class GroupController {
     const group = yield Group.findOrFail(groupData.id)
     group.name = groupData.name;
     group.description = groupData.description;
+    group.public = groupData.public;
     yield group.save()
 
     yield req
         .withAll()
         .andWith({"successes": [{message:"Grupa veiksmīgi rediģēta"}]})
         .flash()
-    res.route('group/show', {id: groupData.id})
+    res.route('group/edit', {id: groupData.id})
   }
 
   * create(req, res) {
@@ -100,7 +120,8 @@ class GroupController {
   }
 
   * create_save(req, res) {
-    const groupData = req.only('name', 'description')
+    let groupData = req.only('name', 'description', 'public')
+    groupData.public = Validator.sanitizor.toBoolean(groupData.public)
 
     const validation = yield Validator.validate(groupData, Group.rules)
     if (validation.fails())
@@ -116,6 +137,7 @@ class GroupController {
     const group = new Group()
     group.name = groupData.name;
     group.description = groupData.description;
+    group.public = groupData.public;
     yield group.save()
 
     yield req

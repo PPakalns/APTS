@@ -11,6 +11,11 @@
     <a href="{{ 'group/list' | route({}) }}" class="list-group-item list-group-item-warning">
       <span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Grupu pārvaldība
     </a>
+    {% if group.public %}
+        <div class="list-group-item list-group-item-danger">
+          Publiska grupa
+        </div>
+    {% endif %}
     <a href="{{ 'group/show' | route({id: group.id}) }}" class="list-group-item list-group-item-success">
       <span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{group.name}}
     </a>

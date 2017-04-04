@@ -31,6 +31,15 @@
         </div>
 
         <div class="form-group">
+          <div class="col-md-offset-4 col-md-8">
+            <label>
+              {{ form.checkbox('public', 'public', old('public') or group.public) }}
+              {{ form.label('public', 'Lietotāji paši var pievienoties grupai', {class: "bold"}) }}
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
           <div class='col-md-12'>
             {{ form.label('description', 'Informācija grupas biedriem', {class: 'control-label'}) }}
             {{ form.textarea('description', old('description') or group.description, {class: 'form-control', rows: '20'}) }}

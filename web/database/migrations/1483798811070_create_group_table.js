@@ -10,6 +10,7 @@ class GroupsTableSchema extends Schema {
       table.timestamps()
       table.string('name', 525)
       table.text('description')
+      table.boolean('public').notNullable().defaultTo(false)
     })
   }
 
