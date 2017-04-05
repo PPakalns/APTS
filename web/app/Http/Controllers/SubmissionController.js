@@ -267,11 +267,11 @@ class SubmissionController {
             // Check if group is public
             const isGroupPublic = jsonAssignment.group.public
 
-            if (isGroupPublic && isVisible)
+            if (isGroupPublic && isVisible && !isParticipant)
             {
-                // automatically add user to group
-                yield req.cUser.ruser.groups().attach([jsonAssignment.group.id])
+                // automatically add user to group (public group)
                 isParticipant = true
+                yield req.cUser.ruser.groups().attach([jsonAssignment.group.id])
             }
 
             if (!isParticipant)
