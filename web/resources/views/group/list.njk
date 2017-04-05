@@ -7,38 +7,40 @@
 
 {% block content %}
 
-  <h3>{{ antl.formatMessage('messages.my_groups') }}</h3>
-  {% if groups.length == 0 %}
-    <p class="bg-info">
-      {{ antl.formatMessage('messages.user_not_added_to_group') }}
-    </p>
-  {% else %}
-    <table class="table">
-      <thead>
-        <tr>
-          <th>#</td>
-          <th>{{ antl.formatMessage('messages.group_name') }}</td>
-        </tr>
-      </thead>
-      <tbody>
-        {% set i=0 %}
-        {% for group in groups %}
+  {% if cUser.auth %}
+    <h3>{{ antl.formatMessage('messages.my_groups') }}</h3>
+    {% if groups.length == 0 %}
+      <p class="bg-info">
+        {{ antl.formatMessage('messages.user_not_added_to_group') }}
+      </p>
+    {% else %}
+      <table class="table">
+        <thead>
           <tr>
-            <td>
-              {% set i=i+1 %}
-              {{ i }}
-            </td>
-            <td>
-              {{ linkTo('group/show', group.name, {id: group.id}) }}
-            </td>
+            <th>#</td>
+            <th>{{ antl.formatMessage('messages.group_name') }}</td>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {% set i=0 %}
+          {% for group in groups %}
+            <tr>
+              <td>
+                {% set i=i+1 %}
+                {{ i }}
+              </td>
+              <td>
+                {{ linkTo('group/show', group.name, {id: group.id}) }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+    <hr>
   {% endif %}
 
   {% if pgroups.length != 0 %}
-    <hr>
     <h3>Publiskas grupas</h3>
     <table class="table">
       <thead>

@@ -57,7 +57,7 @@ Route.group('group', function(){
     Route.get('/', 'GroupController.index').as('group/list')
     Route.get('/show/:id', 'GroupController.show').as('group/show')
     Route.get('/assignment/:assignment_id', 'AssignmentController.show').as('assignment/show')
-}).prefix('/group').middleware('auth')
+}).prefix('/group') // Public groups and their assignments are visible for all page visitors
 
 Route.group('group forAdmin', function(){
     Route.get('/edit/:id', 'GroupController.edit').as('group/edit')

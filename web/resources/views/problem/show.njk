@@ -58,24 +58,30 @@
       <tbody>
         <tr>
           <td colspan=2 class="text-center">
-            {{ form.open({action: 'SubmissionController.submit', params: {assignment_id: assignment.id}, class:"form-horizontal", files: true}) }}
-            {{ csrfField }}
-            <select name="type" class="form-control" style="width:100%; text-align: center;">
+            {% if cUser.auth %}
+              {{ form.open({action: 'SubmissionController.submit', params: {assignment_id: assignment.id}, class:"form-horizontal", files: true}) }}
+              {{ csrfField }}
+              <select name="type" class="form-control" style="width:100%; text-align: center;">
                 <option value="cpp11" >C++11</option>
                 <option value="cpp">C++</option>
                 <option value="c">C</option>
                 <option value="c11">C11</option>
                 <option value="fpc">Pascal</option>
-            </select>
-            <input type="file" name="solution" id="submit_file">
-            <p>
-              <button type="button" class="btn btn-default" style="width:100%;" id="submit_button">{{ antl.formatMessage('messages.choose_file') }}</button><br />
-            </p>
-            <p id="submit_text"></p>
-            <p>
-              <button type="submit" class="btn btn-success button-hidden" style="width:100%;" id="submit_form">{{ antl.formatMessage('messages.submit') }}</button>
-            </p>
-            {{ form.close() }}
+              </select>
+              <input type="file" name="solution" id="submit_file">
+              <p>
+                <button type="button" class="btn btn-default" style="width:100%;" id="submit_button">{{ antl.formatMessage('messages.choose_file') }}</button><br />
+              </p>
+              <p id="submit_text"></p>
+              <p>
+                <button type="submit" class="btn btn-success button-hidden" style="width:100%;" id="submit_form">{{ antl.formatMessage('messages.submit') }}</button>
+              </p>
+              {{ form.close() }}
+            {% else %}
+              <p class="text-warning">
+              {{ antl.formatMessage('messages.submit_require_registration') }}
+              </p>
+            {% endif %}
           </td>
         </tr>
       </tbody>

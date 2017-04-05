@@ -24,12 +24,12 @@
           </div>
 
           <ul class="nav navbar-nav">
+            <li>
+              <a href="{{ 'group/list' | route({}) }}">
+                {{ antl.formatMessage('messages.group') }}
+              </a>
+            </li>
             {% if cUser.auth %}
-              <li>
-                <a href="{{ 'group/list' | route({}) }}">
-                  {{ antl.formatMessage('messages.group') }}
-                </a>
-              </li>
               {% if cUser.admin %}
                 <li>
                   <a href="{{ 'problem/list' | route({}) }}">

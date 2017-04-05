@@ -255,19 +255,29 @@ class SubmissionController {
             errors.push.apply(errors, validation.messages())
         }
 
-        // Check if user is assigned to group
-        const isParticipant =
-            ((yield Database
-                .table('user_group')
-                .where('user_id', req.cUser.user.id)
-                .where('group_id', jsonAssignment.group.id)
-            ).length)
-
-        // Check if assignment is visible and user is participant in group
-        const permission = ((isParticipant && jsonAssignment.visible) || req.cUser.admin)
-        if (permission == false)
+        // Check permissions to submit solution
+        if (req.cUser.admin == false)
         {
-            errors.push({msg: antl.formatMessage("messages.no_permission")})
+            // Check if user is assigned to group
+            let isParticipant = yield Group.participant(req, jsonAssignment.group)
+
+            // Check if assignment is visible
+            const isVisible = (jsonAssignment.visible)
+
+            // Check if group is public
+            const isGroupPublic = jsonAssignment.group.public
+
+            if (isGroupPublic && isVisible)
+            {
+                // automatically add user to group
+                yield req.cUser.ruser.groups().attach([jsonAssignment.group.id])
+                isParticipant = true
+            }
+
+            if (!isParticipant)
+            {
+                errors.push({msg: antl.formatMessage("messages.no_permission")})
+            }
         }
 
         // Allow user to submit only 1 submission per 60 sec

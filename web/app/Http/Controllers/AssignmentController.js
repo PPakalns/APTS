@@ -15,40 +15,29 @@ const score_vis_types = {
 
 class AssignmentController {
 
-  * show(req, res){
+    * show(req, res){
 
-    const id = req.param('assignment_id')
-    const assignment = yield Assignment.findOrFail(id)
-    yield assignment.related('group', 'problem', 'problem.testset').load()
-    let jsonAssignment = assignment.toJSON()
+        const id = req.param('assignment_id')
+        const assignment = yield Assignment.findOrFail(id)
+        yield assignment.related('group', 'problem', 'problem.testset').load()
+        let jsonAssignment = assignment.toJSON()
 
-    // Check if user is assigned to group
-    const isParticipant =
-        ((yield Database
-          .table('user_group')
-          .where('user_id', req.cUser.user.id)
-          .where('group_id', jsonAssignment.group.id)
-        ).length)
-
-    if ((!isParticipant || !jsonAssignment.visible) && !req.cUser.admin)
-    {
-      yield req
-        .with({errors: [{message: "Jums nav vajadzīgās tiesības, lai skatītu pieprasīto lapu."}]})
-        .flash()
-
-      res.route('group/list')
-      return
-    }
-
-    yield res
-      .sendView('problem/show',
+        // Check if user has access to this assignment
+        let assignment_access = jsonAssignment.visible || req.cUser.admin
+        if ((yield Group.access(jsonAssignment.group, req, res, assignment_access)) == false)
         {
-          inAssignment: true,
-          assignment: jsonAssignment,
-          problem: jsonAssignment.problem
+            return
         }
-      )
-  }
+
+        yield res
+            .sendView('problem/show',
+                {
+                    inAssignment: true,
+                    assignment: jsonAssignment,
+                    problem: jsonAssignment.problem
+                }
+            )
+    }
 
   * group_management(req, res){
     const groupid = req.param('group_id')
@@ -76,7 +65,7 @@ class AssignmentController {
         {
             const assignment = new Assignment();
             assignment.problem_id = problem.id;
-            assignmet.score_visibility = 0
+            assignment.score_visibility = 0
             assignment.group_id = group.id;
             assignment.visible = true;
             yield assignment.save()

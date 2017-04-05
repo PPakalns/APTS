@@ -44,41 +44,30 @@ class GroupController {
         yield res.sendView('group/list', {groups: groups, agroups: agroups, pgroups: pgroups})
     }
 
-  * show(req, res) {
-    const id = req.param('id')
-    const group = yield Group.findOrFail(id)
-    const participantCount = (yield group.users().count())[ 0 ][ 'count(*)' ]
+    * show(req, res) {
+        const id = req.param('id')
+        const group = yield Group.findOrFail(id)
+        const participantCount = (yield group.users().count())[ 0 ][ 'count(*)' ]
 
-    // Check if user is assigned to this group
-    const isParticipant =
-        ((yield Database
-          .table('user_group')
-          .where('user_id', req.cUser.user.id)
-          .where('group_id', group.id)
-        ).length)
+        // Check if user is assigned to this group
+        if ((yield Group.access(group, req, res)) == false)
+        {
+            return
+        }
 
-    if (!isParticipant && !req.cUser.admin)
-    {
-      yield req
-        .with({errors: [{message: "Jums nav vajadzīgās tiesības, lai skatītu pieprasīto lapu."}]})
-        .flash()
+        // Populate assignment list
+        let aquery = Assignment.query().with('problem').where('group_id', group.id)
+        if (!req.cUser.admin)
+            aquery = aquery.visible()
 
-      res.route('group/list')
-      return
+        let assignments = yield aquery.fetch()
+
+        yield res.sendView('group/show', {
+            group: group.toJSON(),
+            participantCount: participantCount,
+            assignments: assignments.toJSON()
+        })
     }
-
-    let aquery = Assignment.query().with('problem').where('group_id', group.id)
-    if (!req.cUser.admin)
-        aquery = aquery.visible()
-
-    let assignments = yield aquery.fetch()
-
-    yield res.sendView('group/show', {
-        group: group.toJSON(),
-        participantCount: participantCount,
-        assignments: assignments.toJSON()
-    })
-  }
 
   * edit(req, res) {
     const id = req.param('id')
