@@ -148,9 +148,23 @@ function * bulkInsert(obj, elements){
         yield obj.query().insert(to_insert)
 }
 
+const TESTING_STAGE = {
+    "WAIT" : 0,
+    "PUBLIC_TESTING" : 4,
+    "PUBLIC_DONE" : 8,
+    "NON_PUBLIC_TESTING" : 12,
+    "TESTING_DONE" : 16,
+
+    "__NEXT" : 4,
+    "__IS_TESTING_STAGE": function(stage){
+        return ([4, 12].indexOf(stage) != -1)
+    }
+}
+
 module.exports = {
     bulkInsert : bulkInsert,
     parseRangeStr : parseRangeStr,
-    getRangeSet: getRangeSet
+    getRangeSet: getRangeSet,
+    TESTING_STAGE: TESTING_STAGE
 }
 

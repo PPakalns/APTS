@@ -29,7 +29,7 @@
     </thead>
     <tbody>
       {% for submission in sub_paginated.data %}
-        <tr>
+        <tr class="{{sub.trclass(submission) | striptags}}">
           <td>
             <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
               {{ submission.id }}
@@ -67,7 +67,7 @@
       {% endfor %}
       {% if sub_paginated.total == 0 %}
         <tr>
-          <td colspan=8>
+          <td colspan=9>
             Jūs neesat veicis nevienu iesūtījumu.
           </td>
         </td>

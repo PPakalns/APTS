@@ -1,3 +1,17 @@
+{% macro trclass(submission) %}
+{% if cUser.admin %}
+ {% if submission.testing_stage == 0 %}
+ sub_wait
+ {% elif submission.testing_stage == 4 %}
+ sub_public_testing
+ {% elif submission.testing_stage == 8 %}
+ sub_wait_nonpublic_testing
+ {% elif submission.testing_stage == 12 %}
+ sub_nonpublic_testing
+ {% endif %}
+{% endif %}
+{% endmacro %}
+
 {% macro status(submission, td=false) %}
 {% if td %}
   <td class="{{ submission.statuscolor }}">{{ submission.statusname }}</td>

@@ -32,6 +32,17 @@ class SubmissionsTableSchema extends Schema {
             table.integer('maxscore')
             table.decimal('maxtime', 5, 2)
             table.integer('maxmemory')
+
+            table.integer('public_score')
+            table.integer('public_maxscore')
+            table.decimal('public_maxtime', 5, 2)
+            table.integer('public_maxmemory')
+
+            // Saves submission testing stage
+            // 0 - not testing, 4 - public testing, 8 - public tests done, 12 - non public testing, 16 - all tests done
+            table.integer('testing_stage').notNullable().defaultTo(0)
+
+            table.string('status_private') // Save status message for non public tests
         })
     }
 

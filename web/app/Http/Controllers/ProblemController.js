@@ -156,7 +156,7 @@ class ProblemController {
              .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
              .innerJoin('groups', 'groups.id', 'assignments.group_id')
              .where('assignments.problem_id', problem.id)
-             .whereNotIn('status', [0, 1])
+             .whereNot('status', 0)
              .where(function(){
                  this.whereNot('submissions.testset_id',  testset.id)
                      .orWhereNot('submissions.testset_update', testset.updated)
@@ -332,8 +332,9 @@ class ProblemController {
         const affectedRows = yield Database
             .table('submissions')
             .update('status', 0)
+            .update('testing_stage', 0)
             .where('assignment_id', assignment.id)
-            .whereNotIn('status', [0,1])
+            .whereNot('testing_stage', 0)
             .where(function(){
                 this.whereNot('testset_id',  testset.id)
                     .orWhereNot('testset_update', testset.updated)

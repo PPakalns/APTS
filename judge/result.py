@@ -78,12 +78,14 @@ Stores task test result
 """
 class Result:
 
-    def __init__(self, submission_id, testset_id, testset_update):
+    def __init__(self, submission_id, testset_id, testset_update, public_stage):
         self.submission_id = submission_id
         self.testset_id = testset_id
         self.testset_update = testset_update
         self.status = TASK_STATUS_MAP['OK']
         self.tests = []
+
+        self.public_stage = public_stage
 
         self.maxmemory = 0
         self.maxtime = 0.0
@@ -141,6 +143,7 @@ class Result:
     def getResult(self, with_tests=True):
         return {
             'status': self.status,
+            'public_stage': self.public_stage,
             'submission_id': self.submission_id,
             'testset_id': self.testset_id,
             'testset_update': self.testset_update,

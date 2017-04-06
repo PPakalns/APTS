@@ -12,6 +12,9 @@ class TestresultsTableSchema extends Schema {
       table.integer('submission_id').unsigned().references('id').inTable('submissions')
       table.integer('test_id').unsigned().references('id').inTable('tests')
 
+      // Is test public
+      table.boolean("visible").notNullable().defaultTo(false)
+
       table.string('status', 10)
       table.decimal('memory', 6, 2)
       table.decimal('time', 6, 3)

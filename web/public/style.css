@@ -254,4 +254,19 @@ tr.hover-row:hover{
     }
 }
 
+.sub_wait{
+    background-color: #fa8af2;
+}
+
+.sub_public_testing{
+    background-color: lightpink;
+}
+
+.sub_wait_nonpublic_testing{
+    background-color: #ffff70;
+}
+
+.sub_nonpublic_testing{
+    background-color: lightgreen;
+}
 

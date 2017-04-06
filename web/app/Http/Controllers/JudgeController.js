@@ -79,28 +79,65 @@ class JudgeController {
         let body = req.all()
         let submission = yield Submission.findOrFail(body.submission_id)
 
-        if (submission.status >= 2)
-        {
-            throw Error("Judge: submission already tested" + submission.status)
-        }
+        if (Utility.TESTING_STAGE.__IS_TESTING_STAGE(submission.testing_stage) == false)
+            throw Error("Judge: submission not in testing stage" + submission.id + " " + submission.status)
+
+        const inPublicStage = (submission.testing_stage == Utility.TESTING_STAGE.PUBLIC_TESTING)
+
+        if (body.public_stage != inPublicStage)
+            throw Error("Judge and submission testing stages does not much" + submission.id + " " + submission.status)
+
+        let assignment = yield submission.assignment().fetch()
 
         submission.judge_id = req.judge.id
         submission.testset_id = body.testset_id
         submission.testset_update = body.testset_update
 
-        submission.status = body.status
+        submission.testing_stage = submission.testing_stage + Utility.TESTING_STAGE.__NEXT
+
+        if (inPublicStage)
+        {
+            if (body.status != 2)
+            {
+                // Skip full tests
+                submission.testing_stage = Utility.TESTING_STAGE.TESTING_DONE
+                submission.status = body.status
+            }
+            else
+            {
+                if (assignment.score_visibility == 0)
+                    submission.status = body.status
+                submission.status_private = body.status
+            }
+        }
+        else
+        {
+            submission.status = submission.status_private
+            submission.status_private = body.status
+        }
+
         submission.public = body.public
         submission.private = body.private
 
-        submission.score = body.score
-        submission.maxscore = body.maxscore
-        submission.maxtime = body.maxtime
-        submission.maxmemory = body.maxmemory
+        if (inPublicStage)
+        {
+            submission.score = body.score
+            submission.maxscore = body.maxscore
+            submission.maxtime = body.maxtime
+            submission.maxmemory = body.maxmemory
 
-        submission.public_score = body.public_score
-        submission.public_maxscore = body.public_maxscore
-        submission.public_maxtime = body.public_maxtime
-        submission.public_maxmemory = body.public_maxmemory
+            submission.public_score = body.public_score
+            submission.public_maxscore = body.public_maxscore
+            submission.public_maxtime = body.public_maxtime
+            submission.public_maxmemory = body.public_maxmemory
+        }
+        else
+        {
+            submission.score += body.score
+            submission.maxscore = Math.max(submission.maxscore, body.maxscore)
+            submission.maxtime = Math.max(submission.maxtime, body.maxtime)
+            submission.maxmemory = Math.max(submission.maxmemory, body.maxmemory)
+        }
 
         yield submission.save()
 
@@ -110,6 +147,7 @@ class JudgeController {
         // Remove old testresults
         const affectedRows = yield Testresult.query()
                                    .where('submission_id', submission.id)
+                                   .where('visible', inPublicStage)
                                    .delete()
 
         // Prepare new testresults
@@ -158,8 +196,8 @@ class JudgeController {
         const affectedRows = yield Database
             .table('submissions')
             .where('id', submission.id)
-            .where('status', 0)
-            .update('status', 1)
+            .where('testing_stage', submission.testing_stage)
+            .update('testing_stage', submission.testing_stage + Utility.TESTING_STAGE.__NEXT)
 
         if (affectedRows==0)
         {
@@ -170,16 +208,20 @@ class JudgeController {
             return
         }
 
-        submission.status = 1
+        if (submission.testing_stage == Utility.TESTING_STAGE.WAIT)
+            submission.status = 1 // Set status to TESTING
+
+        submission.testing_stage = submission.testing_stage + Utility.TESTING_STAGE.__NEXT
         submission.judge_id = judge.id
         judge.submission_id = submission.id
-        judge.status = "TESTING " + submission.id
+        judge.status = "TESTING " + submission.id + " - " + String(submission.testing_stage)
         yield judge.save()
         yield submission.save()
 
         // Prepere json object about testing
 
         let output = {}
+        const PUBLIC_STAGE = (submission.testing_stage == Utility.TESTING_STAGE['PUBLIC_TESTING'])
 
         let assignment = yield submission.assignment().fetch()
         let problem = yield assignment.problem().fetch()
@@ -191,9 +233,14 @@ class JudgeController {
         let upd_tests = []
         for (let test of tests)
         {
+            let visible = publicset.hasOwnProperty(test.tid)
+
+            if (visible != PUBLIC_STAGE)
+                continue
+
             upd_tests.push({
                 id: test.id,
-                visible: publicset.hasOwnProperty(test.tid),
+                visible: visible,
                 in: test.input_file,
                 out: test.output_file
             })
@@ -201,6 +248,7 @@ class JudgeController {
 
         output = {
             status: 'ok',
+            public_stage: PUBLIC_STAGE,
             memory_limit: testset.memory,
             time_limit: testset.timelimit,
             checker_id: testset.checker_id,

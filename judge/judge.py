@@ -72,7 +72,8 @@ def judgeSubmission():
         "zip": (sub["zip_id"], str(sub["zip_id"]), SDIR, ".zip", True)
     }
 
-    results = result.Result(sub['submission']['id'], sub['testset_id'], sub['testset_update'] )
+    logger.info("Testing submission %s, stage: %s", sub['submission']['id'], "PUBLIC" if sub['public_stage'] else "NONPUBLIC")
+    results = result.Result(sub['submission']['id'], sub['testset_id'], sub['testset_update'], sub['public_stage'])
 
     test_params = {
         'lang': sub['submission']['type'],

@@ -58,9 +58,10 @@ class SubmissionController {
         const id = req.param('id')
         const submission = yield Submission.findOrFail(id)
 
-        if (submission.status >= 2)
+        if (submission.testing_stage > 0)
         {
             submission.status = 0
+            submission.testing_stage = 0
             yield submission.save()
             yield req.with({successes:[{msg: "Risinājums tiks pārtestēts"}]}).flash()
         }

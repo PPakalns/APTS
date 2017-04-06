@@ -1,6 +1,7 @@
 'use strict'
 
 const Lucid = use('Lucid')
+const Utility = use('Utility')
 
 const STATUS_MAP = {
     0: "WAIT",
@@ -11,6 +12,8 @@ const STATUS_MAP = {
     17: "IE_2"
 }
 
+const TESTING_STAGE = Utility.TESTING_STAGE;
+
 class Submission extends Lucid {
 
     // #######################################
@@ -18,7 +21,15 @@ class Submission extends Lucid {
 
     static *getJudgableSubmission()
     {
-        let submission = yield this.query().where('status', 0).first();
+        // Testing priorities
+        //  1. Evaluate public tests
+        //  2. Evaluate non public tests
+
+        let submission = yield this.query().where('testing_stage', TESTING_STAGE['WAIT']).first();
+
+        if (!submission)
+            submission = yield this.query().where('testing_stage', TESTING_STAGE['PUBLIC_DONE']).first();
+
         return submission
     }
 

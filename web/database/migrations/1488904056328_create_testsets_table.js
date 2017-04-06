@@ -11,6 +11,9 @@ class TestsetsTableSchema extends Schema {
 
       table.integer('problem_id').unsigned().references('id').inTable('problems')
 
+      // String that defines public group range
+      table.string("public_range").notNullable().defaultTo('0-0')
+
       table.integer('updated').unsigned()
       table.decimal('timelimit', 4, 2)
       table.integer('memory').unsigned()
