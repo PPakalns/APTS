@@ -2,6 +2,7 @@
 
 const Database = use('Database')
 const Helpers = use('Helpers')
+const Group = use('App/Model/Group')
 const Assignment = use('App/Model/Assignment')
 const Submission = use('App/Model/Submission')
 const Testresult = use('App/Model/Testresult')
