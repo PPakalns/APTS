@@ -40,7 +40,15 @@
               {{ submission.assignment.group.name }}
             </a>
           </td>
-          <td>{{ submission.user.email }}</td>
+          <td>
+            {% if cUser.admin %}
+              <a href="{{ 'UserController.show' | action({user_id : submission.user.id}) }}" >
+                {{ submission.user.email }}
+              </a>
+            {% else %}
+              {{ submission.user.email }}
+            {% endif %}
+          </td>
           <td>
             <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
               {{ submission.created_at }}

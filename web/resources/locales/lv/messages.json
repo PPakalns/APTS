@@ -17,7 +17,7 @@
   "pages": "Lapas",
   "submission": "Iesūtījums",
   "submissions": "Iesūtījumi",
-  "FAQ": "FAQ",
+  "FAQ": "BUJ",
 
   "groups_description": "Grupās jums ir pieeja programmēšanas uzdevumiem.",
   "user_not_added_to_group": "Jūs neesat pievienots nevienā grupā.",
@@ -54,7 +54,7 @@
 
   "password_changed_successfully": "Parole nomainīta veiksmīgi! Varat ieiet savā profilā.",
   "password_reset_successful" : "Paroles attiestatīšana bija veiksmīga. Uz {email} izsūtīta vēstule ar tālāk sekojošajām paroles nomaiņas instrukcijām.",
-  "password_reset_subject" : "Paroles maiņa Automātiskajā Programmu Testēšanas Sistēmā APTS",
+  "password_reset_subject" : "APTS paroles maiņa",
   "password_reset_body" : "Lai nomainītu paroli APTS sistēmā atveriet zemāk norādīto saiti.",
 
   "user": "Lietotājs",
@@ -66,5 +66,8 @@
   "submit_require_registration": "Lai iesūtītu risinājumu, jums jāreģistrējas sistēmā!",
 
   "zip_does_not_conaint_inout_files": "Iesūtītais arhīvs testam {testname} nesatur ievadfailu un/vai izvadfailu!",
-  "zip_bad_file": "Iesūtītajā zip failā atrasts fails \"{filename}\", kas ir direktorija vai neatbilst pieprasītajam testu faila formātam"
+  "zip_bad_file": "Iesūtītajā zip failā atrasts fails \"{filename}\", kas ir direktorija vai neatbilst pieprasītajam testu faila formātam",
+
+  "limits_updated_successfully": "Programmēšanas uzdevuma testēšanas uzstādījumi veiksmīgi atjaunoti.",
+  "submission_upload_failed": "Faila augšupielāde neizdevās. Faila izmērs nedrīkst pārsniegt {maxSize}."
 }

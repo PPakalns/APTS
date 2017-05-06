@@ -304,7 +304,7 @@ class SubmissionController {
             up_file = yield File.uploadFile(req, 'solution', solution_opt, true)
             if (!up_file)
             {
-                errors.push({msg: antl.formatMessage("messages.submission_upload_failed")})
+                errors.push({msg: antl.formatMessage("messages.submission_upload_failed", solution_opt)})
             }
         }
 

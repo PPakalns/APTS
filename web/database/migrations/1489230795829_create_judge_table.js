@@ -19,7 +19,7 @@ class JudgesTableSchema extends Schema {
             table.string('status', 254)
             table.integer('submission_id').unsigned().references('id').inTable('submissions')
 
-            table.integer('ip', 45)
+            table.string('ip', 45)
             table.integer('tested').unsigned()
         })
     }

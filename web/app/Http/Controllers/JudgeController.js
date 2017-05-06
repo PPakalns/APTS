@@ -134,7 +134,7 @@ class JudgeController {
         else
         {
             submission.score += body.score
-            submission.maxscore = Math.max(submission.maxscore, body.maxscore)
+            submission.maxscore += body.maxscore
             submission.maxtime = Math.max(submission.maxtime, body.maxtime)
             submission.maxmemory = Math.max(submission.maxmemory, body.maxmemory)
         }
@@ -143,6 +143,7 @@ class JudgeController {
 
         let judge = req.judge;
         judge.tested = judge.tested + 1
+        judge.ip = req.ip()
 
         // Remove old testresults
         const affectedRows = yield Testresult.query()
