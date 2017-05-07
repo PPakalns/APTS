@@ -83,4 +83,33 @@
     </tbody>
   </table>
   {{ paginator(sub_paginated) }}
+  {% if cUser.admin and sub_paginated.total %}
+    <div style="float:right;">
+      <div>
+        <div class='rectangle sub_wait border'>
+        </div>
+        Gaida testēšanu
+      </div>
+      <div>
+        <div class='rectangle sub_public_testing border'>
+        </div>
+        Publisko testu testēšana
+      </div>
+      <div>
+        <div class='rectangle sub_wait_nonpublic_testing border'>
+        </div>
+        Pabeigta publisko testu testēšana
+      </div>
+      <div>
+        <div class='rectangle sub_nonpublic_testing border'>
+        </div>
+        Ne publisko testu testēšana
+      </div>
+      <div>
+        <div class='rectangle border'>
+        </div>
+        Testēšana pabeigta
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}
