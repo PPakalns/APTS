@@ -270,3 +270,6 @@ tr.hover-row:hover{
     background-color: lightgreen;
 }
 
+.source_code_toggle{
+    background-color: #f5fff5;
+}

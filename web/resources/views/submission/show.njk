@@ -63,7 +63,8 @@
     {% endif %}
     <div class="clearfix"></div>
     <hr>
-    <div class="tex2jax_process prettycontent" id="source_code">
+    <button data-toggle="collapse" class="source_code_toggle" data-target="#source_code">Pirmkods</button>
+    <div class="tex2jax_process prettycontent collapse" id="source_code">
         <pre><code>{{ submission.file.file }}</code></pre>
     </div>
     <hr>
@@ -82,7 +83,7 @@
     <table class="table ftable">
         <thead>
             <tr>
-                <th colspan=4 class="text-right">Maksimāli atļautais:</th>
+                <th colspan=4 class="text-right">Maksimāli atļauts:</th>
                 <th>{{ submission.testset.memory or 0 }}Mb</th>
                 <th>{{ submission.testset.timelimit or 0 }}s</th>
             </tr>
