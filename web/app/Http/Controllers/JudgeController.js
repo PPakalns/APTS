@@ -189,6 +189,7 @@ class JudgeController {
         if (!submission)
         {
             judge.status = "wait";
+            judge.submission_id = null
             yield judge.save()
             res.json({status: "wait"})
             return
