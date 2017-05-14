@@ -22,9 +22,15 @@ class JudgesTableSchema extends Schema {
             table.string('ip', 45)
             table.integer('tested').unsigned()
         })
+        this.table('submissions', (table) => {
+            table.integer('judge_id').unsigned().references('id').inTable('judges')
+        })
     }
 
     down () {
+        this.table('submissions', (table) => {
+            table.dropColumn('judge_id')
+        })
         this.drop('judges')
     }
 }

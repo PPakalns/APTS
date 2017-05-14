@@ -38,8 +38,15 @@ class TestsetsTableSchema extends Schema {
 
     down () {
         this.table('problems', (table) => {
-            table.dropColumn('testset_id');
-        }).drop('testsets')
+            table.dropColumn('testset_id')
+        })
+        this.table('tests', (table) => {
+            table.dropColumn('testset_id')
+        })
+        this.table('submissions', (table) => {
+            table.dropColumn('testset_id')
+        })
+        this.drop('testsets')
     }
 }
 
