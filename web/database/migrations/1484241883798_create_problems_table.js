@@ -12,7 +12,7 @@ class ProblemsTableSchema extends Schema {
       table.text('description')
       table.integer('author').unsigned().references('id').inTable('users')
 
-      table.integer('testset_id').unsigned().references('id').inTable('testsets')
+      // table.integer('testset_id').unsigned().references('id').inTable('testsets') - defined after testsets
     })
   }
 
