@@ -28,6 +28,7 @@
     "csv": "^1.1.1",
     "mariasql": "^0.2.6",
     "marked": "^0.3.6",
+    "mysql": "^2.13.0",
     "node-uuid": "^1.4.7",
     "rand-token": "^0.3.0",
     "recaptcha2": "^1.3.2",
