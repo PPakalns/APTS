@@ -12,7 +12,7 @@ class TestsTableSchema extends Schema {
       table.integer('tid') // Test number
       table.string('gid', 10) // Test identificator in group ("", a, b, c)
 
-      table.integer('testset_id').unsigned().references('id').inTable('testsets')
+      // table.integer('testset_id').unsigned().references('id').inTable('testsets') -- after testsets
 
       table.string('input_file', 255)
       table.string('output_file', 255)
