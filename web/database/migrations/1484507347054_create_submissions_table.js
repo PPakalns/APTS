@@ -12,7 +12,7 @@ class SubmissionsTableSchema extends Schema {
             table.integer('user_id').unsigned().references('id').inTable('users')
             table.integer('assignment_id').unsigned().references('id').inTable('assignments')
 
-            table.integer('testset_id').unsigned().references('id').inTable('testsets')
+            // table.integer('testset_id').unsigned().references('id').inTable('testsets') -- defined after testsets
             table.integer('testset_update').unsigned()
 
             // Submission

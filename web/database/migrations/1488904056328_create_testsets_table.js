@@ -31,6 +31,9 @@ class TestsetsTableSchema extends Schema {
         this.table('tests', (table) => {
             table.integer('testset_id').unsigned().references('id').inTable('testsets')
         })
+        this.table('submissions', (table) => {
+            table.integer('testset_id').unsigned().references('id').inTable('testsets') -- defined after testsets
+        })
     }
 
     down () {
