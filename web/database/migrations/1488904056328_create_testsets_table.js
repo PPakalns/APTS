@@ -32,7 +32,7 @@ class TestsetsTableSchema extends Schema {
             table.integer('testset_id').unsigned().references('id').inTable('testsets')
         })
         this.table('submissions', (table) => {
-            table.integer('testset_id').unsigned().references('id').inTable('testsets') -- defined after testsets
+            table.integer('testset_id').unsigned().references('id').inTable('testsets')
         })
     }
 
