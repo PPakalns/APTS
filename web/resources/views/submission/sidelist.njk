@@ -28,9 +28,9 @@
               <td>
                   <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
                       {% if not assignment %}
-                          {{ submission.id }}
+                        {{ submission.id }}
                       {% else %}
-                          {{ submission.created_at }}
+                        <small>{{ submission.created_at }}</small>
                       {% endif %}
                   </a>
               </td>
