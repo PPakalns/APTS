@@ -114,8 +114,9 @@ def main():
         except JudgeStopException as e:
             logger.info("Stoping judge")
             judge_api.stop()
-        except e:
+        except Exception as e:
             logger.critical("Unexpected exception %s", e)
+            judge_api.stop()
 
     logger.info("Gracefull stop")
 

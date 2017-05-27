@@ -282,6 +282,7 @@ function * clearJudge(judge)
         {
             submission.judge_id = null
             submission.status = 0
+            submission.testing_stage = 0
             yield submission.save()
         }
         judge.submission_id = null
