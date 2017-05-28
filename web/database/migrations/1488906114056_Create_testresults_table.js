@@ -16,7 +16,7 @@ class TestresultsTableSchema extends Schema {
       table.boolean("visible").notNullable().defaultTo(false)
 
       table.string('status', 10)
-      table.decimal('memory', 6, 2)
+      table.integer('memory')
       table.decimal('time', 6, 3)
       table.string('stderr', 5000)
       table.string('public', 1000)
