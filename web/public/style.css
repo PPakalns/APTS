@@ -144,7 +144,7 @@ table.no-border td, table.no-border th{
   font-family: "Courier New", Courier, monospace;
 }
 
-.alert-hidden, .button-hidden{
+.alert-hidden, .button-hidden, .elem-hidden{
   display: none;
 }
 

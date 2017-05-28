@@ -70,11 +70,11 @@
               </select>
               <input type="file" name="solution" id="submit_file">
               <p>
-                <button type="button" class="btn btn-default" style="width:100%;" id="submit_button">{{ antl.formatMessage('messages.choose_file') }}</button><br />
+                <button type="button" class="btn btn-default button-hidden" style="width:100%;" id="submit_button">{{ antl.formatMessage('messages.choose_file') }}</button><br />
               </p>
               <p id="submit_text"></p>
               <p>
-                <button type="submit" class="btn btn-success button-hidden" style="width:100%;" id="submit_form">{{ antl.formatMessage('messages.submit') }}</button>
+                <button type="submit" class="btn btn-success" style="width:100%;" id="submit_form">{{ antl.formatMessage('messages.submit') }}</button>
               </p>
               {{ form.close() }}
             {% else %}
@@ -94,6 +94,8 @@
   <script>
     $(document).ready(function(){
       $('#submit_file').hide()
+      $('#submit_form').hide()
+      $('#submit_button').show()
 
       $( '#submit_button' ).click(function(){
         $( '#submit_file' ).click();
