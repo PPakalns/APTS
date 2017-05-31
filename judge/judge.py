@@ -67,9 +67,9 @@ def judgeSubmission():
 
     # Downloading files
     downloads = {
-        "checker": (sub["checker_id"], "checker", WDIR),
-        "solution": (sub["submission"]["solution_id"], "solution", WDIR),
-        "zip": (sub["zip_id"], str(sub["zip_id"]), SDIR, ".zip", True)
+        "checker" : (sub["checker_id"], "checker", WDIR),
+        "solution" : (sub["submission"]["solution_id"], "solution", WDIR),
+        "zip" : (sub["zip_id"], str(sub["zip_id"]), SDIR, ".zip", True)
     }
 
     logger.info("Testing submission %s, stage: %s", sub['submission']['id'], "PUBLIC" if sub['public_stage'] else "NONPUBLIC")
@@ -81,9 +81,13 @@ def judgeSubmission():
         'memory_limit': int(sub['memory_limit'])*1024,
 
         # Downloaded files
-        'checker': None,
-        'solution': None,
-        'zip': None,
+        'checker' : None,
+        'solution' : None,
+        'zip' : None,
+
+        'use_files' : sub['use_files'],
+        'input_file' : sub['input_file'],
+        'output_file' : sub['output_file'],
 
         'tests': sub['tests']
     }
@@ -117,6 +121,7 @@ def main():
         except Exception as e:
             logger.critical("Unexpected exception %s", e)
             judge_api.stop()
+            raise e
 
     logger.info("Gracefull stop")
 

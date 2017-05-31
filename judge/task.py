@@ -47,7 +47,12 @@ def ExecuteTest(test, isolate_config, wdir):
 
     solution_isolated_path = sandbox.copyTo(test["solution"], "solution")
     os.chmod(solution_isolated_path, stat.S_IXUSR) # Add permissions to execute file
-    sandbox.copyTo(test["input"], isolate_config.stdin_file)
+    if test["use_files"]:
+        sandbox.copyTo(test["input"], test["input_file"])
+        open(isolate_config.stdin_file, 'w').close() # Create empty file
+        open(test["output_file"], 'w').close() # Create empty output file
+    else:
+        sandbox.copyTo(test["input"], isolate_config.stdin_file)
     test_result = sandbox.run(["solution"])
 
     # If user program did not exit correctly
@@ -65,7 +70,10 @@ def ExecuteTest(test, isolate_config, wdir):
         )
 
     output_file = os.path.join(wdir, "output.file")
-    sandbox.copyFrom(isolate_config.stdout_file, output_file)
+    if test["use_files"]:
+        sandbox.copyFrom(test["output_file"], output_file)
+    else:
+        sandbox.copyFrom(isolate_config.stdout_file, output_file)
     sandbox.cleanUp()
 
     sandbox = isolate.Isolate(isolate.IsolateConfig().initChecker())
@@ -144,6 +152,10 @@ class Task:
         self.memory_limit = config['memory_limit']
         self.tests = config['tests']
 
+        self.use_files = config['use_files']
+        self.input_file = config['input_file']
+        self.output_file = config['output_file']
+
         self.results = results # see result.py
 
 
@@ -184,7 +196,11 @@ class Task:
                 "checker": checker_result["executable"],
                 "input": test["input_path"],
                 "output": test["output_path"],
-                "visible": test["visible"]
+                "visible": test["visible"],
+
+                "use_files": self.use_files,
+                "input_file": self.input_file,
+                "output_file": self.output_file
             }
 
             test_result = ExecuteTest(config, test_config, self.wdir)

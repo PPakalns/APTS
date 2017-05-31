@@ -257,6 +257,9 @@ class JudgeController {
             zip_id: testset.zip_id,
             testset_id: testset.id,
             testset_update: testset.updated,
+            use_files: testset.use_files,
+            input_file: testset.input_file,
+            output_file: testset.output_file,
             submission: {
                 id: submission.id,
                 type: submission.type,

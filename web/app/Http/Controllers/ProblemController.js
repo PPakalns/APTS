@@ -198,7 +198,7 @@ class ProblemController {
     }
 
     * test_save_limits(req, res) {
-        let data = req.only("id", "timelimit", "memory", "public_range")
+        let data = req.only("id", "timelimit", "memory", "public_range", "use_files", "input_file", "output_file")
         const problem = yield Problem.findOrFail(data.id)
 
         let errors = []
@@ -207,6 +207,8 @@ class ProblemController {
 
         // Check memory and time limits
         checkLimits(errors, data)
+
+        checkFiles(errors, data)
 
         if (errors.length > 0)
         {
@@ -220,6 +222,9 @@ class ProblemController {
         testset.memory = data.memory
         testset.timelimit = data.timelimit
         testset.public_range = data.public_range
+        testset.use_files = data.use_files
+        testset.input_file = data.input_file
+        testset.output_file = data.output_file
 
         yield testset.save()
 
@@ -491,6 +496,55 @@ function* parseZipFile(zip_file, errors)
     }
 
     return tests
+}
+
+function checkFiles(errors, data)
+{
+    if (data["use_files"])
+    {
+        data["use_files"] = true;
+
+        try{
+            // Remove whitespaces
+            data.input_file = data.input_file.trim();
+            data.output_file = data.output_file.trim();
+        }catch(e){}
+
+        let file_regex = /^[a-zA-Z]+\.[a-zA-Z]+$/;
+        if (Validator.is.string(data["input_file"]) && Validator.is.regex(data["input_file"], file_regex) == false)
+        {
+            errors.push({msg: "Ievadfaila nosaukums neatbilst formātam \"[a-zA-Z]+\\.[a-zA-Z]+\""})
+            return;
+        }
+        if (Validator.is.string(data["output_file"]) && Validator.is.regex(data["output_file"], file_regex) == false)
+        {
+            errors.push({msg: "Izvadfaila nosaukums neatbilst formātam \"[a-zA-Z]+\\.[a-zA-Z]+\""})
+            return;
+        }
+        if (data.input_file.length >= 20 || data.output_file.length >= 20)
+        {
+            errors.push({msg: "Failu nosaukumiem ir jābūt īsākiem par 20 simboliem!"})
+            return;
+        }
+
+        let extension_regex = /\.log$/;
+        if (Validator.is.regex(data["input_file"], extension_regex) || Validator.is.regex(data["output_file"], extension_regex))
+        {
+            errors.push({msg: "Faila paplašinājums nedrīkst būt \"log\"!"})
+            return;
+        }
+        if (data["input_file"] == data["output_file"])
+        {
+            errors.push({msg: "Ievadfaila un izvadfaila nosaukumi ir vienādi. Tiem ir jābūt dažādiem."})
+            return;
+        }
+    }
+    else
+    {
+        data["use_files"] = false;
+        data["input_file"] = ""
+        data["output_file"] = ""
+    }
 }
 
 module.exports = ProblemController
