@@ -68,6 +68,7 @@
   "zip_does_not_conaint_inout_files": "Iesūtītais arhīvs testam {testname} nesatur ievadfailu un/vai izvadfailu!",
   "zip_bad_file": "Iesūtītajā zip failā atrasts fails \"{filename}\", kas ir direktorija vai neatbilst pieprasītajam testu faila formātam",
   "tests_updated_successfully": "Uzdevuma testi atjaunoti veiksmīgi!",
+  "failed_upload": "Faila augšupielāde neizdevās! Pārbaudiet, vai norādījāt failu ar pareizu tipu un saturu.",
 
   "limits_updated_successfully": "Programmēšanas uzdevuma testēšanas uzstādījumi veiksmīgi atjaunoti.",
   "submission_upload_failed": "Faila augšupielāde neizdevās. Faila izmērs nedrīkst pārsniegt {maxSize}."
