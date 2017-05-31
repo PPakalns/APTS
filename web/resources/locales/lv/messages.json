@@ -10,6 +10,9 @@
   "stderr": "stderr",
   "source_code": "Pirmkods",
 
+  "input_file": "Ievadfails",
+  "output_file": "Izvadfails",
+
   "group": "Grupa",
   "groups": "Grupas",
   "task": "Uzdevums",

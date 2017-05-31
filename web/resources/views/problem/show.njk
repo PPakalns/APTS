@@ -48,6 +48,16 @@
         <td>{{ antl.formatMessage('messages.time') }}</td>
         <td>{{ problem.testset.timelimit }}s</td>
       </tr>
+      {% if problem.testset.use_files %}
+        <tr>
+          <td>{{ antl.formatMessage('messages.input_file') }}</td>
+          <td>{{ problem.testset.input_file }}</td>
+        </tr>
+        <tr>
+          <td>{{ antl.formatMessage('messages.output_file') }}</td>
+          <td>{{ problem.testset.output_file }}</td>
+        </tr>
+      {% endif %}
     </tbody>
   </table>
   {% if inAssignment %}
