@@ -204,6 +204,11 @@ class Isolate:
         logger.debug("Copying file from '%s' to '%s'", src, dst)
         shutil.copyfile(src, dst)
 
+    def createFileIfNotExists(self, filename):
+        path = os.path.join(self.config.isolate_dir, "box", filename)
+        if not os.path.exists(path):
+            open(path, 'w').close()
+
     def run(self, params):
         params = self.config.getRunOptions() + params
         return_code, output = runIsolate(params)

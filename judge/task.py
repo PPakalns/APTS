@@ -49,8 +49,8 @@ def ExecuteTest(test, isolate_config, wdir):
     os.chmod(solution_isolated_path, stat.S_IXUSR) # Add permissions to execute file
     if test["use_files"]:
         sandbox.copyTo(test["input"], test["input_file"])
-        open(isolate_config.stdin_file, 'w').close() # Create empty file
-        open(test["output_file"], 'w').close() # Create empty output file
+        sandbox.createFileIfNotExists(isolate_config.stdin_file)
+        sandbox.createFileIfNotExists(test["output_file"])
     else:
         sandbox.copyTo(test["input"], isolate_config.stdin_file)
     test_result = sandbox.run(["solution"])
@@ -71,6 +71,7 @@ def ExecuteTest(test, isolate_config, wdir):
 
     output_file = os.path.join(wdir, "output.file")
     if test["use_files"]:
+        sandbox.createFileIfNotExists(test["output_file"]) # Create empty output file
         sandbox.copyFrom(test["output_file"], output_file)
     else:
         sandbox.copyFrom(isolate_config.stdout_file, output_file)
