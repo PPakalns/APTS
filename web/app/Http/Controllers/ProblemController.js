@@ -301,7 +301,8 @@ class ProblemController {
         Testset.copy(testset, ntestset)
         ntestset.updated = 0
         ntestset.zip_id = zip_file.id
-        ntestset.test_count =  tests.length
+        ntestset.test_count = tests.length
+        ntestset.public_range = tests.public_range
         yield ntestset.save()
 
         // Update tests
