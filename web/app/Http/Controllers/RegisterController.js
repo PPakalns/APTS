@@ -18,6 +18,7 @@ const LEN_TOKEN = 24;
 const LEN_KEY = 48;
 
 const WAIT_TIME = 30 * 60 * 1000;
+const VALID_TIME = 120 * 60 * 1000;
 
 class RegisterController {
 
@@ -98,7 +99,7 @@ class RegisterController {
                 if (user.password_reset_time)
                 {
                     let diff = (new Date()) - Date.parse(user.password_reset_time);
-                    if ( diff < WAIT_TIME )
+                    if (diff < WAIT_TIME)
                     {
                         diff = WAIT_TIME - diff;
                         errors.push({msg: "Paroles maiņas epastu varēs izsūtīt atkārtoti tikai pēc "+Math.ceil(diff/60000.0)+" minūtēm." })
@@ -117,7 +118,7 @@ class RegisterController {
         let key = String(Token(LEN_KEY))
 
         user.password_reset_hash = yield Hash.make(key, 5)
-        user.password_reset_time = (new Date()).toISOString()
+        user.password_reset_time = new Date()
         yield user.save()
 
         console.log("Passowrd reset email sent to ", user.email)
@@ -179,12 +180,12 @@ class RegisterController {
             }
             else if (!(yield Hash.verify(userData.key || "", user.password_reset_hash)))
             {
-                errors.push({msg: "Kļūda, aktivizācijas saite nav pareiza. Pārbaudiet vai atvērāt jaunāko saiti pareizi."})
+                errors.push({msg: "Kļūda, paroles nomaiņas saite nav pareiza. Pārbaudiet vai atvērāt jaunāko saiti pareizi."})
             }
             else if (user.password_reset_time)
             {
                 let diff = (new Date()) - Date.parse(user.password_reset_time);
-                if ( diff > 2*WAIT_TIME )
+                if (diff > VALID_TIME)
                 {
                     errors.push({msg: "Paroles maiņas saite ir novecojusi. Lūdzu piesakiet aizmirstu paroli vēlreiz." })
                 }
@@ -261,7 +262,7 @@ class RegisterController {
         let key = String(Token(LEN_KEY))
 
         user.email_change_hash = yield Hash.make(key, 5)
-        user.email_change_time = (new Date()).toISOString()
+        user.email_change_time = new Date()
         yield user.save()
 
         console.log("Registration email resended to ", user.email)
@@ -360,7 +361,7 @@ class RegisterController {
         user.token = token
         user.activated = false
         user.email_change_hash = yield Hash.make(key, 5)
-        user.email_change_time = (new Date()).toISOString()
+        user.email_change_time = new Date()
         yield user.save()
 
         yield Mail.send('emails.registration', {base: BASE, email: user.email, token: token, key: key}, message => {
