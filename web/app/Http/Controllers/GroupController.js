@@ -98,8 +98,7 @@ class GroupController {
     yield group.save()
 
     yield req
-        .withAll()
-        .andWith({"successes": [{message:"Grupa veiksmīgi rediģēta"}]})
+        .with({"successes": [{message:"Grupa veiksmīgi rediģēta"}]})
         .flash()
     res.route('group/edit', {id: groupData.id})
   }
@@ -130,8 +129,7 @@ class GroupController {
     yield group.save()
 
     yield req
-        .withAll()
-        .andWith({"successes": [{message:"Grupa veiksmīgi izveidota!"}]})
+        .with({"successes": [{message:"Grupa veiksmīgi izveidota!"}]})
         .flash()
     res.route('group/show', {id: group.id})
   }

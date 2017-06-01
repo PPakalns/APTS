@@ -84,8 +84,7 @@ class ProblemController {
         yield problem.save()
 
         yield req
-            .withAll()
-            .andWith({"successes": [{msg:"Uzdevums veiksmīgi izveidots!"}]})
+            .with({"successes": [{msg:"Uzdevums veiksmīgi izveidots!"}]})
             .flash()
         res.route('problem/show', {id: problem.id})
     }
@@ -107,8 +106,8 @@ class ProblemController {
         const validation = yield Validator.validate(problemData, Problem.rules)
         if (validation.fails())
         {
-            yield req.withAll()
-                .andWith({"errors": [{message:"Lūdzu norādiet uzdevuma nosaukumu."}]}).flash()
+            yield req
+                .with({"errors": [{message:"Lūdzu norādiet uzdevuma nosaukumu."}]}).flash()
             res.route('problem/edit',{id: problemData.id})
             return
         }
