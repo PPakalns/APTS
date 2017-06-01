@@ -45,7 +45,7 @@ class IsolateConfig:
         self.max_processes = 1         # -p
         self.timeout = None            # --time
         self.verbosity = 0             # -v
-        self.wallclock_timeout = None  # -w
+        self.wallclock_timeout = 100   # -w
         self.extra_timeout = None      # -x
 
         self.stdin_file = "stdin.log"         # -i
@@ -62,6 +62,7 @@ class IsolateConfig:
     def initChecker(self):
         self.timeout = 10
         self.address_space = 512 * 1024
+        self.wallclock_timeout = max(self.timeout * 10, 10)
         self.stdin_file = None
         return self
 
@@ -69,6 +70,7 @@ class IsolateConfig:
         self.address_space = memory_limit
         self.timeout = time_limit
         self.extra_timeout = 0.3
+        self.wallclock_timeout = max(self.timeout * 10, 10)
         return self
 
     def getInitOptions(self):
