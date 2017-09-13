@@ -170,7 +170,7 @@ class Isolate:
         return self.config.isolate_dir
 
     def readFile(self, file):
-        trunc = 5000
+        trunc = 10000
         output = b""
         logger.log(logging.DEBUG, "Reading file %s", file)
         with open(file, 'rb') as f:

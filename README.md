@@ -1,2 +1,2 @@
-# APTS - Automātiskā Programmu Testēšanas Sistēma
+# APTS - Automatizēts Programmu Testēšanas Serveris
 

@@ -1,6 +1,6 @@
 {
   "APTS": "APTS",
-  "APTS_": "Automātiskā Programmu Testēšanas Sistēma",
+  "APTS_": "Automatizēts Programmu Testēšanas Serveris",
 
   "id": "id",
   "number": "#",
@@ -49,14 +49,14 @@
   "login": "Ieiet",
   "register": "Reģistrēties",
 
-  "activation_successfull" : "Lietotāja reģistrācija pabeigta veiksmīgi. Varat tagad ieiet lietotājā \"{email}\".",
+  "activation_successfull" : "Lietotāja reģistrācija pabeigta veiksmīgi. Varat ieiet lietotājā \"{email}\".",
   "resend_successfull" : "Reģistrācijas epasts atkārtoti izsūtīts uz \"{email}\".",
-  "registration_successfull" : "Reģistrācija bija veiksmīga. Uz {email} izsūtīta vēstule ar tālāk sekojošajām reģistrācijas instrukcijām.",
+  "registration_successfull" : "Reģistrācija ir veiksmīga. Uz {email} izsūtīta vēstule ar turpmākajām reģistrācijas instrukcijām.",
   "registration_email_subject" : "Reģistrācija APTS sistēmā",
   "registration_email_body" : "Lai pabeigtu reģistrāciju APTS sistēmā, atveriet zemāk norādīto saiti.",
 
-  "password_changed_successfully": "Parole nomainīta veiksmīgi! Varat ieiet savā profilā.",
-  "password_reset_successful" : "Paroles atiestatīšana ir veiksmīga. Uz {email} izsūtīta vēstule ar tālāk sekojošajām paroles nomaiņas instrukcijām.",
+  "password_changed_successfully": "Parole nomainīta veiksmīgi!",
+  "password_reset_successful" : "Paroles atiestatīšana ir veiksmīga. Uz {email} izsūtīta vēstule ar turpmākajām paroles nomaiņas instrukcijām.",
   "password_reset_subject" : "APTS paroles maiņa",
   "password_reset_body" : "Lai nomainītu paroli APTS sistēmā, atveriet zemāk norādīto saiti.",
 
