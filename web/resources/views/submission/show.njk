@@ -45,7 +45,7 @@
             </tr>
             <tr>
                 <td colspan=2>{{ antl.formatMessage('messages.message') }}</td>
-                <td colspan=8 class="message"><pre class="simple">{{ submission.public | truncate(1020, true) }}</pre></td>
+                <td colspan=8 class="message"><pre class="simple">{{ submission.public | truncate(8000, true) }}</pre></td>
             </tr>
             {% if cUser.admin %}
                 <tr>
