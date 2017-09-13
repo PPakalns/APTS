@@ -14,6 +14,10 @@ body {
   background: #ffffff;
 }
 
+.lead {
+    font-size: 22px !important;
+}
+
 .footer {
   text-align: center;
   margin: auto;
@@ -137,7 +141,7 @@ table.no-border td, table.no-border th{
   font-size: 24px;
 }
 .prettycontent h4{
-  font-size: 21px;
+  font-size: 20px;
 }
 
 .prettycontent h5{
