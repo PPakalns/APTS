@@ -128,20 +128,20 @@ table.no-border td, table.no-border th{
 }
 
 .prettycontent h1{
-  font-size: 1.6em;
+  font-size: 30px;
 }
 .prettycontent h2{
-  font-size: 1.5em;
+  font-size: 27px;
 }
 .prettycontent h3{
-  font-size: 1.4em;
+  font-size: 24px;
 }
 .prettycontent h4{
-  font-size: 1.3em;
+  font-size: 21px;
 }
 
 .prettycontent h5{
-  font-size: 1.2em;
+  font-size: 18px;
 }
 
 .sidebar, textarea{
