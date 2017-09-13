@@ -53,12 +53,12 @@
   "resend_successfull" : "Reģistrācijas epasts atkārtoti izsūtīts uz \"{email}\".",
   "registration_successfull" : "Reģistrācija ir veiksmīga. Uz {email} izsūtīta vēstule ar turpmākajām reģistrācijas instrukcijām.",
   "registration_email_subject" : "Reģistrācija APTS sistēmā",
-  "registration_email_body" : "Lai pabeigtu reģistrāciju APTS sistēmā, atveriet zemāk norādīto saiti.",
+  "registration_email_body" : "Lai pabeigtu reģistrāciju APTS, Automatizēts Programmu Testēšanas Serveris, sistēmā, atveriet zemāk norādīto saiti.",
 
   "password_changed_successfully": "Parole nomainīta veiksmīgi!",
   "password_reset_successful" : "Paroles atiestatīšana ir veiksmīga. Uz {email} izsūtīta vēstule ar turpmākajām paroles nomaiņas instrukcijām.",
   "password_reset_subject" : "APTS paroles maiņa",
-  "password_reset_body" : "Lai nomainītu paroli APTS sistēmā, atveriet zemāk norādīto saiti.",
+  "password_reset_body" : "Lai nomainītu paroli APTS, Automatizēts Programmu Testēšanas Serveris, sistēmā, atveriet zemāk norādīto saiti.",
 
   "user": "Lietotājs",
   "menu_user": "Lietotājs: {user}",

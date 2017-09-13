@@ -216,7 +216,8 @@ class RegisterController {
             {
                 action: "RegisterController.resend_registration_post",
                 header: "Ŗeģistrācijas epasta atkārtota izsūtīšana",
-                lead: "Reģistrācijas epastu lietotājam var izsūtīt maksimums vienu reizi 30 minūtēs."            }
+                lead: "Maksimums vienu reizi 30 minūtēs var tikt izsūtīts reģistrācijas epasts. Reģistrācijas epasts var pienākt ar 10 minūšu aizkavi."
+            }
         );
     }
 
