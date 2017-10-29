@@ -106,6 +106,7 @@ def judgeSubmission():
         submission_judge()
 
     judge_api.submitResult(results.getResult())
+    goodSleep(1)
     return True
 
 
