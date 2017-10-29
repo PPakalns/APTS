@@ -189,6 +189,9 @@ class JudgeController {
 
         let submission = yield Submission.getJudgableSubmission()
 
+        console.log("Get Job")
+        console.log(submission)
+
         // No submission
         if (!submission)
         {
