@@ -79,7 +79,6 @@ class JudgeController {
     {
         let body = req.all()
         let submission = yield Submission.findOrFail(body.submission_id)
-        console.log(submission.toJSON())
 
         if (Utility.TESTING_STAGE.__IS_TESTING_STAGE(submission.testing_stage) == false)
             throw Error("Judge: submission not in testing stage" + submission.id + " " + submission.status)
@@ -141,8 +140,6 @@ class JudgeController {
 
         yield submission.save()
 
-        console.log("AFTER")
-        console.log(submission.toJSON())
 
         let judge = req.judge;
         judge.tested = judge.tested + 1
@@ -197,9 +194,6 @@ class JudgeController {
             res.json({status: "wait"})
             return
         }
-
-        console.log("Get Job")
-        console.log(submission.toJSON())
 
         if (submission.testing_stage == Utility.TESTING_STAGE.WAIT)
             submission.status = 1 // Set status to TESTING
