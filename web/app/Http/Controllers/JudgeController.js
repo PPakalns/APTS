@@ -189,9 +189,6 @@ class JudgeController {
 
         let submission = yield Submission.getJudgableSubmission()
 
-        console.log("Get Job")
-        console.log(submission.toJSON())
-
         // No submission
         if (!submission)
         {
@@ -201,6 +198,9 @@ class JudgeController {
             res.json({status: "wait"})
             return
         }
+
+        console.log("Get Job")
+        console.log(submission.toJSON())
 
         const affectedRows = yield Database
             .table('submissions')
