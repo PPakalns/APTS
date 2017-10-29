@@ -25,7 +25,9 @@
 {% macro score(submission) %}
 {% if submission.status >= 2 %}
   {% if submission.assignment.score_visibility >= 4 %}
-    {% if submission.score or submission.score==0 %}{{ submission.score }}/{{ submission.maxscore }}{%endif%}
+    {% if submission.score or submission.score==0 %}
+        {{ "**" if submission.assignment.testing_stage != 16 else "" }}{{ submission.score }}/{{ submission.maxscore }}
+    {%endif%}
   {% else %}
     {% if submission.public_score or submission.public_score==0 %}**{{ submission.public_score }}/{{ submission.public_maxscore }}{%endif%}
     {% if cUser.admin %}
