@@ -107,14 +107,12 @@ class JudgeController {
             }
             else
             {
-                if (assignment.score_visibility == 0)
-                    submission.status = body.status
+                submission.status = body.status
                 submission.status_private = body.status
             }
         }
         else
         {
-            submission.status = submission.status_private
             submission.status_private = body.status
         }
 

@@ -62,7 +62,6 @@ def judgeSubmission():
 
     if not sub:
         return False
-    goodSleep(1)
 
     logger.info("Judging solution %d", sub['submission']['id'])
 
