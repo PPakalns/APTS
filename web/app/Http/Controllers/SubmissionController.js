@@ -47,7 +47,7 @@ class SubmissionController {
         if (!req.cUser.admin && submission.assignment.score_visibility <= 4 )
             query = query.where('visible', true)
 
-        query = query.orderBy('tests.tid').orderBy('tests.gid');
+        // query = query.orderBy('tests.tid').orderBy('tests.gid');
 
         let tests = yield query.fetch()
 
