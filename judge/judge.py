@@ -62,6 +62,7 @@ def judgeSubmission():
 
     if not sub:
         return False
+    goodSleep(1)
 
     logger.info("Judging solution %d", sub['submission']['id'])
 
@@ -106,7 +107,6 @@ def judgeSubmission():
         submission_judge()
 
     judge_api.submitResult(results.getResult())
-    goodSleep(1)
     return True
 
 
