@@ -26,7 +26,7 @@
 {% if submission.status >= 2 %}
   {% if submission.assignment.score_visibility >= 4 %}
     {% if submission.score or submission.score==0 %}
-        {{ "**" if submission.assignment.testing_stage != 16 else "" }}{{ submission.score }}/{{ submission.maxscore }}
+        {{ "**" if submission.testing_stage != 16 else "" }}{{ submission.score }}/{{ submission.maxscore }}
     {%endif%}
   {% else %}
     {% if submission.public_score or submission.public_score==0 %}**{{ submission.public_score }}/{{ submission.public_maxscore }}{%endif%}
