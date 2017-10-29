@@ -47,6 +47,8 @@ class SubmissionController {
         if (!req.cUser.admin && submission.assignment.score_visibility <= 4 )
             query = query.where('visible', true)
 
+        query = query.orderBy('tid').orderBy('gid');
+
         let tests = yield query.fetch()
 
         yield res.sendView('submission/show', {submission: submission.toJSON(), tests: tests.toJSON()})
