@@ -52,6 +52,7 @@ class JudgeController {
 
     * stop(req, res)
     {
+        console.log("Stopping judge")
         let judge = req.judge;
 
         yield clearJudge(judge)
@@ -201,21 +202,6 @@ class JudgeController {
 
         console.log("Get Job")
         console.log(submission.toJSON())
-
-        const affectedRows = yield Database
-            .table('submissions')
-            .where('id', submission.id)
-            .where('testing_stage', submission.testing_stage)
-            .update('testing_stage', submission.testing_stage + Utility.TESTING_STAGE.__NEXT)
-
-        if (affectedRows==0)
-        {
-            console.error("Race condition in JudgeController.getJob")
-            judge.status = "wait";
-            yield judge.save()
-            res.json({status: "wait"})
-            return
-        }
 
         if (submission.testing_stage == Utility.TESTING_STAGE.WAIT)
             submission.status = 1 // Set status to TESTING
