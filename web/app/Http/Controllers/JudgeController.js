@@ -190,7 +190,7 @@ class JudgeController {
         let submission = yield Submission.getJudgableSubmission()
 
         console.log("Get Job")
-        console.log(submission)
+        console.log(submission.toJSON())
 
         // No submission
         if (!submission)
