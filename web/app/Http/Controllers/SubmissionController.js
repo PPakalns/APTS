@@ -11,6 +11,20 @@ const File = use('App/Model/File')
 const antl = use('Antl')
 
 let stringify = require('csv-stringify');
+let moment = require('moment')
+
+function convertDate(dateStr)
+{
+    try
+    {
+        return moment(dateStr, "YYYY-MM-DD HH:mm:ss").format("DD.MM.YYYY HH:mm:ss")
+    }
+    catch (err)
+    {
+        console.error(err)
+        return dateStr
+    }
+}
 
 class SubmissionController {
 
@@ -93,6 +107,7 @@ class SubmissionController {
             'submission_id',
             'problem_name',
             'group_name',
+            'created_at',
             'status',
             'score',
             'maxscore',
@@ -107,6 +122,7 @@ class SubmissionController {
             score: submission.score,
             maxscore: submission.maxscore,
             test_count: submission.testset.test_count,
+            created_at: convertDate(submission.created_at),
         }
 
         for (let testr of submission.testresults)
@@ -146,6 +162,7 @@ class SubmissionController {
         // PREPARE COLUMNS FOR DATA OUPUT
         let columns = [
             'submission_id',
+            'created_at',
             'problem_name',
             'group_name',
             'student_id',
@@ -216,7 +233,8 @@ class SubmissionController {
                 maxscore: submission.maxscore,
                 test_count: submission.testset.test_count,
                 student_id: submission.user.student_id,
-                email: submission.user.email
+                email: submission.user.email,
+                created_at: convertDate(submission.created_at),
             }
 
             for (let testr of submission.testresults)
