@@ -1,6 +1,5 @@
 {% extends 'master' %}
-{% from 'macros.paginator' import paginator %}
-{% import 'macros.submission' as sub %}
+{% import 'macros/submission.njk' as sub %}
 
 {% block header %}
   <h2>Iesūtījumi</h2>
@@ -12,104 +11,5 @@
 {% endblock %}
 
 {% block content %}
-  <div class="pull-right bold">**Publiskie testi</div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>{{ antl.formatMessage('messages.id') }}</th>
-        <th>{{ antl.formatMessage('messages.group') }}</th>
-        <th>{{ antl.formatMessage('messages.user') }}</th>
-        <th>{{ antl.formatMessage('messages.time') }}</th>
-        <th>{{ antl.formatMessage('messages.task') }}</th>
-        <th>{{ antl.formatMessage('messages.status') }}</th>
-        <th>{{ antl.formatMessage('messages.result') }}</th>
-        <th>{{ antl.formatMessage('messages.memory') }}</th>
-        <th>{{ antl.formatMessage('messages.time') }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for submission in sub_paginated.data %}
-        <tr class="{{sub.trclass(submission) | striptags}}">
-          <td>
-            <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
-              {{ submission.id }}
-            </a>
-          </td>
-          <td>
-            <a href="{{ 'GroupController.show' | action({id: submission.assignment.group.id }) }}">
-              {{ submission.assignment.group.name }}
-            </a>
-          </td>
-          <td>
-            {% if cUser.admin %}
-              <a href="{{ 'UserController.show' | action({user_id : submission.user.id}) }}" >
-                {{ submission.user.email }}
-              </a>
-            {% else %}
-              {{ submission.user.email }}
-            {% endif %}
-          </td>
-          <td>
-            <a href="{{ 'SubmissionController.show' | action({id: submission.id}) }}">
-              {{ submission.created_at }}
-            </a>
-          </td>
-          <td>
-            <a href="{{ 'AssignmentController.show' | action({assignment_id: submission.assignment.id }) }}">
-              {{ submission.assignment.problem.name }}
-            </a>
-          </td>
-          <td>
-            {{ sub.status(submission) }}
-          </td>
-          <td class="c_score">
-            {{ sub.score(submission) }}
-          </td>
-          <td>
-            {{ sub.memory(submission) }}
-          </td>
-          <td>
-            {{ sub.time(submission) }}
-          </td>
-        </tr>
-      {% endfor %}
-      {% if sub_paginated.total == 0 %}
-        <tr>
-          <td colspan=9>
-            Jūs neesat veicis nevienu iesūtījumu.
-          </td>
-        </td>
-      {% endif %}
-    </tbody>
-  </table>
-  {{ paginator(sub_paginated) }}
-  {% if cUser.admin and sub_paginated.total %}
-    <div style="float:right;">
-      <div>
-        <div class='rectangle sub_wait border'>
-        </div>
-        Gaida testēšanu
-      </div>
-      <div>
-        <div class='rectangle sub_public_testing border'>
-        </div>
-        Publisko testu testēšana
-      </div>
-      <div>
-        <div class='rectangle sub_wait_nonpublic_testing border'>
-        </div>
-        Pabeigta publisko testu testēšana
-      </div>
-      <div>
-        <div class='rectangle sub_nonpublic_testing border'>
-        </div>
-        Ne publisko testu testēšana
-      </div>
-      <div>
-        <div class='rectangle border'>
-        </div>
-        Testēšana pabeigta
-      </div>
-    </div>
-  {% endif %}
+  {{ sub.showSubmissionList(sub_paginated, 'SubmissionController.index', {}) }}
 {% endblock %}

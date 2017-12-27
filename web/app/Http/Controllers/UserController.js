@@ -5,6 +5,7 @@ const User = use('App/Model/User')
 const Group = use('App/Model/Group')
 const Validator = use('Validator')
 const reCAPTCHA = use('reCAPTCHA')
+const Submission = use('App/Model/Submission')
 const Hash = use('Hash')
 
 class UserController {
@@ -17,8 +18,17 @@ class UserController {
     * show(req, res) {
         // If user is not an admin - show only users own page
         let id = req.cUser.ruser.id
+        let sub_paginated = null
+
         if (req.cUser.admin){
             id = req.param('user_id', id)
+
+            // Show submissions of user
+            let page = Validator.sanitizor.toInt(req.param('page', 1), 10)
+            page = isNaN(page) ? 1 : Math.max(page, 1);
+            let query = Submission.query().orderBy('id', 'desc').with('user', 'assignment.group', 'assignment.problem')
+                                          .where('user_id', id)
+            sub_paginated = (yield query.paginate(page, 40)).toJSON()
         }
         let user = yield User.findOrFail(id)
         yield user.related('groups').load()
@@ -26,7 +36,7 @@ class UserController {
         const sub_cnt = yield Database.table('submissions').where('user_id', id).count()
         data.submissions = sub_cnt[ 0 ]['count(*)']
 
-        yield res.sendView('user/show', {user: user.toJSON(), data: data})
+        yield res.sendView('user/show', {user: user.toJSON(), data: data, sub_paginated: sub_paginated})
     }
 
     * change_password(req, res) {

@@ -37,7 +37,7 @@ class SubmissionController {
         let query = Submission.query().orderBy('id', 'desc').with('user', 'assignment.group', 'assignment.problem')
         if (!req.cUser.admin)
             query = query.where('user_id', req.cUser.user.id)
-        let sub_paginated = yield query.paginate(page,20)
+        let sub_paginated = yield query.paginate(page, 40)
         yield res.sendView('submission/index', {sub_paginated: sub_paginated.toJSON()})
     }
 

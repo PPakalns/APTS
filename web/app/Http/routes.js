@@ -44,7 +44,7 @@ Route.group('register', function(){
 }).middleware('notauth')
 
 Route.group('user', function(){
-    Route.get('/show/:user_id?', 'UserController.show').as('user/show')
+    Route.get('/show/:user_id?/:page?', 'UserController.show').as('user/show')
     Route.get('/change_password', 'UserController.change_password').as('user/change/password')
 }).prefix('/user').middleware('auth')
 

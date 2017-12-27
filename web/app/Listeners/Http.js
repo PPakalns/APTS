@@ -72,4 +72,9 @@ Http.onStart = function () {
       return "";
     return marked(str)
   })
+
+  View.filter('setProperty', function (obj, str, val) {
+      obj[str] = val;
+      return obj;
+  })
 }

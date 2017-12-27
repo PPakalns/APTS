@@ -1,11 +1,11 @@
-{% macro paginator(pag) %}
+{% macro paginator(pag, controller_action, action_opts) %}
 
 {% if pag.lastPage > 1 %}
   <nav aria-label="list of submission pages" class="text-center">
     <ul class="pagination">
       {% for i in range(1, pag.lastPage + 1) %}
         <li class="{{ "active" if i == pag.currentPage }}">
-          <a href="{{ 'SubmissionController.index' | action({page: i }) }}">
+          <a href="{{ controller_action | action( action_opts | setProperty("page", i)) }}">
             {{ i }}
           </a>
         </li>
