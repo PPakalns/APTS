@@ -108,7 +108,7 @@ class SubmissionController {
         const id = req.param('assignment_id')
         let assignment = yield Assignment.findOrFail(id)
 
-        let strids = String(req.input('submission_ids', ""))
+        let strids = String(req.input('submission_ids' + String(assignment.id), ""))
         let ids = strids.split(",").map(function(elem){return elem.trim()})
         let parsed_ids = []
 
@@ -129,7 +129,7 @@ class SubmissionController {
             {
                 yield req.withAll()
                     .andWith({errors:[{msg: "Eksportēt iesūtījumu ar id \"" + String(tid) + "\" nav iespējams!"
-                        + "Iesūtījums nav šīs grupas uzdevuma risinājums" }]})
+                        + " Iesūtījums nav šīs grupas uzdevuma risinājums" }]})
                     .flash()
                 return res.redirect('back')
             }

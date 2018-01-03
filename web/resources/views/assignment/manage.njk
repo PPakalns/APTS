@@ -92,9 +92,9 @@
                 {{ form.open({action: 'SubmissionController.export_assignment_submissions', params: {assignment_id: assignment.id}, class:"form-horizontal"}) }}
                 {{ csrfField }}
                 <div class="col-md-8">
-                  {{ form.label('submission_ids', 'Iesūtījumu id:', {class: 'col-md-4 control-label'}) }}
+                  {{ form.label('submission_ids' + (assignment.id | string), 'Iesūtījumu id:', {class: 'col-md-4 control-label'}) }}
                   <div class="col-md-8">
-                    {{ form.text('submission_ids', old('submission_ids') or "", {class: 'form-control', required: true}) }}
+                    {{ form.text('submission_ids' + (assignment.id | string), old('submission_ids' + (assignment.id | string)) or "", {class: 'form-control', required: true}) }}
                   </div>
                 </div>
                 <div class="col-md-4">
