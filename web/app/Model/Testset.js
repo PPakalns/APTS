@@ -6,7 +6,7 @@ class Testset extends Lucid {
 
     static copy(from, to) {
         const arr = ["problem_id", "updated", "timelimit", "memory", "test_count",
-                     "zip_id", "checker_id", "public_range"]
+                     "zip_id", "checker_id", "public_range", "use_files", "input_file", "output_file"]
 
         for (let key of arr)
         {

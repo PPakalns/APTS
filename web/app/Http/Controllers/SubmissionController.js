@@ -28,7 +28,6 @@ function convertDate(dateStr)
 
 class SubmissionController {
 
-
     * index(req, res) {
         // Retrieve page number
         let page = Validator.sanitizor.toInt(req.param('page', 1), 10)
@@ -83,7 +82,7 @@ class SubmissionController {
         }
         else
         {
-            yield req.with({error:[{msg: "Lai pārtestētu risinājumu, risinājumam ir jābūt notestētam."}]}).flash()
+            yield req.with({errors:[{msg: "Lai pārtestētu risinājumu, risinājumam ir jābūt notestētam."}]}).flash()
         }
         res.redirect('back')
     }
@@ -96,59 +95,49 @@ class SubmissionController {
 
         if (submission.status < 2)
         {
-            yield req.with({error:[{msg: "Eksportēt uz csv nav iespējams, jo risinājums nav notestēts."}]}).flash()
+            yield req.with({errors:[{msg: "Eksportēt uz csv nav iespējams, jo risinājums nav notestēts."}]}).flash()
             return res.redirect('back')
         }
 
-        yield submission.related('testset', 'testresults.test', 'assignment.problem', 'assignment.group').load()
-        submission = submission.toJSON()
+        yield export_submissions(res, submission.assignment_id, [id])
+    }
 
-        var columns = [
-            'submission_id',
-            'problem_name',
-            'group_name',
-            'created_at',
-            'status',
-            'score',
-            'maxscore',
-            'test_count'
-        ]
 
-        let data = {
-            problem_name: submission.assignment.problem.name,
-            group_name: submission.assignment.group.name,
-            submission_id: submission.id,
-            status: submission.status,
-            score: submission.score,
-            maxscore: submission.maxscore,
-            test_count: submission.testset.test_count,
-            created_at: convertDate(submission.created_at),
-        }
+    * export_assignment_submissions(req, res)
+    {
+        const id = req.param('assignment_id')
+        let assignment = yield Assignment.findOrFail(id)
 
-        for (let testr of submission.testresults)
+        let strids = String(req.input('submission_ids', ""))
+        let ids = strids.split(",").map(function(elem){return elem.trim()})
+        let parsed_ids = []
+
+        for (let id of ids)
         {
-            let tid = testr.test.tid + (testr.test.gid || "");
-            let t_tid = tid + "_t"
-            let m_tid = tid + "_m"
-            let s_tid = tid + "_s"
-            columns.push(tid)
-            columns.push(s_tid)
-            columns.push(t_tid)
-            columns.push(m_tid)
-            data[tid] = testr.score
-            data[m_tid] = testr.memory / 1024.0 / 1024.0
-            data[t_tid] = testr.time
-            data[s_tid] = testr.status
+            let tid = id;
+            id = Validator.sanitizor.toInt(id, 10)
+            if (isNaN(id))
+            {
+                yield req.withAll()
+                    .andWith({errors:[{msg: "Eksportēt iesūtījumu ar id \"" + String(tid) + "\" nav iespējams!" }]})
+                    .flash()
+                return res.redirect('back')
+            }
+
+            let submission = yield Submission.findOrFail(id)
+            if (submission.assignment_id != assignment.id)
+            {
+                yield req.withAll()
+                    .andWith({errors:[{msg: "Eksportēt iesūtījumu ar id \"" + String(tid) + "\" nav iespējams!"
+                        + "Iesūtījums nav šīs grupas uzdevuma risinājums" }]})
+                    .flash()
+                return res.redirect('back')
+            }
+
+            parsed_ids.push(id)
         }
 
-        let stringifier = stringify({ header: true, columns: columns })
-
-        res.header('Content-type', 'application/csv; charset=utf-8')
-        res.header("Content-Disposition", "attachment;filename="+String(submission.id)+".csv");
-        stringifier.pipe(res.response)
-
-        stringifier.write(data);
-        stringifier.end();
+        yield export_submissions(res, assignment.id, parsed_ids)
     }
 
 
@@ -158,36 +147,6 @@ class SubmissionController {
         let assignment = yield Assignment.findOrFail(assignment_id)
         yield assignment.related('group', 'problem', 'problem.testset.tests').load()
         assignment = assignment.toJSON()
-
-        // PREPARE COLUMNS FOR DATA OUPUT
-        let columns = [
-            'submission_id',
-            'created_at',
-            'problem_name',
-            'group_name',
-            'student_id',
-            'email',
-            'status',
-            'score',
-            'maxscore',
-            'test_count'
-        ]
-
-        let testIdToTest = {} // Will hold info about tests
-
-        for (let test of assignment.problem.testset.tests)
-        {
-            testIdToTest[ test.id ] = test
-
-            let tid = test.tid + (test.gid || "");
-            let t_tid = tid + "_t"
-            let m_tid = tid + "_m"
-            let s_tid = tid + "_s"
-            columns.push(tid)
-            columns.push(s_tid)
-            columns.push(t_tid)
-            columns.push(m_tid)
-        }
 
         // Retrieve last OK submission id for all participants
         let submissions = yield Database
@@ -203,58 +162,13 @@ class SubmissionController {
             .where('s1.assignment_id', assignment.id)
             .whereNull('s2.id')
 
-        // Prepare stream for output
-        let stringifier = stringify({ header: true, columns: columns })
-
-        res.header('Content-type', 'application/csv; charset=utf-8')
-        res.header("Content-Disposition", "attachment;filename=task"+String(assignment.id)+".csv");
-        stringifier.pipe(res.response)
-
-        // ITERATE OVER DATA AND CONVERT TO CSV
-        for (let idobj of submissions)
+        let ids = []
+        for (let sub of submissions)
         {
-            let id = idobj['id']
-
-            let submission = yield Submission.findOrFail(id)
-            yield submission.related('testset',
-                                     'testresults',
-                                     'user'
-                                     )
-                            .load()
-
-            submission = submission.toJSON()
-
-            let data = {
-                problem_name: assignment.problem.name,
-                group_name: assignment.group.name,
-                submission_id: submission.id,
-                status: submission.status,
-                score: submission.score,
-                maxscore: submission.maxscore,
-                test_count: submission.testset.test_count,
-                student_id: submission.user.student_id,
-                email: submission.user.email,
-                created_at: convertDate(submission.created_at),
-            }
-
-            for (let testr of submission.testresults)
-            {
-                if (testIdToTest.hasOwnProperty(testr.test_id) == false)
-                    continue
-                testr.test = testIdToTest[testr.test_id]
-
-                let tid = testr.test.tid + (testr.test.gid || "");
-                let t_tid = tid + "_t"
-                let m_tid = tid + "_m"
-                let s_tid = tid + "_s"
-                data[tid] = testr.score
-                data[m_tid] = testr.memory / 1024.0 / 1024.0
-                data[t_tid] = testr.time
-                data[s_tid] = testr.status
-            }
-            stringifier.write(data);
+            ids.push(sub['id'])
         }
-        stringifier.end();
+
+        yield export_submissions(res, assignment_id, ids)
     }
 
 
@@ -351,6 +265,113 @@ class SubmissionController {
         res.route('assignment/show', {assignment_id: assignment.id})
         return
     }
+}
+
+function *export_submissions(res, assignment_id, id_array)
+{
+    let assignment = yield Assignment.findOrFail(assignment_id)
+    yield assignment.related('group', 'problem', 'problem.testset.tests').load()
+    assignment = assignment.toJSON()
+
+    // PREPARE COLUMNS FOR DATA OUPUT
+    let columns = [
+        'submission_id',
+        'created_at',
+        'problem_name',
+        'group_name',
+        'student_id',
+        'email',
+        'status',
+        'score',
+        'maxscore',
+        'test_count'
+    ]
+
+    let testIdToTest = {} // Will hold info about tests
+
+    let tests = []
+    for (let test of assignment.problem.testset.tests)
+    {
+        tests.push({tid: test.tid, gid: (test.gid || ""), id: test.id})
+    }
+
+    tests.sort(function(x, y) {
+        if (x.tid == y.tid)
+        {
+            if (x.gid < y.gid)
+                return -1;
+            else if (x.gid > y.gid)
+                return 1;
+            return 0;
+        }
+        else
+            return x.tid - y.tid;
+    });
+
+    for (let test of tests)
+    {
+        testIdToTest[ test.id ] = test
+
+        let tid = test.tid + (test.gid || "");
+        let t_tid = tid + "_t"
+        let m_tid = tid + "_m"
+        let s_tid = tid + "_s"
+        columns.push(tid)
+        columns.push(s_tid)
+        columns.push(t_tid)
+        columns.push(m_tid)
+    }
+
+    // Prepare stream for output
+    let stringifier = stringify({ header: true, columns: columns })
+
+    res.header('Content-type', 'application/csv; charset=utf-8')
+    res.header("Content-Disposition", "attachment;filename=task"+String(assignment.id)+".csv");
+    stringifier.pipe(res.response)
+
+    // ITERATE OVER DATA AND CONVERT TO CSV
+    for (let id of id_array)
+    {
+        let submission = yield Submission.findOrFail(id)
+        yield submission.related('testset',
+                                 'testresults',
+                                 'user'
+                                 )
+                        .load()
+
+        submission = submission.toJSON()
+
+        let data = {
+            problem_name: assignment.problem.name,
+            group_name: assignment.group.name,
+            submission_id: submission.id,
+            status: submission.status,
+            score: submission.score,
+            maxscore: submission.maxscore,
+            test_count: submission.testset.test_count,
+            student_id: submission.user.student_id,
+            email: submission.user.email,
+            created_at: convertDate(submission.created_at),
+        }
+
+        for (let testr of submission.testresults)
+        {
+            if (testIdToTest.hasOwnProperty(testr.test_id) == false)
+                continue
+            testr.test = testIdToTest[testr.test_id]
+
+            let tid = testr.test.tid + (testr.test.gid || "");
+            let t_tid = tid + "_t"
+            let m_tid = tid + "_m"
+            let s_tid = tid + "_s"
+            data[tid] = testr.score
+            data[m_tid] = testr.memory / 1024.0 / 1024.0
+            data[t_tid] = testr.time
+            data[s_tid] = testr.status
+        }
+        stringifier.write(data);
+    }
+    stringifier.end();
 }
 
 module.exports = SubmissionController

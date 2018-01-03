@@ -116,5 +116,6 @@ Route.group('submission', function(){
     Route.get('/submission/retest/:id', 'SubmissionController.retest').middleware('admin')
     Route.get('/submission/export/:id', 'SubmissionController.export').middleware('admin')
     Route.get('/submission/assignment/export/:assignment_id', 'SubmissionController.export_assignment').middleware('admin')
+    Route.post('/submission/assignment/exportids/:assignment_id', 'SubmissionController.export_assignment_submissions').middleware('admin')
 }).middleware('auth')
 

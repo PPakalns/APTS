@@ -77,12 +77,31 @@
               <div class="form-group">
                 <div class="col-md-6 col-md-offset-4">
                   {{ form.button('Saglabāt uzstādījumus', 'save', {class: "btn btn-primary", style: "margin-top:5px;"}) }}
-                  <a class="btn btn-default" href="{{ "SubmissionController.export_assignment" | action({ assignment_id: assignment.id }) }}" style="margin-top: 5px;">
-                    Eksportēt dalībnieku rezultātus CSV failā
+                </div>
+              </div>
+              <hr>
+              <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                  <a class="btn btn-default" href="{{ "SubmissionController.export_assignment" | action({ assignment_id: assignment.id }) }}" style="margin-top: 5px; margin-bottom: 5px;">
+                    Eksportēt pēdējos iesūtījumus (CSV)
                   </a>
                 </div>
               </div>
               {{ form.close() }}
+              <div class="row">
+                {{ form.open({action: 'SubmissionController.export_assignment_submissions', params: {assignment_id: assignment.id}, class:"form-horizontal"}) }}
+                {{ csrfField }}
+                <div class="col-md-8">
+                  {{ form.label('submission_ids', 'Iesūtījumu id:', {class: 'col-md-4 control-label'}) }}
+                  <div class="col-md-8">
+                    {{ form.text('submission_ids', old('submission_ids') or "", {class: 'form-control', required: true}) }}
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  {{ form.button('Eksportēt norādītos (CSV)', 'save', {class: "btn btn-default form-control"}) }}
+                </div>
+                {{ form.close() }}
+              </div>
             </div>
           </div>
         {% endfor %}
