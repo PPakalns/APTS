@@ -94,7 +94,7 @@
                 <div class="col-md-8">
                   {{ form.label('submission_ids' + (assignment.id | string), 'Iesūtījumu id:', {class: 'col-md-4 control-label'}) }}
                   <div class="col-md-8">
-                    {{ form.text('submission_ids' + (assignment.id | string), old('submission_ids' + (assignment.id | string)) or "", {class: 'form-control', required: true}) }}
+                    {{ form.text('submission_ids' + (assignment.id | string), old('submission_ids' + (assignment.id | string)) or "", {class: 'form-control', required: true, placeholder: "1, 5, 123"}) }}
                   </div>
                 </div>
                 <div class="col-md-4">
