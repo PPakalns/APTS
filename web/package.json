@@ -23,6 +23,7 @@
     "adonis-middleware": "^1.0.14",
     "adonis-validation-provider": "^3.0.5",
     "adonis-websocket": "^1.0.4",
+    "archiver": "^2.1.1",
     "basic-auth": "^1.1.0",
     "bluebird": "^3.5.1",
     "csv": "^1.2.1",

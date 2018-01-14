@@ -10,8 +10,17 @@ const Validator = use('Validator')
 const File = use('App/Model/File')
 const antl = use('Antl')
 
-let stringify = require('csv-stringify');
+let stringify = require('csv-stringify')
 let moment = require('moment')
+let archiver = require('archiver')
+
+let EXTENSIONS = {
+    "cpp"   : "cpp",
+    "cpp11" : "cpp",
+    "c"     : "c",
+    "c11"   : "c",
+    "pas"   : "pas",
+}
 
 function convertDate(dateStr)
 {
@@ -322,12 +331,18 @@ function *export_submissions(res, assignment_id, id_array)
         columns.push(m_tid)
     }
 
+    res.header('Content-type', 'application/zip; charset=utf-8')
+    res.header("Content-Disposition", "attachment;filename=task"+String(assignment.id)+".zip");
+
+    let archive = archiver('zip', {
+        zlib: {level: 9}
+    });
+
+    archive.pipe(res.response);
+
     // Prepare stream for output
     let stringifier = stringify({ header: true, columns: columns })
-
-    res.header('Content-type', 'application/csv; charset=utf-8')
-    res.header("Content-Disposition", "attachment;filename=task"+String(assignment.id)+".csv");
-    stringifier.pipe(res.response)
+    archive.append(stringifier, {name: 'results.csv'})
 
     // ITERATE OVER DATA AND CONVERT TO CSV
     for (let id of id_array)
@@ -335,11 +350,18 @@ function *export_submissions(res, assignment_id, id_array)
         let submission = yield Submission.findOrFail(id)
         yield submission.related('testset',
                                  'testresults',
-                                 'user'
+                                 'user',
+                                 'file'
                                  )
                         .load()
 
         submission = submission.toJSON()
+
+        let ext = (EXTENSIONS.hasOwnProperty(submission.type)
+                   ? EXTENSIONS[submission.type]
+                   : "unknown");
+
+        archive.append(submission.file.file, {name: "submissions/" + submission.id + "." + ext})
 
         let data = {
             problem_name: assignment.problem.name,
@@ -371,7 +393,8 @@ function *export_submissions(res, assignment_id, id_array)
         }
         stringifier.write(data);
     }
-    stringifier.end();
+    stringifier.end()
+    archive.finalize()
 }
 
 module.exports = SubmissionController
