@@ -1,0 +1,25 @@
+
+<div class="spacer"></div>
+<ul class="list-unstyled components">
+  @loggedIn
+  <li>
+    <a href="{{ route('SessionController.delete') }}">
+      {{ antl.formatMessage("main.signout") }}
+    </a>
+  </li>
+  @else
+  <li>
+    <a href="{{ route('SessionController.create') }}">
+      {{ antl.formatMessage("main.signin") }}
+    </a>
+  </li>
+  <li>
+    <a href="{{ route('UserController.create') }}">
+      {{ antl.formatMessage("main.signup") }}
+    </a>
+  </li>
+  @endloggedIn
+</ul>
+
+<div style="height: 20px;"></div>
+<div style="padding: 10px">(c) Pēteris Pakalns</div>
