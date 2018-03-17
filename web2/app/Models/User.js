@@ -35,6 +35,18 @@ class User extends Model {
   roles() {
       return this.hasMany('App/Models/Role', 'id', 'user_id')
   }
+
+  /* Participates in following groups */
+  groups () {
+      return this.belongsToMany(
+        'App/Models/Group',
+        'user_id',
+        'group_id',
+        'id',
+        'id'
+      ).pivotTable('user_group')
+  }
+
 }
 
 module.exports = User

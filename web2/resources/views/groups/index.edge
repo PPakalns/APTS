@@ -1,0 +1,53 @@
+@layout('master.edge')
+
+@section('content')
+  <h1 class="display-4">{{ antl.formatMessage('main.groups') }}</h1>
+  <p class="lead">{{ antl.formatMessage('main.groups_introduction') }}</p>
+  @if(request.roles.admin)
+  <div class="float-right">
+    <a class="btn btn-dark d-flex align-items-center" href="{{ route('GroupController.create') }}">
+      @!component('icon.plus', { size: '25px' })
+      {{ antl.formatMessage('main.create') }}
+    </a>
+  </div>
+  <div class="clearfix"></div>
+  @endif
+
+  @loggedIn
+    <h2 class="display-6">{{ antl.formatMessage('main.my_groups') }}</h2>
+    <ul class="list-group">
+    @each(group in groups)
+      @include('groups.partials.groupEntry')
+    @else
+      <li class="list-group-item list-group-item-info">
+        {{ antl.formatMessage('main.groups_not_available') }}
+      </li>
+    @endeach
+    </ul>
+  @endloggedIn
+
+  <h2 class="display-6 mt-4">{{ antl.formatMessage('main.public_groups') }}</h2>
+  <ul class="list-group">
+  @each(group in publicGroups)
+    @include('groups.partials.groupEntry')
+  @else
+      <li class="list-group-item list-group-item-info">
+        {{ antl.formatMessage('main.groups_not_available') }}
+      </li>
+  @endeach
+  </ul>
+
+  @if(request.roles.admin)
+    <h2 class="display-6 mt-4">{{ antl.formatMessage('main.all_groups') }}</h2>
+    <ul class="list-group">
+    @each(group in allGroups)
+      @include('groups.partials.groupEntry')
+    @else
+      <li class="list-group-item list-group-item-info">
+        {{ antl.formatMessage('main.groups_not_available') }}
+      </li>
+    @endeach
+    </ul>
+  @endif
+
+@endsection

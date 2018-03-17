@@ -31,4 +31,15 @@ Route.group(() => {
   Route.get('delete/:id', 'PageController.delete')
 }).middleware(['admin']).prefix('page')
 
+// Groups routes
+Route.get('group/show/:id', 'GroupController.show')
+Route.get('group/', 'GroupController.index')
+
+Route.group(() => {
+  Route.get('create', 'GroupController.create')
+  Route.post('create', 'GroupController.store').validator('GroupStore')
+  Route.get('edit/:id', 'GroupController.edit')
+  Route.post('update/:id', 'GroupController.update').validator('GroupStore')
+  Route.get('delete/:id', 'GroupController.delete')
+}).middleware(['admin']).prefix('group')
 

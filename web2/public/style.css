@@ -133,3 +133,8 @@ a, a:hover, a:focus {
     bottom: 0px;
   }
 }
+
+.col-auto {
+  max-width: 100% !important;
+  word-wrap: break-word !important;
+}

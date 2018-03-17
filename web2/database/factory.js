@@ -43,3 +43,13 @@ Factory.blueprint('App/Models/Page', (faker, index, data) => {
 
   return Object.assign(defaultValue, data)
 })
+
+Factory.blueprint('App/Models/Group', (faker, index, data) => {
+  const defaultValue = {
+    name: faker.sentence(),
+    description: faker.paragraph(),
+    public: faker.bool()
+  }
+
+  return Object.assign(defaultValue, data)
+})

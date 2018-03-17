@@ -37,5 +37,12 @@
   "description": "Saturs",
   "visible": "Redzams",
   "path": "Ceļš",
-  "comment": "Komentārs"
+  "comment": "Komentārs",
+
+  "groups": "Grupas",
+  "groups_introduction": "Grupās ir atrodami programmēšanas uzdevumi.",
+  "groups_not_available": "Šajā sadaļā nav pieejama neviena grupa.",
+  "my_groups": "Manas grupas",
+  "public_groups": "Publiskas grupas",
+  "all_groups": "Visas grupas"
 }

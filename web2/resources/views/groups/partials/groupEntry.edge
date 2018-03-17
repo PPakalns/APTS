@@ -1,0 +1,10 @@
+<li class="list-group-item">
+  <div class="row">
+    <div class="col-auto">
+      <a href="{{ route('GroupController.show', {id: group.id}) }}">
+        {{ group.name }}
+      </a>
+    </div>
+    @include('groups/partials/admin-nav')
+  </div>
+</li>
