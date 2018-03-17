@@ -1,0 +1,17 @@
+
+@layout('master.edge')
+
+@section('content')
+  <div class="card">
+    <div class="card-header">
+      {{ antl.formatMessage('main.edit') }} -
+      {{ antl.formatMessage('main.page') }}
+    </div>
+    <div class="card-body">
+      <form action="{{ route('PageController.update', {id: page.id}) }}" method="POST">
+        @include('pages.partials.form')
+        <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.edit') }}</button>
+      </form>
+    </div>
+  </div>
+@endsection

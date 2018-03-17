@@ -2,6 +2,7 @@
 
 const Factory = use('Factory')
 const { test, trait } = use('Test/Suite')('Authentication')
+const antl = use('Antl')
 
 trait('Test/Browser')
 trait('DatabaseTransactions')
@@ -44,7 +45,7 @@ test('a user can log in inside the application', async ({ browser }) => {
     .waitForNavigation()
 
   // We expect to be on the homepage
-  await page.assertPath('/')
+  await page.assertHas(antl.formatMessage('main.signout'))
 }).timeout(0)
 
 test('a not activated user can not log in inside the application', async ({ browser }) => {

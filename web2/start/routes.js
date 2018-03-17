@@ -1,22 +1,12 @@
 'use strict'
 
-/*
-|--------------------------------------------------------------------------
-| Routes
-|--------------------------------------------------------------------------
-|
-| Http routes are entry points to your web application. You can create
-| routes for different URL's and bind Controller actions to them.
-|
-| A complete guide on routing is available here.
-| http://adonisjs.com/docs/4.0/routing
-|
-*/
-
 const Route = use('Route')
 
-Route.on('/').render('index')
-
+Route.get('/', async ({ response, session, view }) => {
+  // By redirecting user to page, flash messages are lost. Save them!
+  session.flash(view._locals.flashMessages)
+  return response.route('PageController.show', {path: 'apts'})
+})
 
 // Sign in, out routes
 Route.get('signin', 'SessionController.create')
@@ -28,4 +18,17 @@ Route.get('signup', 'UserController.create')
 Route.post('signup', 'UserController.store').validator('StoreUser')
 Route.get('signup/activate/:token/:key', 'UserController.activate')
 Route.post('signup/activate', 'UserController.storeActivate').validator('ActivateUser')
+
+// Page routes
+Route.get('page/show/:path', 'PageController.show')
+
+Route.group(() => {
+  Route.get('/', 'PageController.index')
+  Route.get('create', 'PageController.create')
+  Route.post('create', 'PageController.store').validator('PageStore')
+  Route.get('edit/:id', 'PageController.edit')
+  Route.post('update/:id', 'PageController.update').validator('PageStore')
+  Route.get('delete/:id', 'PageController.delete')
+}).middleware(['admin']).prefix('page')
+
 

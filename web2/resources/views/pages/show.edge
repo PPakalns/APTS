@@ -1,0 +1,22 @@
+@layout('master.edge')
+
+@section('content')
+  @include('pages/partials/admin-nav')
+  <h1 class="display-4">{{ page.name }}</h1>
+  <p class="lead">
+    {{ page.intro }}
+  </p>
+  <div>
+    <div class="tex2jax_process">
+      {{ markdown(page.description) }}
+    </div>
+  </div>
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        showProcessingMessages: false,
+        tex2jax: { inlineMath: [['$','$']] },
+        TeX: { equationNumbers: {autoNumber: "AMS"} }
+      });
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+@endsection

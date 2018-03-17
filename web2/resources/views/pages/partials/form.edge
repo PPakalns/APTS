@@ -1,0 +1,43 @@
+{{ csrfField() }}
+
+<div class="form-group">
+  <label for="name">{{ antl.formatMessage('main.title') }}</label>
+  <input class="form-control {{ hasErrorFor('name') ? 'is-invalid': '' }}"
+    id="name" type="text" name="name" placeholder="" value="{{ old('name', page.name || '') }}" autofocus>
+  <div class="invalid-feedback">{{ getErrorFor('name') }}</div>
+</div>
+
+<div class="form-group">
+  <label for="intro">{{ antl.formatMessage('main.intro') }}</label>
+  <input class="form-control {{ hasErrorFor('intro') ? 'is-invalid': '' }}"
+    id="intro" type="text" name="intro" placeholder="" value="{{ old('intro', page.intro || '') }}" autofocus>
+  <div class="invalid-feedback">{{ getErrorFor('intro') }}</div>
+</div>
+
+<div class="form-group">
+  <label for="comment">{{ antl.formatMessage('main.comment') }}</label>
+  <input class="form-control {{ hasErrorFor('comment') ? 'is-invalid': '' }}"
+    id="comment" type="text" name="comment" placeholder="" value="{{ old('comment', page.comment || '') }}" autofocus>
+  <div class="invalid-feedback">{{ getErrorFor('comment') }}</div>
+</div>
+
+<div class="form-group">
+  <label for="path">{{ antl.formatMessage('main.path') }}</label>
+  <input class="form-control {{ hasErrorFor('path') ? 'is-invalid': '' }}"
+    id="path" type="text" name="path" placeholder="" value="{{ old('path', page.path || '') }}" autofocus>
+  <div class="invalid-feedback">{{ getErrorFor('path') }}</div>
+</div>
+
+<div class="form-group">
+  <div class="form-check">
+    <input class="form-check-input" id="visible" type="checkbox" name="visible" placeholder="" {{ old('visible', page.visible || page===undefined) ? ' checked' : '' }} autofocus>
+    <label class="form-check-label" for="visible">{{ antl.formatMessage('main.visible') }}</label>
+  </div>
+</div>
+
+<div class="form-group">
+  <label for="description">{{ antl.formatMessage('main.description') }}</label>
+  <textarea class="form-control {{ hasErrorFor('description') ? 'is-invalid': '' }}"
+    id="description" name="description" rows="30">{{ old('description', page.description || '') }}</textarea>
+  <div class="invalid-feedback">{{ getErrorFor('description') }}</div>
+</div>

@@ -1,0 +1,24 @@
+@if(request.roles.admin)
+<ul class="nav justify-content-end">
+  <li style='font-size: 30px'>
+    @if(page.visible)
+    <i class="material-icons">visibility</i>
+    @else
+    <i class="material-icons">visibility_off</i>
+    @endif
+  </li>
+  <li class="nav-item ml-2">
+    <a class="btn btn-dark d-flex align-items-center" href="{{ route('PageController.edit', {id: page.id}) }}">
+      @!component('icon.edit', { size: '25px' })
+      {{ antl.formatMessage('main.edit') }}
+    </a>
+  </li>
+  <li class="nav-item ml-2">
+    <a data-toggle="confirmation" data-title="{{antl.formatMessage('main.delete')}}"
+      class="btn btn-dark d-flex align-items-center trash" href="{{ route('PageController.delete', {id: page.id}) }}">
+      @!component('icon.trash', { size: '25px' })
+      {{ antl.formatMessage('main.delete') }}
+    </a>
+  </li>
+</ul>
+@endif

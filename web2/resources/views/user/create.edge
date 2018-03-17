@@ -6,16 +6,6 @@
       <h4>{{ antl.formatMessage("main.signup") }}</h4>
     </div>
     <div class="card-body">
-      @if(flashMessage('success'))
-        @component('components.alert', { type: 'success', dismissible: true })
-          {{ flashMessage('success') }}
-        @endcomponent
-      @endif
-      @if(flashMessage('error'))
-        @component('components.alert', { type: 'danger', dismissible: true })
-          {{ flashMessage('error') }}
-        @endcomponent
-      @endif
       <form action="{{ route('UserController.create') }}" method="post">
         <div class="form-group">
           <label for="email">{{ antl.formatMessage("main.email") }}</label>

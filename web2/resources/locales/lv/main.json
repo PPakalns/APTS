@@ -17,5 +17,25 @@
   "bad_activation_url": "Slikts aktivācijas url, pārbaudiet vai to atvērāt pareizi!",
 
   "activation_email_subject": "Reģistrācija APTS!",
-  "activation_email_body": "Lai pabeigtu reģistrāciju APTS sistēmā, lūdzu atveriet sekojošo saiti: {DOMAIN}{url}"
+  "activation_email_body": "Lai pabeigtu reģistrāciju APTS sistēmā, lūdzu atveriet sekojošo saiti: {DOMAIN}{url}",
+
+  "no_permissions": "Nav nepieciešamo pilnvaru, lai piekļūtu lapai.",
+
+  "admin": "Administrators",
+  "role": "Loma",
+  "page": "Raksts",
+  "pages": "Raksti",
+  "pages_introduction": "Rakstos varat ievietot pamācībās, paziņojumus, komentārus utml.",
+  "pages_not_available": "Neviena lapa nav izveidota!",
+
+  "create": "Izveidot",
+  "edit": "Labot",
+  "delete": "Dzēst",
+
+  "title": "Nosaukums",
+  "intro": "Ievads",
+  "description": "Saturs",
+  "visible": "Redzams",
+  "path": "Ceļš",
+  "comment": "Komentārs"
 }
