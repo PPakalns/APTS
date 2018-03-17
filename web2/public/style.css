@@ -43,7 +43,7 @@ body {
   padding-left: 15px;
 }
 
-#sidebar ul li a {
+#sidebar ul li a, #sidebar ul li span {
   color: white;
   display: block;
   padding: 8px;

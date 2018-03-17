@@ -3,6 +3,12 @@
 <ul class="list-unstyled components">
   @loggedIn
   <li>
+    <span>{{ antl.formatMessage('main.email') }}: {{ auth.user.email }}</span>
+  </li>
+  <li>
+    <span>{{ elIf('$self', auth.user.student_id, auth.user.student_id) }}</span>
+  </li>
+  <li>
     <a href="{{ route('SessionController.delete') }}">
       {{ antl.formatMessage("main.signout") }}
     </a>

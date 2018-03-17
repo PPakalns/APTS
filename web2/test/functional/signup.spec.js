@@ -9,7 +9,7 @@ const Hash = use('Hash')
 trait('Test/Browser')
 trait('DatabaseTransactions')
 
-test('we can sign up and activate a new user', async ({ browser, assert }) => {
+test('can sign up and activate user through email', async ({ browser, assert }) => {
   Mail.fake()
 
   // Given we are on the sign up page

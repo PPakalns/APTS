@@ -23,9 +23,9 @@ Route.get('signin', 'SessionController.create')
 Route.post('signin', 'SessionController.store')
 Route.get('signout', 'SessionController.delete').middleware('auth')
 
-// User registration routes
+// User sign up routes
 Route.get('signup', 'UserController.create')
-Route.post('signup', 'UserController.store')
+Route.post('signup', 'UserController.store').validator('StoreUser')
 Route.get('signup/activate/:token/:key', 'UserController.activate')
-Route.post('signup/activate', 'UserController.storeActivate')
+Route.post('signup/activate', 'UserController.storeActivate').validator('ActivateUser')
 
