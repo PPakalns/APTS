@@ -5,5 +5,17 @@
   "signup": "Reģistrēties",
   "signout": "Iziet",
   "email": "Epasts",
-  "password": "Parole"
+  "email_confirmation": "Epasts atkārtoti",
+  "password": "Parole",
+  "password_confirmation": "Parole atkārtoti",
+  "missing_credentials": "Nevarēja atrast lietotāju ar dotajiem datiem.",
+
+  "successful_signup": "Reģistrācija bija veiksmīga. Lai pabeigtu reģistrāciju, atveriet saiti, ko saņemsiet epastā.",
+  "successful_user_activation": "Lietotāja reģistrācija ir veiksmīgi pabeigta! Varat ieiet lietotājā!",
+
+  "user_not_activated": "Lūdzu apstipriniet reģistrāciju, atverot uz epast nosūtīto saiti.",
+  "bad_activation_url": "Slikts aktivācijas url, pārbaudiet vai to atvērāt pareizi!",
+
+  "activation_email_subject": "Reģistrācija APTS!",
+  "activation_email_body": "Lai pabeigtu reģistrāciju APTS sistēmā, lūdzu atveriet sekojošo saiti: {DOMAIN}{url}"
 }

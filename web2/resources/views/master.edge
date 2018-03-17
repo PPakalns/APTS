@@ -13,14 +13,18 @@
         <h3>{{ antl.formatMessage("main.APTS") }}</h3>
       </div>
       <ul class="list-unstyled components">
-          <li class="active"><a href="/">{{ antl.formatMessage("main.APTS") }}</a></li>
+          <li><a href="/">{{ antl.formatMessage("main.APTS") }}</a></li>
           <li><a href="#">{{ antl.formatMessage("main.BUJ") }}</a></li>
       </ul>
       @!section('sidebar')
       @include('user/sidebar')
     </div>
     <div id="content">
-      @!section('content')
+      <div id="center-content">
+        <div class="container">
+          @!section('content')
+        </div>
+      </div>
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>

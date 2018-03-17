@@ -25,10 +25,13 @@
     "@adonisjs/framework": "^5.0.4",
     "@adonisjs/ignitor": "^2.0.5",
     "@adonisjs/lucid": "^5.0.2",
+    "@adonisjs/mail": "^3.0.5",
     "@adonisjs/session": "^1.0.20",
     "@adonisjs/shield": "^1.0.6",
+    "@adonisjs/validator": "^5.0.3",
     "@adonisjs/vow": "^1.0.15",
-    "@adonisjs/vow-browser": "^1.0.5"
+    "@adonisjs/vow-browser": "^1.0.5",
+    "rand-token": "^0.4.0"
   },
   "devDependencies": {
     "sqlite3": "^3.1.13"

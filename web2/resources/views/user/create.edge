@@ -1,0 +1,35 @@
+@layout('master.edge')
+
+@section('content')
+  <div class="card">
+    <div class="card-header">
+      <h4>{{ antl.formatMessage("main.signup") }}</h4>
+    </div>
+    <div class="card-body">
+      @if(flashMessage('success'))
+        @component('components.alert', { type: 'success', dismissible: true })
+          {{ flashMessage('success') }}
+        @endcomponent
+      @endif
+      @if(flashMessage('error'))
+        @component('components.alert', { type: 'danger', dismissible: true })
+          {{ flashMessage('error') }}
+        @endcomponent
+      @endif
+      <form action="{{ route('UserController.create') }}" method="post">
+        <div class="form-group">
+          <label for="email">{{ antl.formatMessage("main.email") }}</label>
+          <input class="form-control {{ hasErrorFor('email') ? 'is-invalid' : ''}}" type="text" name="email" id="email" value="{{ old('email', '') }}" autofocus>
+          {{ elIf('<div class="invalid-feedback">$self</div>', getErrorFor('email'), hasErrorFor('email')) }}
+        </div>
+        <div class="form-group">
+          <label for="email_confirmation">{{ antl.formatMessage("main.email_confirmation") }}</label>
+          <input class="form-control {{ hasErrorFor('email_confirmation') ? 'is-invalid' : ''}}" type="text" name="email_confirmation" id="email_confirmation" value="" autofocus>
+          {{ elIf('<div class="invalid-feedback">$self</div>', getErrorFor('email_confirmation'), hasErrorFor('email_confirmation')) }}
+        </div>
+        {{ csrfField() }}
+        <button type="submit" class="btn btn-primary float-right">{{ antl.formatMessage("main.signup") }}</button>
+      </form>
+    </div>
+  </div>
+@endsection

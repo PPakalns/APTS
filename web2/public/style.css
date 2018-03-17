@@ -7,6 +7,13 @@ body {
 
 #content {
   margin-top: 1em;
+  width: 100%;
+  text-align: center;
+}
+
+#content #center-content{
+  display: inline-block;
+  text-align: left;
 }
 
 .wrapper {

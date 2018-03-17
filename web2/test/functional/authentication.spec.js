@@ -46,3 +46,24 @@ test('a user can log in inside the application', async ({ browser }) => {
   // We expect to be on the homepage
   await page.assertPath('/')
 }).timeout(0)
+
+test('a not activated user can not log in inside the application', async ({ browser }) => {
+  // Given we have a non activated user
+  const user = await Factory.model('App/Models/User').create({ password: 'secret', activated: false })
+
+  // And we are on the sign in page
+  const page = await browser.visit('/signin')
+
+  // When we fill and send the sign in form
+  await page
+    .type('[name="email"]', user.email)
+    .type('[name="password"]', 'secret')
+    .submitForm('form')
+    .waitForNavigation()
+
+  // We expect to be on the sign in page
+  await page.assertPath('/signin')
+
+  // And we expect to see an alert message
+  await page.assertExists('div.alert.alert-danger')
+}).timeout(0)

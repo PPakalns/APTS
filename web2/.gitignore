@@ -14,3 +14,4 @@ yarn.lock
 # The development and testing sqlite files
 database/development.sqlite
 database/testing.sqlite
+database/adonis.sqlite
