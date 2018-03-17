@@ -29,6 +29,9 @@ class PageController {
   async store ({ session, request, response }) {
     const data = request.only(['name', 'intro', 'comment', 'description',
                                'path', 'visible'])
+    // visible stores 'on' or undefined
+    data.visible = !!data.visible;
+
     await Page.create(data)
     return response.route('PageController.show', {path: data.path})
   }
@@ -41,6 +44,9 @@ class PageController {
   async update ({ params, session, request, response }) {
     const data = request.only(['name', 'intro', 'comment', 'description',
                                'path', 'visible'])
+    // visible stores 'on' or undefined
+    data.visible = !!data.visible;
+
     const page = await Page.findOrFail(params.id)
     page.merge(data)
     await page.save()
