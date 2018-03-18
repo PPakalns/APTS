@@ -1,6 +1,6 @@
 'use strict'
 
-class StoreGroup {
+class GroupStore {
   get rules () {
     return {
       name: 'required|max:524'
@@ -8,4 +8,4 @@ class StoreGroup {
   }
 }
 
-module.exports = StoreGroup
+module.exports = GroupStore

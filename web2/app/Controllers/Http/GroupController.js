@@ -28,15 +28,28 @@ class GroupController {
                          allGroups: allGroups })
   }
 
-  async show () {
+  async show (ctx) {
+    const group = await Group.findOrFail(ctx.params.id)
+
+    // Check view permissions
+    if ((await Group.checkViewPermission(ctx, group)) == false) {
+      return;
+    }
+
+    // TODO: get visible assignment list
+
+    return ctx.view.render('groups.show', { group: group.toJSON() })
   }
 
   async create () {
   }
+
   async store () {
   }
+
   async edit () {
   }
+
   async update () {
   }
 }

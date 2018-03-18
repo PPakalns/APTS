@@ -15,7 +15,7 @@ class PageController {
     // Hidden pages are visible only by admin
     if (page.visible == false && request.roles.admin == false) {
       session
-        .flash({ success: antl.formatMessage('main.no_permissions') })
+        .flash({ error: antl.formatMessage('main.no_permissions') })
       return response.redirect('back')
     }
 
