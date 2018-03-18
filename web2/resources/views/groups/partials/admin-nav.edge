@@ -10,6 +10,12 @@
         {{ antl.formatMessage('main.edit') }}
       </a>
     </li>
+    <li class="nav-item ml-2">
+      <a class="btn btn-dark d-flex align-items-center" href="{{ route('GroupController.participants', {id: group.id}) }}">
+        @!component('icon.edit', { size: '25px' })
+        {{ antl.formatMessage('main.manage_participants') }}
+      </a>
+    </li>
   </ul>
 </div>
 @endif

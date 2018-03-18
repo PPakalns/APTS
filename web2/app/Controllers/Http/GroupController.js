@@ -1,6 +1,7 @@
 'use strict'
 
 const Group = use('App/Models/Group')
+const User = use('App/Models/User')
 
 class GroupController {
 
@@ -67,6 +68,56 @@ class GroupController {
     await group.save()
 
     return response.route('GroupController.show', {id: group.id})
+  }
+
+  async participants ({ params, view }) {
+    const group = await Group.findOrFail(params.id)
+    await group.load('users')
+
+    let participantIdList = []
+    let participants = group.toJSON().users
+    for (let user of participants) {
+      participantIdList.push(user.id)
+    }
+
+    let candidates = await User.query()
+                               .whereNotIn('id', participantIdList)
+                               .fetch()
+
+    return view.render('groups.participants',
+                       { candidates: candidates.toJSON(),
+                         group: group.toJSON() })
+  }
+
+  async addParticipant ({ params, response, session, antl }) {
+    let group = await Group.findOrFail(params.id)
+    let user = await User.findOrFail(params.user_id)
+
+    if ((await Group.isParticipant(user, group)) == true) {
+      session.flash({ error: antl.formatMessage('main.already_a_participant', user.toJSON()) })
+      return response.redirect('back')
+    }
+
+    await user.groups().attach([group.id])
+
+    session.flash({ success: antl.formatMessage('main.participant_added', user.toJSON()) })
+    return response.redirect('back')
+  }
+
+  async removeParticipant ({ params, session, response, antl }) {
+    let group = await Group.findOrFail(params.id)
+    let user = await User.findOrFail(params.user_id)
+
+    if ((await Group.isParticipant(user, group)) == false) {
+      session
+        .flash({ error: antl.formatMessage('main.already_a_non_participant', user.toJSON()) })
+      return response.redirect('back')
+    }
+
+    await user.groups().detach([group.id])
+
+    session.flash({ success: antl.formatMessage('main.participant_removed', user.toJSON()) })
+    return response.redirect('back')
   }
 }
 

@@ -40,5 +40,11 @@ Route.group(() => {
   Route.post('create', 'GroupController.store').validator('GroupStore')
   Route.get('edit/:id', 'GroupController.edit')
   Route.post('update/:id', 'GroupController.update').validator('GroupStore')
+
+  // Participation management routes
+  Route.get('participants/show/:id', 'GroupController.participants')
+  Route.get('participants/add/:id/:user_id', 'GroupController.addParticipant')
+  Route.get('participants/remove/:id/:user_id', 'GroupController.removeParticipant')
+
 }).middleware(['admin']).prefix('group')
 

@@ -46,5 +46,18 @@
   "my_groups": "Manas grupas",
   "public_groups": "Publiskas grupas",
   "all_groups": "Visas grupas",
-  "public": "Publiska"
+  "public": "Publiska",
+  "participant": "Dalībnieks",
+  "participants": "Dalībnieki",
+  "manage_participants": "Pārvaldīt dalībniekus!",
+  "already_a_participant": "Lietotājs \"{email}\" jau ir grupas dalībnieks!",
+  "already_a_non_participant": "Lietotājam \"{email}\" nav grupas dalībnieka statuss!",
+  "participant_added": "\"{email}\" pievienots grupai, kā dalībnieks!",
+  "participant_removed": "\"{email}\" vairs nav grupas dalībnieks!",
+  "users_not_available": "Nav lietotāju!",
+  "others": "Citi",
+
+  "group_participant_page_introduction": "Grupas dalībnieku pārvaldne",
+  "add": "Pievienot",
+  "remove": "Noņemt"
 }

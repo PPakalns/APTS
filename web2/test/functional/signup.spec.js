@@ -65,5 +65,5 @@ test('can sign up and activate user through email', async ({ browser, assert }) 
   // assert.equal(await Hash.make('secret'), user.password)
 
   Mail.restore()
-})
+}).timeout(4000)
 

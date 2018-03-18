@@ -1,0 +1,40 @@
+<h3 class="display-6">{{ title }}</h3>
+
+@if(users.length > 0)
+  <table class="table table-bordered table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>#</td>
+      <th>Stud. apl. nr.</td>
+      <th>Epasts.</td>
+      <th>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+
+  @each(user in users)
+      <tr>
+        <td>
+          {{ ($loop.index + 1) }}
+        </td>
+        <td>
+          {{ user.student_id || '' }}
+        </td>
+        <td>
+          {{ user.email }}
+        </td>
+        <td>
+          <a href="{{ route(controller, {id: group.id, user_id: user.id}) }}" >
+            {{ action }}
+          </a>
+        </td>
+      </tr>
+  @endeach
+  </tbody>
+  </table>
+@else
+  @component('components.alert', { type: 'info' })
+    {{ antl.formatMessage('main.users_not_available') }}
+  @endcomponent
+@endif

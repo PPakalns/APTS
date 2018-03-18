@@ -66,4 +66,4 @@ test('Priviliged user can write a post', async ({ assert, browser }) => {
   let storedPage = await Page.findBy("name", page.name)
   assert.isNotNull(storedPage)
   assert.equal(!!storedPage.visible, page.visible)
-}).timeout(3000)
+}).timeout(4000)

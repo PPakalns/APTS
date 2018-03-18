@@ -24,11 +24,14 @@
           @endif
           <a href="{{ route('PageController.show', {path: page.path}) }}">
             {{ page.name }}
-            <small class="text-muted">{{ route('PageController.show', {path: page.path}) }}</small>
+            <small class="text-muted font-italic">{{ route('PageController.show', {path: page.path}) }}</small>
           </a>
         </h4>
         <p class="card-text">
           {{{ page.intro }}}
+        </p>
+        <p class="card-text cgray font-italic">
+          {{{ page.comment }}}
         </p>
       </div>
     </div>

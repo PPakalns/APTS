@@ -18,6 +18,14 @@ class Group extends Model {
   }
 
   /**
+   * Returns true if user is participant of group
+   */
+  static async isParticipant(user, group) {
+    let grCnt = await user.groups().where('groups.id', group.id).getCount()
+    return (grCnt > 0)
+  }
+
+  /**
    * Check that user can view this group
    * User can view public groups, groups that he participates in
    * Only adminstrator can view all groups
@@ -31,9 +39,7 @@ class Group extends Model {
       return false;
     // User is signed in and this is not a public group
     // Therefore user must be participant to view this group
-    let user = await auth.getUser()
-    let grCnt = await user.groups().where('groups.id', group.id).getCount()
-    return (grCnt > 0)
+    return await Group.isParticipant(await auth.getUser(), group)
   }
 
   static async checkViewPermission(ctx, group) {
