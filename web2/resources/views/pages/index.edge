@@ -1,28 +1,27 @@
 @layout('master.edge')
 
 @section('content')
-  <div class="jumbotron jumbotron-fluid">
-    <div class="container">
-      <h1 class="display-6">{{ antl.formatMessage('main.pages') }}</h1>
-      <hr class="my-4">
-      <p class="lead">{{ antl.formatMessage('main.pages_introduction') }}</p>
-      <div class="float-right">
-        <a class="btn btn-dark d-flex align-items-center" href="{{ route('PageController.create') }}">
-          @!component('icon.plus', { size: '25px' })
-          {{ antl.formatMessage('main.create') }}
-        </a>
-      </div>
-    </div>
+  <h1 class="display-4">{{ antl.formatMessage('main.pages') }}</h1>
+  <p class="lead">{{ antl.formatMessage('main.pages_introduction') }}</p>
+  @if(request.roles.admin)
+  <div class="float-right">
+    <a class="btn btn-dark d-flex align-items-center" href="{{ route('PageController.create') }}">
+      @!component('icon.plus', { size: '25px' })
+      {{ antl.formatMessage('main.create') }}
+    </a>
   </div>
-
-  <hr class="my-4">
+  <div class="clearfix"></div>
+  @endif
 
   @each(page in pages)
     <div class="card mt-3">
-      @include('pages/partials/admin-nav')
-
       <div class="card-body">
         <h4 class="card-title">
+          @if(request.roles.admin)
+          <i class="material-icons mr-2 cgray" style="font-size: 25px;">
+            {{ (page.visible) ? 'visibility' : 'visibility_off' }}
+          </i>
+          @endif
           <a href="{{ route('PageController.show', {path: page.path}) }}">
             {{ page.name }}
             <small class="text-muted">{{ route('PageController.show', {path: page.path}) }}</small>

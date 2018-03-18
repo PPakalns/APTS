@@ -138,3 +138,11 @@ a, a:hover, a:focus {
   max-width: 100% !important;
   word-wrap: break-word !important;
 }
+
+i.material-icons {
+  vertical-align: middle !important;
+}
+
+.cgray {
+  color: gray;
+}
