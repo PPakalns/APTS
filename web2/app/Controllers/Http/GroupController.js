@@ -41,16 +41,32 @@ class GroupController {
     return ctx.view.render('groups.show', { group: group.toJSON() })
   }
 
-  async create () {
+  async create ({ view }) {
+    return view.render('groups.create')
   }
 
-  async store () {
+  async store ({ request, response }) {
+    const data = request.only(['name', 'description', 'public'])
+    data.public = !!data.public;
+
+    await Group.create(data)
+    return response.route('GroupController.index')
   }
 
-  async edit () {
+  async edit ({ params, view }) {
+    const group = await Group.findOrFail(params.id)
+    return view.render('groups.edit', {group: group.toJSON()})
   }
 
-  async update () {
+  async update ({ request, response, params }) {
+    const data = request.only(['name', 'description', 'public'])
+    data.public = !!data.public;
+
+    const group = await Group.findOrFail(params.id)
+    group.merge(data)
+    await group.save()
+
+    return response.route('GroupController.show', {id: group.id})
   }
 }
 
