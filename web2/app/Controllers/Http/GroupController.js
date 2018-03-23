@@ -50,8 +50,8 @@ class GroupController {
     const data = request.only(['name', 'description', 'public'])
     data.public = !!data.public;
 
-    await Group.create(data)
-    return response.route('GroupController.index')
+    const group = await Group.create(data)
+    return response.route('GroupController.show', {id: group.id})
   }
 
   async edit ({ params, view }) {

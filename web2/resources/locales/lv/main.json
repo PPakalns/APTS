@@ -59,5 +59,10 @@
 
   "group_participant_page_introduction": "Grupas dalībnieku pārvaldne",
   "add": "Pievienot",
-  "remove": "Noņemt"
+  "remove": "Noņemt",
+
+  "problem": "Uzdevums",
+  "problems": "Uzdevumi",
+  "problems_introduction": "APTS ievietotie programmēšanas uzdevumi.",
+  "problems_not_available": "Nav izveidots neviens uzdevums!"
 }

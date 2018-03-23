@@ -3,7 +3,11 @@
 @section('content')
   <h1 class="display-4">{{ antl.formatMessage('main.groups') }}</h1>
   <p class="lead">{{ antl.formatMessage('main.group_participant_page_introduction') }}</p>
-  <h2 class="display-5">{{ antl.formatMessage('main.group') }} : {{ group.name }}</h2>
+  <div class="mb-3">
+    <a href="{{ route('GroupController.show', {id: group.id}) }}">
+      <h2 class="display-5">{{ antl.formatMessage('main.group') }} : {{ group.name }}</h2>
+    </a>
+  </div>
 
   <div class="row">
     <div class="col-sm-6">

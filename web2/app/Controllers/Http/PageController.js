@@ -22,11 +22,11 @@ class PageController {
     return view.render('pages.show', { page: page.toJSON() })
   }
 
-  create ({ view }) {
+  async create ({ view }) {
     return view.render('pages.create')
   }
 
-  async store ({ session, request, response }) {
+  async store ({ request, response }) {
     const data = request.only(['name', 'intro', 'comment', 'description',
                                'path', 'visible'])
     // visible stores 'on' or undefined
@@ -41,7 +41,7 @@ class PageController {
     return view.render('pages.edit', { page: page.toJSON() })
   }
 
-  async update ({ params, session, request, response }) {
+  async update ({ params, request, response }) {
     const data = request.only(['name', 'intro', 'comment', 'description',
                                'path', 'visible'])
     // visible stores 'on' or undefined

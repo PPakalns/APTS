@@ -17,7 +17,7 @@
     <h2 class="display-6">{{ antl.formatMessage('main.my_groups') }}</h2>
     <ul class="list-group">
     @each(group in groups)
-      @include('groups.partials.groupEntry')
+      @include('groups.partials.entry')
     @else
       <li class="list-group-item list-group-item-info">
         {{ antl.formatMessage('main.groups_not_available') }}
@@ -29,7 +29,7 @@
   <h2 class="display-6 mt-4">{{ antl.formatMessage('main.public_groups') }}</h2>
   <ul class="list-group">
   @each(group in publicGroups)
-    @include('groups.partials.groupEntry')
+    @include('groups.partials.entry')
   @else
       <li class="list-group-item list-group-item-info">
         {{ antl.formatMessage('main.groups_not_available') }}
@@ -41,7 +41,7 @@
     <h2 class="display-6 mt-4">{{ antl.formatMessage('main.all_groups') }}</h2>
     <ul class="list-group">
     @each(group in allGroups)
-      @include('groups.partials.groupEntry')
+      @include('groups.partials.entry')
     @else
       <li class="list-group-item list-group-item-info">
         {{ antl.formatMessage('main.groups_not_available') }}

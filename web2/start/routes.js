@@ -48,3 +48,6 @@ Route.group(() => {
 
 }).middleware(['admin']).prefix('group')
 
+// Problem routes
+Route.post('problem/:id/update', 'ProblemController.update').middleware(['admin'])
+Route.resource('problem', 'ProblemController').except(['destroy', 'update']).middleware(['admin'])

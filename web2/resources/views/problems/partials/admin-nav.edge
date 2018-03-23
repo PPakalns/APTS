@@ -1,0 +1,12 @@
+@if(request.roles.admin)
+<div class="col">
+  <ul class="nav justify-content-end">
+    <li class="nav-item ml-2">
+      <a class="btn btn-dark d-flex align-items-center" href="{{ route('ProblemController.edit', {id: problem.id}) }}">
+        @!component('icon.edit', { size: '25px' })
+        {{ antl.formatMessage('main.edit') }}
+      </a>
+    </li>
+  </ul>
+</div>
+@endif

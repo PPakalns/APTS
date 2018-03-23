@@ -1,6 +1,11 @@
 'use strict'
 
 class StoreUser {
+  get sanitizationRules () {
+    return {
+      email: 'normalize_email',
+    }
+  }
   get rules () {
     return {
       email: 'required|email|unique:users|max:250',

@@ -1,0 +1,16 @@
+@layout('master.edge')
+
+@section('content')
+  <div class="card">
+    <div class="card-header">
+      {{ antl.formatMessage('main.create') }} -
+      {{ antl.formatMessage('main.problem') }}
+    </div>
+    <div class="card-body">
+      <form action="{{ route('ProblemController.store') }}" method="POST">
+        @include('problems.partials.form')
+        <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.create') }}</button>
+      </form>
+    </div>
+  </div>
+@endsection
