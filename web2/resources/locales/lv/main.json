@@ -64,5 +64,17 @@
   "problem": "Uzdevums",
   "problems": "Uzdevumi",
   "problems_introduction": "APTS ievietotie programmēšanas uzdevumi.",
-  "problems_not_available": "Nav izveidots neviens uzdevums!"
+  "problems_not_available": "Nav izveidots neviens uzdevums!",
+
+  "testset": "Testkopa",
+  "timelimit": "Laika limits(s)",
+  "memorylimit": "Atmiņas ierobežojums(MiB)",
+  "public_range": "Publisko grupu robežas",
+  "use_files": "Ievads, izvads uz failiem",
+  "input_file": "Ievadfails",
+  "output_file": "Izvadfails",
+
+  "edit_testset": "Labot testkopu",
+  "saved": "Saglabāts!"
 }
+

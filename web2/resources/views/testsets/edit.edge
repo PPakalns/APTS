@@ -1,0 +1,40 @@
+
+@layout('master.edge')
+
+@section('content')
+  <h1 class="display-5">
+    {{ antl.formatMessage('main.edit') }} -
+    {{ antl.formatMessage('main.testset') }}
+  </h1>
+  <h2 class="display-6">
+    {{ antl.formatMessage('main.problem') }}:
+    <a href="{{ route('ProblemController.show', {id: problem.id}) }}">
+      {{ problem.name }}
+    </a>
+  </h2>
+    <div class="card-body">
+      <form action="{{ route('TestsetController.updateRestrictions', {id: testset.id}) }}" method="POST">
+        {{ csrfField() }}
+        @!component('components.input',
+          { label: antl.formatMessage('main.timelimit'), name: 'timelimit', type: 'text', data: testset,
+            getErrorFor, hasErrorFor, old })
+        @!component('components.input',
+          { label: antl.formatMessage('main.memorylimit'), name: 'memory', type: 'text', data: testset,
+            getErrorFor, hasErrorFor, old })
+        @!component('components.input',
+          { label: antl.formatMessage('main.public_range'), name: 'public_range', type: 'text', data: testset,
+            getErrorFor, hasErrorFor, old })
+        @!component('components.input',
+          { label: antl.formatMessage('main.use_files'), name: 'use_files', type: 'checkbox', data: testset,
+            getErrorFor, hasErrorFor, old })
+        @!component('components.input',
+          { label: antl.formatMessage('main.input_file'), name: 'input_file', type: 'text', data: testset,
+            getErrorFor, hasErrorFor, old })
+        @!component('components.input',
+          { label: antl.formatMessage('main.output_file'), name: 'output_file', type: 'text', data: testset,
+            getErrorFor, hasErrorFor, old })
+        <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.edit') }}</button>
+      </form>
+    </div>
+  </div>
+@endsection

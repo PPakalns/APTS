@@ -49,5 +49,19 @@ Route.group(() => {
 }).middleware(['admin']).prefix('group')
 
 // Problem routes
-Route.post('problem/:id/update', 'ProblemController.update').middleware(['admin'])
-Route.resource('problem', 'ProblemController').except(['destroy', 'update']).middleware(['admin'])
+Route.post('problem/:id/update', 'ProblemController.update')
+  .middleware(['admin'])
+  .validator('ProblemStore')
+
+Route.resource('problem', 'ProblemController')
+  .except(['destroy', 'update'])
+  .middleware(['admin'])
+  .validator(new Map([[['problem.store'], ['ProblemStore']]]))
+
+// Testset routes
+Route.group(() => {
+  Route.get('edit/:id', 'TestsetController.edit')
+  Route.post('restrictions/:id', 'TestsetController.updateRestrictions').validator('TestsetRestrictionUpdate')
+  Route.post('checker/:id', 'TestsetController.updateChecker')
+  Route.post('tests/:id', 'TestsetController.updateTests')
+}).middleware(['admin']).prefix('testset')
