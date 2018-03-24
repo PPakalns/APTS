@@ -6,14 +6,20 @@
       placeholder="" {{ old(name, data[name]) ? ' checked' : '' }}
       autofocus>
       <label class="form-check-label" for="{{ name }}">{{ label }}</label>
+      <p class="form-text text-muted">
+        {{ comment || "" }}
+      </p>
       <div class="cred">{{ getErrorFor(name) || "" }}</div>
   </div>
 </div>
 @else
 <div class="form-group">
-  <label for="name">{{ label }}</label>
+  <label for="{{ name }}">{{ label }}</label>
   <input class="form-control {{ hasErrorFor(name) ? 'is-invalid': '' }}"
   id="{{ name }}" type="{{type}}" name="{{ name }}" placeholder="" value="{{ old(name, data[name] || '') }}" autofocus>
+  <p class="form-text text-muted">
+    {{ comment || "" }}
+  </p>
   <div class="invalid-feedback">{{ getErrorFor(name) }}</div>
 </div>
 @endif

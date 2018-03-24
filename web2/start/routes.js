@@ -60,6 +60,8 @@ Route.resource('problem', 'ProblemController')
 
 // Testset routes
 Route.group(() => {
+  Route.get('checker/:id', 'TestsetController.downloadChecker')
+  Route.get('tests/:id', 'TestsetController.downloadTests')
   Route.get('edit/:id', 'TestsetController.edit')
   Route.post('restrictions/:id', 'TestsetController.updateRestrictions').validator('TestsetRestrictionUpdate')
   Route.post('checker/:id', 'TestsetController.updateChecker')

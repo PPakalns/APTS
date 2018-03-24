@@ -75,6 +75,21 @@
   "output_file": "Izvadfails",
 
   "edit_testset": "Labot testkopu",
-  "saved": "Saglabāts!"
+  "saved": "Saglabāts!",
+  "example": "Piemērs",
+  "upload": "Augšupielādēt",
+  "checker": "Čekeris",
+  "checker_description": "Čekeris ir līdz 64KiB liels C++ fails, kas pārbauda, vai atbildes ir pareizas, izmantojot testlib.h.",
+  "download": "Lejupielādēt",
+  "test_zip_archive": "Testu zip arhīvs",
+  "test_zip_archive_description": "Zip arhīvs, kas satur teksta failus pa pāriem. Piemēram: data.i01a data.o01a",
+  "tests": "Testi",
+  "source_code": "Pirmkods",
+  "file_not_provided": "Lūdzu norādiet augšupielādējamo failu!",
+  "zip_bad_file": "Zip fails satur neatbilstošu failu \"{filename}\"",
+  "zip_does_not_contain_inout_files": "Iesūtītais arhīvs testam {testname} nesatur ievadfailu vai izvadfailu!",
+  "zip_empty": "Augšupielādētais zip fails ir tukšs!",
+  "no_tests": "Nav pievienoti testi!",
+  "no_checker": "Nav pievienots čekeris"
 }
 

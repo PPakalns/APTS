@@ -12,6 +12,7 @@
       {{ problem.name }}
     </a>
   </h2>
+  <div class="card">
     <div class="card-body">
       <form action="{{ route('TestsetController.updateRestrictions', {id: testset.id}) }}" method="POST">
         {{ csrfField() }}
@@ -23,18 +24,110 @@
             getErrorFor, hasErrorFor, old })
         @!component('components.input',
           { label: antl.formatMessage('main.public_range'), name: 'public_range', type: 'text', data: testset,
-            getErrorFor, hasErrorFor, old })
+            getErrorFor, hasErrorFor, old,
+            comment: antl.formatMessage('main.example') + ': 1-9,13,14-16' })
         @!component('components.input',
           { label: antl.formatMessage('main.use_files'), name: 'use_files', type: 'checkbox', data: testset,
             getErrorFor, hasErrorFor, old })
         @!component('components.input',
           { label: antl.formatMessage('main.input_file'), name: 'input_file', type: 'text', data: testset,
-            getErrorFor, hasErrorFor, old })
+            getErrorFor, hasErrorFor, old,
+            comment: antl.formatMessage('main.example') + ': data.in' })
         @!component('components.input',
           { label: antl.formatMessage('main.output_file'), name: 'output_file', type: 'text', data: testset,
-            getErrorFor, hasErrorFor, old })
+          getErrorFor, hasErrorFor, old,
+            comment: antl.formatMessage('main.example') + ': data.out' })
         <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.edit') }}</button>
       </form>
+    </div>
+  </div>
+  <div class="card mt-4">
+    <div class="card-body">
+      <form action="{{ route('TestsetController.updateChecker', {id: testset.id}) }}" method="POST" enctype="multipart/form-data">
+        {{ csrfField() }}
+        <label for="checker">{{ antl.formatMessage('main.checker') }}</label>
+        <input class="form-control {{ hasErrorFor('checker') ? 'is-invalid': '' }}"
+          type="file" id="checker" name="checker" accept=".cpp" required>
+        <div class="invalid-feedback">{{ getErrorFor('checker') }}</div>
+        <p class="form-text text-muted">
+          {{ antl.formatMessage('main.checker_description') }}
+        </p>
+        <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.upload') }}</button>
+      </form>
+      @if(testset.checker_id)
+      <hr>
+      <button class="btn btn-info" data-toggle="collapse" data-target="#source_code">{{ antl.formatMessage('main.source_code') }}</button>
+      <a href="{{ route('TestsetController.downloadChecker', {id: testset.id}) }}" class="btn btn-light">{{ antl.formatMessage('main.download') }}</a>
+      <div class="tex2jax_process prettycontent collapse" id="source_code">
+            <pre><code>{{ checker.file }}</code></pre>
+      </div>
+      @else
+      <hr>
+      <div class="p-2 bg-danger">
+        {{ antl.formatMessage("main.no_checker") }}
+      </div>
+      @endif
+    </div>
+  </div>
+
+  <div class="card mt-4">
+    <div class="card-body">
+      <form action="{{ route('TestsetController.updateTests', {id: testset.id}) }}" method="POST" enctype="multipart/form-data">
+        {{ csrfField() }}
+        <label for="tests">{{ antl.formatMessage('main.test_zip_archive') }}</label>
+        <input class="form-control {{ hasErrorFor('tests') ? 'is-invalid': '' }}"
+          type="file" id="tests" name="tests" accept=".zip" required>
+        <div class="invalid-feedback">{{ getErrorFor('tests') }}</div>
+        <p class="form-text text-muted">
+          {{ antl.formatMessage('main.test_zip_archive_description') }}
+        </p>
+        <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.upload') }}</button>
+      </form>
+
+      <hr>
+      @if(testset.zip_id)
+      <a href="{{ route('TestsetController.downloadTests', {id: testset.id}) }}" class="btn btn-light">{{ antl.formatMessage('main.download') }}</a>
+      @endif
+      @if(tests.length)
+        <table class="table table-condensed">
+          <thead>
+            <tr>
+              <th>#</td>
+              <th>Ievadfails</td>
+              <th>Izvadfails</td>
+              <th>Numurs</td>
+              <th>Numurs grupā</td>
+            </tr>
+          </thead>
+          <tbody>
+          @each(test in tests)
+            <tr>
+              <td>
+                {{ $loop.index + 1 }}
+              </td>
+              <td>
+                {{ test.input_file }}
+              </td>
+              <td>
+                {{ test.output_file }}
+              </td>
+              <td>
+                {{ test.tid }}
+              </td>
+              <td>
+                {{ test.gid }}
+              </td>
+            </tr>
+          @endeach
+          </tbody>
+        </table>
+      @else
+        <div class="p-2 bg-danger">
+          {{ antl.formatMessage("main.no_tests") }}
+        </div>
+      @endif
+    </div>
+  </div>
     </div>
   </div>
 @endsection
