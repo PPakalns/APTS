@@ -67,3 +67,12 @@ Route.group(() => {
   Route.post('checker/:id', 'TestsetController.updateChecker')
   Route.post('tests/:id', 'TestsetController.updateTests')
 }).middleware(['admin']).prefix('testset')
+
+// Assignment routes
+Route.get('assignment/:id', 'AssignmentController.show')
+Route.group(() => {
+  Route.get('edit/:group_id', 'AssignmentController.edit')
+  Route.get('add/:group_id/:problem_id', 'AssignmentController.store')
+  Route.post('update/:id', 'AssignmentController.update')
+}).middleware(['admin']).prefix('assignments')
+

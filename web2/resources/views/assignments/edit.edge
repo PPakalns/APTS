@@ -1,0 +1,86 @@
+@layout('master.edge')
+
+@section('content')
+  <h1 class="display-4">{{ antl.formatMessage('main.assignments') }}</h1>
+  <p class="lead">{{ antl.formatMessage('main.assignments_introduction') }}</p>
+  <div class="mb-3">
+    <a href="{{ route('GroupController.show', {id: group.id}) }}">
+      <h2 class="display-5">{{ antl.formatMessage('main.group') }} : {{ group.name }}</h2>
+    </a>
+  </div>
+
+  <div class="card card-default">
+    <div class="card-body">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">{{ antl.formatMessage('main.title') }}</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @each(problem in problems)
+          <tr>
+            <th scope="row">{{ ($loop.index + 1) }}</th>
+            <td>{{ problem.name }}</td>
+            <td>
+              <a href="{{ route('AssignmentController.store', {problem_id: problem.id, group_id: group.id}) }}">
+                {{ antl.formatMessage('main.add') }}
+              </a>
+            </td>
+          </tr>
+          @endeach
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card card-default mt-4">
+    <div class="card-header">{{ antl.formatMessage('main.assignments') }}</div>
+    <div class="card-body">
+      @if(assignments.length == 0)
+        <p class="bg-info p-3">
+          Grupai nav neviena uzdevuma
+        </p>
+      @else
+        <div class="bg-info p-3 m-3">
+          <div>
+            <strong>{{ antl.formatMessage('main.result') }}</strong>:
+            Dalībnieks redz cik testi no cik testiem bija veiksmīgi.
+            Piemēram: "5/10" vai "**2/5", kur "**" norāda, ka rezultāts ir pa publiskajiem testiem.
+          </div>
+          <div>
+            <strong>Detalizēti testi</strong>: Dalībnieks papildus tam, vai tests bija veiksmīgs, redzēs arī čekera paziņojumu attiecīgajam testam.
+          </div>
+        </div>
+        <div class="top-buffer"></div>
+        @each(assignment in assignments)
+          <div class="card card-default mt-3">
+            <div class="card-header">
+              <a href="{{ route('AssignmentController.show', {id: assignment.id}) }}">
+                Uzdevums: {{assignment.problem.name}}
+              </a>
+            </div>
+            <div class="card-body">
+              <form method="post" action="{{ route('AssignmentController.update', {id: assignment.id}) }}">
+                {{ csrfField() }}
+                @!component('components.input',
+                  { label: antl.formatMessage('main.visible'), name: 'visible', type: 'checkbox', data: assignment,
+                    getErrorFor, hasErrorFor, old })
+                @!component('components.input',
+                  { label: antl.formatMessage('main.score_visibility'), name: 'score_visibility', type: 'select',
+                    data: assignment, options: score_vis_type_messages, getErrorFor, hasErrorFor, old })
+                <div class="form-group">
+                  <input type="submit" class="btn btn-primary" value="{{ antl.formatMessage('main.edit') }}">
+                </div>
+              </form>
+            </div>
+          </div>
+        @endeach
+        </div>
+      </div>
+      @endif
+    </div>
+  </div>
+@endsection

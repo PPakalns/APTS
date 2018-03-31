@@ -10,6 +10,8 @@
   "password_confirmation": "Parole atkārtoti",
   "missing_credentials": "Nevarēja atrast lietotāju ar dotajiem datiem.",
 
+  "alert_success": "Operācija izpildīta veiksmīgi!",
+  "alert_exists": "Nevarēja izveidot! Jau eksistē!",
   "successful_signup": "Reģistrācija bija veiksmīga. Lai pabeigtu reģistrāciju, atveriet saiti, ko saņemsiet epastā.",
   "successful_user_activation": "Lietotāja reģistrācija ir veiksmīgi pabeigta! Varat ieiet lietotājā!",
 
@@ -90,6 +92,16 @@
   "zip_does_not_contain_inout_files": "Iesūtītais arhīvs testam {testname} nesatur ievadfailu vai izvadfailu!",
   "zip_empty": "Augšupielādētais zip fails ir tukšs!",
   "no_tests": "Nav pievienoti testi!",
-  "no_checker": "Nav pievienots čekeris"
+  "no_checker": "Nav pievienots čekeris",
+  "score_visibility": "Dalībniekiem redzamie rezultāti",
+
+  "assignments": "Grupas uzdevumi",
+  "assignments_introduction": "Grupas uzdevumu pārvaldība",
+  "manage_assignments": "Pārvaldīt grupas uzdevumus",
+  "result": "Rezultāts",
+  "assignment_vis_0": "Publisko grupu rezultāts, publisko grupu testi detalizēti",
+  "assignment_vis_4": "Pilnais rezultāts, publisko grupu testi detalizēti",
+  "assignment_vis_8": "Pilnais rezultāts, visi testi, publiskie testi detalizēti",
+  "assignment_vis_12": "Pilnais rezultāts, visi testi detalizēti"
 }
 
