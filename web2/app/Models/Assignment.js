@@ -8,6 +8,17 @@ class Assignment extends Model {
     builder.where('visible', 1)
   }
 
+  // Returned value is used to display sidebar with
+  // assignments for the group
+  static async getGroupVisibleAssignments(group) {
+    return (await group
+        .assignments()
+        .with('problem')
+        .where('visible', true)
+        .fetch()
+      ).toJSON()
+  }
+
   submissions () {
     return this.hasMany('App/Models/Submission')
   }

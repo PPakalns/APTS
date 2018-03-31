@@ -32,7 +32,11 @@ class AssignmentController {
     }
 
     return view.render('problems.show',
-      { problem: problem.toJSON(), assignment: assignment.toJSON() })
+      { problem: problem.toJSON(),
+        assignment: assignment.toJSON(),
+        group: group.toJSON(),
+        groupVisibleAssignments: await Assignment.getGroupVisibleAssignments(group),
+      })
   }
 
   async edit({ params, view }) {
@@ -50,6 +54,7 @@ class AssignmentController {
         assignments: assignments.toJSON(),
         score_vis_type_messages,
         problems: problems.toJSON(),
+        groupVisibleAssignments: await Assignment.getGroupVisibleAssignments(group),
       })
   }
 

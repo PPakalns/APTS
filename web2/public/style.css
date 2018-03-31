@@ -58,6 +58,10 @@ body {
   flex-direction: column;
 }
 
+#sidebar ul.purplish {
+  background: #a386D5;
+}
+
 @media only screen and (min-height: 700px) {
   #sidebar {
     position: fixed;
@@ -79,7 +83,7 @@ body {
   margin-bottom: 0px;
 }
 
-#sidebar ul li a, #sidebar ul li span {
+#sidebar>ul>li>a, #sidebar>ul>li>span {
   color: white;
   display: block;
   padding: 8px;
@@ -88,11 +92,20 @@ body {
   line-height: 1.3em;
 }
 
-#sidebar ul li span.small {
+#sidebar>ul>li>span>a {
+  text-decoration: none;
+  color: white;
+}
+
+#sidebar>ul>li>a {
+  padding-left: 25px;
+}
+
+#sidebar>ul>li>span.small {
   font-size: 1em;
 }
 
-#sidebar ul li a:hover {
+#sidebar>ul>li>a:hover {
   color: #7386D5;
   background: #fff;
   text-decoration: none;

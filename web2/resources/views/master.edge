@@ -20,6 +20,7 @@
             <li><a href="{{ route('PageController.show', {path: 'BUJ'}) }}">{{ antl.formatMessage("main.BUJ") }}</a></li>
         </ul>
         @!section('sidebar')
+        @include('assignments.sidebar')
         @if(request.roles.admin)
           @include('admin/sidebar')
         @endif

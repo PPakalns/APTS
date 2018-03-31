@@ -22,6 +22,7 @@
   "activation_email_body": "Lai pabeigtu reģistrāciju APTS sistēmā, lūdzu atveriet sekojošo saiti: {DOMAIN}{url}",
 
   "no_permissions": "Nav nepieciešamo pilnvaru, lai piekļūtu lapai.",
+  "no_assignments": "Grupā nav uzdevumu",
 
   "admin": "Administrators",
   "role": "Loma",
@@ -93,6 +94,7 @@
   "zip_empty": "Augšupielādētais zip fails ir tukšs!",
   "no_tests": "Nav pievienoti testi!",
   "no_checker": "Nav pievienots čekeris",
+  "not_added": "Nav pievienoti",
   "score_visibility": "Dalībniekiem redzamie rezultāti",
 
   "assignments": "Grupas uzdevumi",

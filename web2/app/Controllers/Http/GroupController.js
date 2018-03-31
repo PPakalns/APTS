@@ -1,6 +1,7 @@
 'use strict'
 
 const Group = use('App/Models/Group')
+const Assignment = use('App/Models/Assignment')
 const User = use('App/Models/User')
 
 class GroupController {
@@ -37,9 +38,10 @@ class GroupController {
       return;
     }
 
-    // TODO: get visible assignment list
-
-    return ctx.view.render('groups.show', { group: group.toJSON() })
+    return ctx.view.render('groups.show',
+      { group: group.toJSON(),
+        groupVisibleAssignments: await Assignment.getGroupVisibleAssignments(group),
+      })
   }
 
   async create ({ view }) {
@@ -56,7 +58,10 @@ class GroupController {
 
   async edit ({ params, view }) {
     const group = await Group.findOrFail(params.id)
-    return view.render('groups.edit', {group: group.toJSON()})
+    return view.render('groups.edit',
+      { group: group.toJSON(),
+        groupVisibleAssignments: await Assignment.getGroupVisibleAssignments(group),
+      })
   }
 
   async update ({ request, response, params }) {
@@ -85,8 +90,10 @@ class GroupController {
                                .fetch()
 
     return view.render('groups.participants',
-                       { candidates: candidates.toJSON(),
-                         group: group.toJSON() })
+      { candidates: candidates.toJSON(),
+        group: group.toJSON(),
+        groupVisibleAssignments: await Assignment.getGroupVisibleAssignments(group),
+      })
   }
 
   async addParticipant ({ params, response, session, antl }) {
