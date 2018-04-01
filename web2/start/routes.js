@@ -76,4 +76,5 @@ Route.group(() => {
   Route.post('update/:id', 'AssignmentController.update').validator('AssignmentStore')
 }).middleware(['admin']).prefix('assignments')
 
+Route.get('submission/:id', 'SubmissionController.show').middleware(['auth'])
 Route.get('submissions/:page?', 'SubmissionController.index').middleware(['auth'])

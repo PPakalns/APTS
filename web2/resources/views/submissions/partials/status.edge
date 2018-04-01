@@ -1,4 +1,10 @@
+@if(td)
+<td class="{{ submission.statuscolor }}">
+  {{ submission.statusname }}
+</td>
+@else
 <a href="{{ route('SubmissionController.show', {id: submission.id}) }}"
   class="{{ submission.statuscolor }}">
   {{ submission.statusname }}
 </a>
+@endif

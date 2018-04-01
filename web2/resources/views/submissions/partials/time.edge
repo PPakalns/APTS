@@ -1,10 +1,10 @@
 @if(submission.status >= 2)
   @if(submission.assignment.score_visibility >= 4)
-    {{submission.maxtime}}s
+    {{ round(submission.maxtime, 2) }}s
   @else
-    **{{ submission.public_maxtime }}s
+    **{{ round(submission.public_maxtime, 2) }}s
     @if(request.roles.admin)
-    ({{ submission.maxtime }}s)
+    ({{ round(submission.maxtime, 2) }}s)
     @endif
   @endif
 @endif

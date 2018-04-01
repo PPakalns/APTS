@@ -58,7 +58,7 @@ class Submission extends Model {
     }
 
     testresults () {
-        return this.hasMany('App/Models/Testresult', 'submission_id', 'id')
+        return this.hasMany('App/Models/Testresult', 'id', 'submission_id')
     }
 }
 

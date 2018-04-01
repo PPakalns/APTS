@@ -5,7 +5,7 @@
   {{-- <p class="lead">{{ antl.formatMessage('main.groups_introduction') }}</p> --}}
 
   @!component('submissions.partials.submission_list',
-  { antl, submissions, request,
+  { antl, submissions, show_user: false, request,
     controller_action: 'SubmissionController.index',
      page_param: 'page', params: {}})
 @endsection

@@ -49,8 +49,8 @@
   "my_groups": "Manas grupas",
   "public_groups": "Publiskas grupas",
   "all_groups": "Visas grupas",
-  "public": "Publiska",
-  "private": "Privāta",
+  "public": "Publisks",
+  "private": "Privāts",
   "participant": "Dalībnieks",
   "participants": "Dalībnieki",
   "manage_participants": "Pārvaldīt dalībniekus!",
@@ -107,6 +107,7 @@
   "assignment_vis_8": "Pilnais rezultāts, visi testi, publiskie testi detalizēti",
   "assignment_vis_12": "Pilnais rezultāts, visi testi detalizēti",
 
+  "submission": "Iesūtījums",
   "submissions": "Iesūtījumi",
   "my_submissions": "Mani iesūtījumi",
   "id": "id",
@@ -116,6 +117,18 @@
   "status": "Statuss",
   "memory": "Atmiņa",
   "execution_time": "Izpildes laiks",
-  "no_submissions": "Nav iesūtījumu"
+  "no_submissions": "Nav iesūtījumu",
+  "public_tests": "Publiskie testi",
+  "message": "Izvads",
+  "size": "Izmērs",
+  "type": "Tips",
+  "hidden_for_user": "Dalībniekam slēpta informācija",
+  "public_group": "Publiska grupa",
+  "private_group": "Privāta grupa",
+  "restrictions": "Ierobežojumi",
+  "number": "Numurs",
+  "no_results": "Nav rezultātu",
+  "stderr": "stderr",
+  "system_private_output": "Sistēmas izvads"
 }
 

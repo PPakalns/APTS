@@ -9,7 +9,8 @@
       {{ submission.assignment.group.name }}
     </a>
   </td>
-  <td>
+  @if(show_user)
+  <td class="break-word">
     @if(request.roles.admin)
     <a href="{{ route('UserController.show', {id : submission.user.id}) }}" >
       {{ submission.user.email }}
@@ -18,6 +19,7 @@
     {{ submission.user.email }}
     @endif
   </td>
+  @endif
   <td>
     <a href="{{ route('SubmissionController.show', {id: submission.id}) }}">
       {{ submission.created_at }}

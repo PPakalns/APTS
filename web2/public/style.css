@@ -213,3 +213,44 @@ i.material-icons {
 .c_IE1, .c_IE2, .c_UNKNOWN{
     color: purple;
 }
+
+.break-word {
+  word-wrap: break-word;
+}
+
+.private-result {
+  background-color: #eff1f0;
+}
+
+td.message {
+  overflow-x: auto;
+  max-width: 1px; /* Why dis works */
+}
+
+.simple {
+  overflow: visible;
+}
+
+.rectangle {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
+}
+
+.border {
+  border: 3px dotted black;
+}
+
+.testresult tbody:before {
+    content: "";
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    line-height: 0px;
+    height: 0px;
+    color: transparent;
+}
+
+.testresult .initial {
+  border-top: 2px solid purple;
+}

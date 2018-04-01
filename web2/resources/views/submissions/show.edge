@@ -1,0 +1,152 @@
+@layout('master.edge')
+
+@section('content')
+  <h1 class="display-4">{{ antl.formatMessage('main.submission') }}</h1>
+  <div class="float-right">
+    <h4><b>**{{ antl.formatMessage('main.public_tests') }}</b></h4>
+  </div>
+  <div class="clearfix"></div>
+  @if(request.roles.admin)
+  <div class="float-right">
+    <h4>
+      <div class='rectangle private-result border'>
+      </div>
+      {{ antl.formatMessage('main.hidden_for_user') }}
+    </h4>
+  </div>
+  @endif
+  <table class="table table-bordered table-sm">
+      <thead>
+          <tr>
+              <th colspan=2>{{ antl.formatMessage('main.user') }}</th>
+              <td colspan=8>
+                <span>
+                  <a href="{{ route('UserController.show', {id: submission.user.id}) }}">
+                  {{ submission.user.email }}
+                  </a>
+                </span>
+                <span class="ml-4">
+                  <a href="{{ route('UserController.show', {id: submission.user.id}) }}">
+                  {{ submission.user.student_id }}
+                  </a>
+                </span>
+              </td>
+          </tr>
+          <tr>
+              <th>{{ antl.formatMessage('main.id') }}</th>
+              <th>{{ antl.formatMessage('main.time') }}</th>
+              <th>{{ antl.formatMessage('main.group') }}</th>
+              <th>{{ antl.formatMessage('main.task') }}</th>
+              <th>{{ antl.formatMessage('main.type') }}</th>
+              <th>{{ antl.formatMessage('main.status') }}</th>
+              <th>{{ antl.formatMessage('main.result') }}</th>
+              <th>{{ antl.formatMessage('main.memory') }}</th>
+              <th>{{ antl.formatMessage('main.execution_time') }}</th>
+              <th>{{ antl.formatMessage('main.size') }}</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr>
+              <td>{{ submission.id }}</td>
+              <td>{{ submission.created_at }}</td>
+              <td>
+                  <a href="{{ route('GroupController.show', {id: submission.assignment.group.id }) }}">
+                  {{ submission.assignment.group.name }}
+                  </a>
+              </td>
+              <td>
+                  <a href="{{ route('AssignmentController.show', {id: submission.assignment.id }) }}">
+                  {{ submission.assignment.problem.name }}
+                  </a>
+              </td>
+              <td>{{ submission.type }}</td>
+              @!component('submissions.partials.status', {submission, request, td: true})
+              <td class="c_score">
+              @!component('submissions.partials.score', {submission, request})
+              </td>
+              <td>
+              @!component('submissions.partials.memory', {submission, request})
+              </td>
+              <td>
+              @!component('submissions.partials.time', {submission, request})
+              </td>
+              <td>
+              @!component('submissions.partials.size', {submission, request})
+              </td>
+          </tr>
+          <tr>
+              <td colspan=2>{{ antl.formatMessage('main.message') }}</td>
+              <td colspan=8 class="message"><pre class="simple">{{ truncate(submission.public, 8000) }}</pre></td>
+          </tr>
+          @if(request.roles.admin)
+          <tr class="private-result">
+              <td colspan=2>{{ antl.formatMessage('main.system_private_output') }}</td>
+              <td colspan=8 class="message"><pre class="simple">{{ truncate(submission.private, 1020) }}</pre></td>
+          </tr>
+          @endif
+      </tbody>
+  </table>
+  <button data-toggle="collapse" class="source_code_toggle btn btn-default" data-target="#source_code">Pirmkods</button>
+  <div class="tex2jax_process prettycontent collapse" id="source_code">
+      <pre><code>{{ submission.file.file }}</code></pre>
+  </div>
+  <table class="table table-bordered table-sm mt-2 testresult">
+    <thead>
+      <tr>
+        <th colspan=4 class="text-right">{{ antl.formatMessage('main.restrictions') }}</th>
+        <th>{{ submission.testset.memory || 0 }}Mb</th>
+        <th>{{ submission.testset.timelimit || 0 }}s</th>
+      </tr>
+      <tr>
+        <th>{{ antl.formatMessage('main.group') }}</th>
+        <th>{{ antl.formatMessage('main.number') }}</th>
+        <th>{{ antl.formatMessage('main.status') }}</th>
+        <th>{{ antl.formatMessage('main.result') }}</th>
+        <th>{{ antl.formatMessage('main.memory') }}</th>
+        <th>{{ antl.formatMessage('main.time') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      @each(test in submission.testresults)
+        @if(request.roles.admin || testVisible(test, assignment))
+           <tr class="initial{{ testVisible(test, assignment) ? "" : " private-result" }}">
+            <td>{{ (test.visible) ? "** " : "" }}{{ test.test.tid }}</td>
+            <td>{{ test.test.gid }}</td>
+            <td class="cc_sub {{ (test.status=="OK") ? "c_OK" : "c_CE" }}">
+                {{ test.status }}
+            </td>
+            <td>{{ test.score }}</td>
+            <td>{{ round( test.memory / 1024 / 1024, 2) }}MB</td>
+            <td>{{ round(test.time, 2) }}</td>
+          </tr>
+          @if(request.roles.admin || testDetailed(test, assignment))
+            <tr class="{{ testDetailed(test, assignment) ? "" : "private-result" }}">
+                <td colspan=2 class="text-right">{{ antl.formatMessage('main.message') }}</td>
+                <td colspan=4 class="message"><pre class="simple">{{ test.public || " "}}</pre></td>
+            </tr>
+            @if(test.visible)
+            <tr class="{{ testDetailed(test, assignment) ? "" : "private-result" }}">
+                <td colspan=2 class="text-right">{{ antl.formatMessage('main.stderr') }}</td>
+                <td colspan=4 class="message"><pre class="simple">{{ truncate((test.stderr || " "), 5000) }}</pre></td>
+            </tr>
+            @endif
+          @endif
+          @if(request.roles.admin)
+            <tr class="private-result">
+              <td colspan=2 class="text-right">{{ antl.formatMessage('main.system_private_output') }}</td>
+              <td colspan=4 class="message"><pre class="simple">{{ test.private || " " }}</pre></td>
+            </tr>
+          @endif
+        @endif
+      @else
+      <tr>
+        <td colspan=6>
+          {{ antl.formatMessage('main.no_results') }}
+        </td>
+      </tr>
+      @endeach
+    </tbody>
+  </table>
+@endsection
+
+

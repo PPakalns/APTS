@@ -29,6 +29,7 @@
         @!component('components.input',
           { label: antl.formatMessage('main.use_files'), name: 'use_files', type: 'checkbox', data: testset,
             getErrorFor, hasErrorFor, old })
+        <div>
         @!component('components.input',
           { label: antl.formatMessage('main.input_file'), name: 'input_file', type: 'text', data: testset,
             getErrorFor, hasErrorFor, old,
@@ -37,6 +38,7 @@
           { label: antl.formatMessage('main.output_file'), name: 'output_file', type: 'text', data: testset,
           getErrorFor, hasErrorFor, old,
             comment: antl.formatMessage('main.example') + ': data.out' })
+        </div>
         <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.edit') }}</button>
       </form>
     </div>

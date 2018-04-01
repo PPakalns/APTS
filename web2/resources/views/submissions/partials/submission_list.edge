@@ -1,10 +1,12 @@
-<div class="pull-right bold">**Publiskie testi</div>
-<table class="table">
+<div class="float-right font-weight-bold">**{{ antl.formatMessage('main.public_tests') }}</div>
+<table class="table table-sm">
   <thead>
     <tr>
       <th>{{ antl.formatMessage('main.id') }}</th>
       <th>{{ antl.formatMessage('main.group') }}</th>
-      <th>{{ antl.formatMessage('main.user') }}</th>
+      @if(show_user)
+      <th class="break-word">{{ antl.formatMessage('main.user') }}</th>
+      @endif
       <th>{{ antl.formatMessage('main.time') }}</th>
       <th>{{ antl.formatMessage('main.task') }}</th>
       <th>{{ antl.formatMessage('main.status') }}</th>
@@ -16,10 +18,10 @@
   <tbody>
     @each(submission in submissions.data)
       @!component('submissions.partials.row',
-        { submission, request })
+        { submission, request, show_user })
     @else
     <tr>
-      <td colspan=9 class="bg-info">
+      <td colspan={{ (show_user) ? 9 : 8 }} class="bg-info">
         {{ antl.formatMessage('main.no_submissions') }}
       </td>
     </td>
@@ -50,29 +52,29 @@
 @if(request.roles.admin)
 <div class="float-right border">
   <div>
-    <div class='rectangle sub_wait'>
+    <div class='rectangle sub_wait border'>
+    </div>
     Gaida testēšanu
-    </div>
   </div>
   <div>
-    <div class='rectangle sub_public_testing'>
+    <div class='rectangle sub_public_testing border'>
+    </div>
     Publisko testu testēšana
-    </div>
   </div>
   <div>
-    <div class='rectangle sub_wait_nonpublic_testing'>
+    <div class='rectangle sub_wait_nonpublic_testing border'>
+    </div>
     Pabeigta publisko testu testēšana
-    </div>
   </div>
   <div>
-    <div class='rectangle sub_nonpublic_testing'>
+    <div class='rectangle sub_nonpublic_testing border'>
+    </div>
     Ne publisko testu testēšana
-    </div>
   </div>
   <div>
-    <div class='rectangle'>
-    Testēšana pabeigta
+    <div class='rectangle border'>
     </div>
+    Testēšana pabeigta
   </div>
 </div>
 @endif

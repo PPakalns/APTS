@@ -8,6 +8,17 @@ hooks.after.providersBooted(() => {
   View.global('markdown', function (text) {
     return this.safe(marked(text, {sanitize: true}))
   })
+  View.global('round', function(val, places) {
+    return Number(val).toFixed(places)
+  })
+
+  View.global('testVisible', function(test, assignment) {
+    return (test.visible || assignment.score_visibility >= 8)
+  })
+  View.global('testDetailed', function(test, assignment) {
+    return (test.visible || assignment.score_visibility >= 12)
+  })
+
   View.global('paginator', function (submissions, page_param, params) {
     let range = 3
     let pageDict = {1: true}
