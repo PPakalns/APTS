@@ -1,7 +1,4 @@
 <li class="list-group-item">
-  @if(request.roles.admin)
-  <i class="material-icons cgray mr-2">{{ (group.public) ? 'visibility' : 'visibility_off' }}</i>
-  @endif
   <a href="{{ route('GroupController.show', {id: group.id}) }}">
     {{ group.name }}
   </a>

@@ -1,0 +1,10 @@
+@if(submission.status >= 2)
+  @if(submission.assignment.score_visibility  >= 4)
+    {{ (submission.maxmemory / 1024 / 1024) }}Mb
+  @else
+    **{{ (submission.public_maxmemory / 1024 / 1024) }}Mb
+    @if(request.roles.admin)
+    ({{ (submission.maxmemory / 1024 / 1024) }}Mb)
+    @endif
+  @endif
+@endif

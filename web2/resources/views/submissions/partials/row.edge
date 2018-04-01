@@ -1,0 +1,43 @@
+<tr class="@!component('submissions.partial.trclass', { submission })">
+  <td>
+    <a href="{{ route('SubmissionController.show', {id: submission.id}) }}">
+      {{ submission.id }}
+    </a>
+  </td>
+  <td>
+    <a href="{{ route('GroupController.show', {id: submission.assignment.group.id }) }}">
+      {{ submission.assignment.group.name }}
+    </a>
+  </td>
+  <td>
+    @if(request.roles.admin)
+    <a href="{{ route('UserController.show', {id : submission.user.id}) }}" >
+      {{ submission.user.email }}
+    </a>
+    @else
+    {{ submission.user.email }}
+    @endif
+  </td>
+  <td>
+    <a href="{{ route('SubmissionController.show', {id: submission.id}) }}">
+      {{ submission.created_at }}
+    </a>
+  </td>
+  <td>
+    <a href="{{ route('AssignmentController.show', {id: submission.assignment.id }) }}">
+      {{ submission.assignment.problem.name }}
+    </a>
+  </td>
+  <td>
+    @!component('submissions.partials.status', { submission, request })
+  </td>
+  <td class="c_score">
+    @!component('submissions.partials.score', { submission, request })
+  </td>
+  <td>
+    @!component('submissions.partials.memory', { submission, request })
+  </td>
+  <td>
+    @!component('submissions.partials.time', { submission, request })
+  </td>
+</tr>

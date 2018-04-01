@@ -1,0 +1,18 @@
+@if(submission.status >= 2)
+  @if(submission.assignment.score_visibility >= 4)
+    @if(submission.score || submission.score==0)
+        {{ (submission.testing_stage != 16) ? "**" : "" }}{{ submission.score }}/{{ submission.maxscore }}
+    @endif
+  @else
+    @if(submission.public_score || submission.public_score==0)
+    **{{ submission.public_score }}/{{ submission.public_maxscore }}
+    @endif
+    @if(request.roles.admin)
+      @if(submission.score || submission.score==0)
+        <span style="font-style: italic; font-weight: normal;">
+          ({{ submission.score }}/{{ submission.maxscore }})
+        </span>
+      @endif
+    @endif
+  @endif
+@endif

@@ -1,0 +1,78 @@
+<div class="pull-right bold">**Publiskie testi</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th>{{ antl.formatMessage('main.id') }}</th>
+      <th>{{ antl.formatMessage('main.group') }}</th>
+      <th>{{ antl.formatMessage('main.user') }}</th>
+      <th>{{ antl.formatMessage('main.time') }}</th>
+      <th>{{ antl.formatMessage('main.task') }}</th>
+      <th>{{ antl.formatMessage('main.status') }}</th>
+      <th>{{ antl.formatMessage('main.result') }}</th>
+      <th>{{ antl.formatMessage('main.memory') }}</th>
+      <th>{{ antl.formatMessage('main.execution_time') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    @each(submission in submissions.data)
+      @!component('submissions.partials.row',
+        { submission, request })
+    @else
+    <tr>
+      <td colspan=9 class="bg-info">
+        {{ antl.formatMessage('main.no_submissions') }}
+      </td>
+    </td>
+    @endeach
+  </tbody>
+</table>
+
+<nav aria-label="list of submission pages">
+  <ul class="pagination justify-content-center">
+    @each(page in paginator(submissions, page_param, params))
+    @if(page.link)
+    <li class="page-item {{ (page.active) ? "active" : "" }}">
+      <a class="page-link" href="{{ route(controller_action, page.params) }}">
+        {{ page.text }}
+      </a>
+    </li>
+    @else
+    <li class="page-item disabled">
+      <a href="#" class="page-link">
+        {{ page.text }}
+      </a>
+    </li>
+    @endif
+    @endeach
+  </ul>
+</nav>
+
+@if(request.roles.admin)
+<div class="float-right border">
+  <div>
+    <div class='rectangle sub_wait'>
+    Gaida testēšanu
+    </div>
+  </div>
+  <div>
+    <div class='rectangle sub_public_testing'>
+    Publisko testu testēšana
+    </div>
+  </div>
+  <div>
+    <div class='rectangle sub_wait_nonpublic_testing'>
+    Pabeigta publisko testu testēšana
+    </div>
+  </div>
+  <div>
+    <div class='rectangle sub_nonpublic_testing'>
+    Ne publisko testu testēšana
+    </div>
+  </div>
+  <div>
+    <div class='rectangle'>
+    Testēšana pabeigta
+    </div>
+  </div>
+</div>
+@endif

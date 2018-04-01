@@ -1,8 +1,14 @@
 @if(request.roles.admin)
 <div class="col">
   <ul class="nav justify-content-end">
-    <li>
-      <i class="material-icons" style="font-size: 25px;">{{ (group.public) ? 'visibility' : 'visibility_off' }}</i>
+    <li class="nav-item m-1">
+      <button class="btn btn-outline-secondary" disabled>
+      @if(group.public)
+      ({{ antl.formatMessage('main.public') }})
+      @else
+      ({{ antl.formatMessage('main.private') }})
+      @endif
+      </button>
     </li>
     <li class="nav-item m-1">
       <a class="btn btn-dark d-flex align-items-center" href="{{ route('GroupController.edit', {id: group.id}) }}">

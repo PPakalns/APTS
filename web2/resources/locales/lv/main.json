@@ -50,6 +50,7 @@
   "public_groups": "Publiskas grupas",
   "all_groups": "Visas grupas",
   "public": "Publiska",
+  "private": "Privāta",
   "participant": "Dalībnieks",
   "participants": "Dalībnieki",
   "manage_participants": "Pārvaldīt dalībniekus!",
@@ -104,6 +105,17 @@
   "assignment_vis_0": "Publisko grupu rezultāts, publisko grupu testi detalizēti",
   "assignment_vis_4": "Pilnais rezultāts, publisko grupu testi detalizēti",
   "assignment_vis_8": "Pilnais rezultāts, visi testi, publiskie testi detalizēti",
-  "assignment_vis_12": "Pilnais rezultāts, visi testi detalizēti"
+  "assignment_vis_12": "Pilnais rezultāts, visi testi detalizēti",
+
+  "submissions": "Iesūtījumi",
+  "my_submissions": "Mani iesūtījumi",
+  "id": "id",
+  "user": "Lietotājs",
+  "time": "Laiks",
+  "task": "Uzdevums",
+  "status": "Statuss",
+  "memory": "Atmiņa",
+  "execution_time": "Izpildes laiks",
+  "no_submissions": "Nav iesūtījumu"
 }
 

@@ -163,3 +163,53 @@ i.material-icons {
 .cred {
   color: red;
 }
+
+/* Testing stage colors */
+.sub_wait{
+    background-color: #fa8af2;
+}
+
+.sub_public_testing{
+    background-color: lightpink;
+}
+
+.sub_wait_nonpublic_testing{
+    background-color: #ffff70;
+}
+
+.sub_nonpublic_testing{
+    background-color: lightgreen;
+}
+
+/* Submission colors */
+.cc{
+    font-weight: bolder;
+}
+
+.cc_sub{
+    font-weight: bolder;
+}
+
+.c_score{
+    font-weight: bolder;
+}
+
+.c_OK{
+    color: darkgreen;
+}
+
+.c_CE{
+    color: RED;
+}
+
+.c_WAIT{
+    color: black;
+}
+
+.c_TESTING{
+    color: darkblue;
+}
+
+.c_IE1, .c_IE2, .c_UNKNOWN{
+    color: purple;
+}

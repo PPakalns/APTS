@@ -73,6 +73,7 @@ Route.get('assignment/:id', 'AssignmentController.show')
 Route.group(() => {
   Route.get('edit/:group_id', 'AssignmentController.edit')
   Route.get('add/:group_id/:problem_id', 'AssignmentController.store')
-  Route.post('update/:id', 'AssignmentController.update')
+  Route.post('update/:id', 'AssignmentController.update').validator('AssignmentStore')
 }).middleware(['admin']).prefix('assignments')
 
+Route.get('submissions/:page?', 'SubmissionController.index').middleware(['auth'])

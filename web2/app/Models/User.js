@@ -47,6 +47,9 @@ class User extends Model {
       ).pivotTable('user_group')
   }
 
+  submissions () {
+      return this.hasMany('App/Models/Submission', 'id', 'user_id')
+  }
 }
 
 module.exports = User
