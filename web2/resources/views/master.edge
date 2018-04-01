@@ -15,13 +15,13 @@
           <li><span><h3>{{ antl.formatMessage("main.APTS") }}</h3></span></li>
           <li><a href="/">{{ antl.formatMessage("main.APTS") }}</a></li>
           <li><a href="{{ route('GroupController.index') }}">{{ antl.formatMessage("main.groups") }}</a></li>
+          @include('assignments.sidebar')
           @loggedIn
           <li><a href="{{ route('SubmissionController.index') }}">{{ antl.formatMessage("main.submissions") }}</a></li>
           @endloggedIn
           <li><a href="{{ route('PageController.show', {path: 'BUJ'}) }}">{{ antl.formatMessage("main.BUJ") }}</a></li>
         </ul>
         @!section('sidebar')
-        @include('assignments.sidebar')
         @if(request.roles.admin)
           @include('admin/sidebar')
         @endif

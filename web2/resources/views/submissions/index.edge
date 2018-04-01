@@ -2,7 +2,6 @@
 
 @section('content')
   <h1 class="display-4">{{ antl.formatMessage('main.my_submissions') }}</h1>
-  {{-- <p class="lead">{{ antl.formatMessage('main.groups_introduction') }}</p> --}}
 
   @!component('submissions.partials.submission_list',
   { antl, submissions, show_user: false, request,

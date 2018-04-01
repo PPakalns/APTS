@@ -45,6 +45,22 @@ class SubmissionController {
 
     return view.render('submissions.index', { submissions: submissions.toJSON() })
   }
+
+  async indexAll({params, auth, view}) {
+    let page = sanitizor.toInt(params.page, 10)
+    page = isNaN(page) ? 1 : Math.max(page, 1)
+
+    let submissions = await Submission
+      .query()
+      .with('assignment.group')
+      .with('assignment.problem')
+      .with('user')
+      .orderBy('id', 'desc')
+      .paginate(page, 20)
+
+    return view.render('submissions.indexAll', { submissions: submissions.toJSON() })
+  }
+
 }
 
 module.exports = SubmissionController

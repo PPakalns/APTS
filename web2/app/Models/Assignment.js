@@ -4,10 +4,6 @@ const Model = use('Model')
 
 class Assignment extends Model {
 
-  static scopeVisible (builder) {
-    builder.where('visible', 1)
-  }
-
   // Returned value is used to display sidebar with
   // assignments for the group
   static async getGroupVisibleAssignments(group) {

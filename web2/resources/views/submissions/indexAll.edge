@@ -1,0 +1,11 @@
+@layout('master.edge')
+
+@section('content')
+  <h1 class="display-4">{{ antl.formatMessage('main.submissions') }}</h1>
+  <p class="lead">{{ antl.formatMessage('main.all_submissions') }}</p>
+
+  @!component('submissions.partials.submission_list',
+  { antl, submissions, show_user: true, request,
+    controller_action: 'SubmissionController.indexAll',
+     page_param: 'page', params: {}})
+@endsection

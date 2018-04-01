@@ -60,7 +60,6 @@ class GroupController {
     const group = await Group.findOrFail(params.id)
     return view.render('groups.edit',
       { group: group.toJSON(),
-        groupVisibleAssignments: await Assignment.getGroupVisibleAssignments(group),
       })
   }
 
@@ -92,7 +91,6 @@ class GroupController {
     return view.render('groups.participants',
       { candidates: candidates.toJSON(),
         group: group.toJSON(),
-        groupVisibleAssignments: await Assignment.getGroupVisibleAssignments(group),
       })
   }
 

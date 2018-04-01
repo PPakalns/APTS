@@ -35,7 +35,6 @@ class AssignmentController {
       { problem: problem.toJSON(),
         assignment: assignment.toJSON(),
         group: group.toJSON(),
-        groupVisibleAssignments: await Assignment.getGroupVisibleAssignments(group),
       })
   }
 
@@ -54,7 +53,6 @@ class AssignmentController {
         assignments: assignments.toJSON(),
         score_vis_type_messages,
         problems: problems.toJSON(),
-        groupVisibleAssignments: await Assignment.getGroupVisibleAssignments(group),
       })
   }
 

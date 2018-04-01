@@ -28,7 +28,7 @@ html, body {
 }
 
 #footer div{
-  opacity: 0.3;
+  opacity: 0.4;
   transition: all 0.3s;
 }
 
@@ -74,7 +74,7 @@ html, body {
   justify-content: space-between;
 }
 
-#sidebar ul.purplish {
+#sidebar ul li.purplish {
   background: #a386D5;
 }
 
@@ -126,7 +126,7 @@ html, body {
 }
 
 #sidebar>ul>li>a {
-  padding-left: 25px;
+  padding-left: 15px;
 }
 
 #sidebar>ul>li>span.small {
@@ -223,7 +223,15 @@ i.material-icons {
 }
 
 .break-word {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
   word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
 }
 
 .private-result {

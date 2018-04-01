@@ -77,4 +77,6 @@ Route.group(() => {
 }).middleware(['admin']).prefix('assignments')
 
 Route.get('submission/:id', 'SubmissionController.show').middleware(['auth'])
+Route.get('submissions/all/:page?', 'SubmissionController.indexAll').middleware(['admin'])
 Route.get('submissions/:page?', 'SubmissionController.index').middleware(['auth'])
+

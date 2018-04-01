@@ -1,12 +1,10 @@
-@if(groupVisibleAssignments)
-<ul class="list-unstyled components purplish">
-  <li>
-    <a class="pl-2" href="{{ route('GroupController.show', {id: group.id}) }}">{{ group.name }}</a>
+@if(group)
+  <li class="purplish">
+    <a class="pl-4" href="{{ route('GroupController.show', {id: group.id}) }}">{{ group.name }}</a>
   </li>
   @if(assignment)
-  <li >
-    <a class="pl-4" href="{{ route('AssignmentController.show', {id: assignment.id}) }}">{{ problem.name }}</a>
+  <li class="purplish">
+    <a class="pl-5" href="{{ route('AssignmentController.show', {id: assignment.id}) }}">{{ problem.name }}</a>
   </li>
   @endif
-</ul>
 @endif
