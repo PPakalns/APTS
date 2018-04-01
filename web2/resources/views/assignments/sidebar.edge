@@ -1,23 +1,12 @@
 @if(groupVisibleAssignments)
-<div class="spacer"></div>
 <ul class="list-unstyled components purplish">
   <li>
-    <span>
-      <a href="{{ route('GroupController.show', {id: group.id}) }}">{{ group.name }}</a>
-    </span>
+    <a class="pl-2" href="{{ route('GroupController.show', {id: group.id}) }}">{{ group.name }}</a>
   </li>
-  @each(assignment in groupVisibleAssignments)
-  <li>
-    <a href="{{ route('AssignmentController.show', {id: assignment.id}) }}">
-      {{ assignment.problem.name }}
-    </a>
+  @if(assignment)
+  <li >
+    <a class="pl-4" href="{{ route('AssignmentController.show', {id: assignment.id}) }}">{{ problem.name }}</a>
   </li>
-  @else
-  <li>
-    <span class="font-italic">
-      {{ antl.formatMessage("main.no_assignments") }}
-    </span>
-  </li>
-  @endeach
+  @endif
 </ul>
 @endif

@@ -5,7 +5,10 @@
   <div class="card">
     <div class="card-header">
       {{ antl.formatMessage('main.edit') }} -
-      {{ antl.formatMessage('main.problem') }}
+      {{ antl.formatMessage('main.problem') }} -
+      <a href="{{ route('ProblemController.show', {id: problem.id}) }}">
+        {{ problem.name }}
+      </a>
     </div>
     <div class="card-body">
       <form action="{{ route('ProblemController.update', {id: problem.id}) }}" method="POST">

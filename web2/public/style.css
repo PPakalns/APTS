@@ -1,27 +1,47 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
-body {
+html, body {
   font-family: 'Poppins', sans-serif;
   background: #fafafa;
-  min-height: 700px;
+  min-height: 100vh;
 }
 
 #content {
-  margin-top: 1em;
-  width: 100%;
+  min-height: 100vh;
   text-align: center;
+  flex-grow: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 #content #center-content{
-  display: inline-block;
+  margin-top: 1em;
   text-align: left;
 }
 
+#footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+#footer div{
+  opacity: 0.3;
+  transition: all 0.3s;
+}
+
+#footer div:hover {
+  opacity: 1;
+}
+
 .wrapper {
-  min-height: 700px;
+  min-height: 100vh;
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: row;
   align-items: stretch;
 }
 
@@ -32,6 +52,8 @@ body {
   background: #7386D5;
   color: #fff;
   transition: all 0.3s;
+  flex-grow: 0;
+  box-shadow: 0px 0px 10px black;
 }
 
 #center-content {
@@ -42,24 +64,24 @@ body {
   min-width: 100%;
 }
 
-@media only screen and (min-width: 800px) {
-  #center-content{
-    min-width: 600px;
-    max-width: 80%;
-    width: 70%;
-  }
-}
-
 #sidebar {
   background: #7386D5;
   width: 200px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
 }
 
 #sidebar ul.purplish {
   background: #a386D5;
+}
+
+@media only screen and (max-width: 950px) {
+  #apts_foot {
+    display: none;
+  }
 }
 
 @media only screen and (min-height: 700px) {
@@ -70,13 +92,15 @@ body {
   }
 }
 
-#sidebar .spacer{
+.spacer{
   flex-grow: 1;
+  flex-shrink: 1;
 }
 
-.sidebar-header {
-  padding: 7px;
-  padding-left: 15px;
+.vflex {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 #sidebar ul {
@@ -90,6 +114,10 @@ body {
   padding-left: 15px;
   font-size: 1.2em;
   line-height: 1.3em;
+}
+
+#sidebar>ul>li>span {
+  overflow-x: hidden;
 }
 
 #sidebar>ul>li>span>a {
@@ -117,34 +145,14 @@ a, a:hover, a:focus {
   transition: all 0.3s;
 }
 
-#content {
-  padding: 20px;
-}
-
 .card-header h4 {
   margin: 0px;
-}
-
-#github {
-  position: fixed;
-  z-index: 1;
-  right: 0px;
-  bottom: -70px;
-  opacity:0;
-  transition: all 1s;
 }
 
 #github a {
   display: inline-block;
   text-decoration: none;
   padding: 10px;
-}
-
-@media only screen and (min-height: 400px) and (min-width: 1000px) {
-  #github {
-    opacity:1;
-    bottom: 0px;
-  }
 }
 
 .col-auto {
@@ -253,4 +261,14 @@ td.message {
 
 .testresult .initial {
   border-top: 2px solid purple;
+}
+
+.md-float-right {
+  float: right;
+}
+
+@media only screen and (max-width: 800px) {
+  .md-float-right{
+    float: none;
+  }
 }

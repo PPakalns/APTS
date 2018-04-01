@@ -1,18 +1,16 @@
-
-<div class="spacer"></div>
 <ul class="list-unstyled components">
   @loggedIn
   <li>
-    <span>{{ antl.formatMessage('main.email') }}: {{ auth.user.email }}</span>
+    <span class="small">{{ antl.formatMessage('main.email') }}: {{ auth.user.email }}</span>
   </li>
   @if(auth.user.student_id)
   <li>
-    <span>{{ auth.user.student_id }}</span>
+    <span class="small">{{ auth.user.student_id }}</span>
   </li>
   @endif
   @if(request.roles.admin)
   <li>
-    <span>{{ antl.formatMessage('main.role') }}: {{ antl.formatMessage('main.admin') }}</span>
+    <span class="small">{{ antl.formatMessage('main.role') }}: {{ antl.formatMessage('main.admin') }}</span>
   </li>
   @endif
   <li>
@@ -32,10 +30,5 @@
     </a>
   </li>
   @endloggedIn
-  <li style="height: 20px;">
-  </li>
-  <li>
-    <span class="small">(c) Pēteris Pakalns</span>
-  </li>
 </ul>
 
