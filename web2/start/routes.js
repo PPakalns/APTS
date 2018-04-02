@@ -47,7 +47,7 @@ Route.group(() => {
   Route.get('participants/show/:id', 'GroupController.participants')
   Route.get('participants/add/:id/:user_id', 'GroupController.addParticipant')
   Route.get('participants/remove/:id/:user_id', 'GroupController.removeParticipant')
-
+  Route.post('participants/import/:id', 'GroupController.importParticipantCSV').validator('ParticipantImport')
 }).middleware(['admin']).prefix('group')
 
 // Problem routes

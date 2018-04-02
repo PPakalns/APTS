@@ -1,6 +1,8 @@
 'use strict'
 
 const Model = use('Model')
+const Event = use('Event')
+const Token = require('rand-token').generate;
 
 class User extends Model {
   static boot () {
@@ -15,6 +17,20 @@ class User extends Model {
 
   static get hidden () {
     return ['password']
+  }
+
+  static async newUser(email) {
+    const LEN_KEY = 48
+    let user = new User()
+    user.email = email
+    user.activated = false
+    user.email_change_hash = String(Token(LEN_KEY))
+    user.email_change_time = new Date()
+    await user.save()
+
+    // Fire event for registration email etc
+    Event.fire('new:user', user)
+    return user
   }
 
   tokens () {

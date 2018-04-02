@@ -3,6 +3,12 @@
 const Group = use('App/Models/Group')
 const Assignment = use('App/Models/Assignment')
 const User = use('App/Models/User')
+const File = use('App/Models/File')
+const Validator = use('Validator')
+const Antl = use('Antl')
+
+const fs = require('fs')
+const CsvParse = require('csv-parse')
 
 class GroupController {
 
@@ -124,6 +130,96 @@ class GroupController {
     session.flash({ success: antl.formatMessage('main.participant_removed', user.toJSON()) })
     return response.redirect('back')
   }
+
+  async importParticipantCSV(ctx) {
+    let { params, request, session, response, antl } = ctx
+    let group = await Group.findOrFail(params.id)
+    let data = await request.only(['student_id', 'email'])
+
+    let csv = await File.upload(ctx, 'csv', ['text', 'text/csv'], false, '10MB')
+    if (!csv) {
+      return
+    }
+
+    let stats = null
+
+    try {
+      stats = await parseCsv(csv, data.student_id, data.email)
+    } catch (error) {
+      await csv.delete()
+      session.flash({ error: error.message || error })
+      return response.redirect('back')
+    }
+    await csv.delete()
+
+    let existing_users = 0, created_users = 0, added_to_group = 0, updated_student_id = 0
+
+    for (let cuser of stats.data) {
+      let user = await User.findBy('email', cuser.email)
+      if (user) {
+        existing_users += 1
+      } else {
+        user = await User.newUser(cuser.email)
+        created_users += 1
+      }
+
+      if (cuser.student_id && user.student_id != cuser.student_id) {
+        user.student_id = cuser.student_id
+        updated_student_id += 1
+        await user.save()
+      }
+
+      const isowned = (await group.users().where("users.id", user.id).fetch()).size()
+      if (!isowned) {
+        added_to_group += 1
+        await group.users().attach([user.id])
+      }
+    }
+
+    session
+      .flash({ success: antl.formatMessage('main.csv_imported',
+        {existing_users, created_users, added_to_group, updated_student_id }) })
+    return response.redirect('back')
+  }
+}
+
+function parseCsv(file, student_id_column, email_column) {
+  return new Promise(function(resolve, reject) {
+  let stats = {
+      data: [],
+      lines: 0,
+      good: 0
+  }
+  let readStream = fs.createReadStream(file.path).pipe(CsvParse({columns: true}))
+  readStream
+    .on('data', (row) => {
+      stats.lines += 1
+      console.log(row)
+      if (row.hasOwnProperty(email_column) == false ||
+          Validator.is.email(row[email_column]) == false) {
+        readStream.destroy()
+        reject(Antl.formatMessage('main.dont_have_email_column', { column_name: email_column }))
+        return
+      }
+      if (row.hasOwnProperty(student_id_column) == false) {
+        readStream.destroy()
+        reject(Antl.formatMessage('main.dont_have_student_id_column', { column_name: email_column }))
+        return
+      }
+
+      let email = Validator.sanitizor.normalizeEmail(row[email_column])
+      let student_id = row[student_id_column].trim()
+
+      stats.data.push({ email, student_id })
+      stats.good += 1
+    })
+    .on('error', e => {
+      reject(e);
+    })
+    .on('end', () => {
+      resolve(stats);
+    });
+  })
 }
 
 module.exports = GroupController

@@ -139,6 +139,14 @@
   "submit_require_registration": "Lai iesūtītu risinājumu, reģistrējieties sistēmā!",
   "submit": "Iesūtīt",
   "choose_file": "Izvēlēties failu",
-  "submit_solution": "Iesūtīt risinājumu"
+  "submit_solution": "Iesūtīt risinājumu",
+  "csv_imported": "CSV fails veiksmīgi importēts. Izveidoti {created_users} jauni lietotāji. Grupai pievienoti {added_to_group} lietotāji, kas iepriekš nebija pievienoti. Studenta id nomainīts {updated_student_id} lietotājiem.",
+  "dont_have_email_column": "CSV fails nesatur norādīto epasta kolumnu \"{column_name}\"",
+  "dont_have_student_id_column": "CSV fails nesatur norādīto studenta id kolumnu \"{column_name}\"",
+  "user_csv_import": "Lietotāju imports no csv faila",
+  "email_column": "Epasta kolumna",
+  "student_id_column": "Studenta id kolumna",
+  "import": "Importēt",
+  "csv_file": "CSV fails"
 }
 

@@ -9,6 +9,31 @@
     </a>
   </div>
 
+  <div class="card mb-3">
+    <div class="card-header">{{ antl.formatMessage('main.user_csv_import') }} </div>
+    <div class="card-body">
+      <form action="{{ route('GroupController.importParticipantCSV', {id: group.id}) }}"
+            method="POST" enctype="multipart/form-data">
+
+        {{ csrfField() }}
+        @!component('components.input',
+          { label: antl.formatMessage('main.email_column'), name: 'email', type: 'text', data: {},
+            getErrorFor, hasErrorFor, old })
+        @!component('components.input',
+          { label: antl.formatMessage('main.student_id_column'), name: 'student_id', type: 'text', data: {},
+            getErrorFor, hasErrorFor, old })
+
+        <div class="form-group">
+          <label for="checker">{{ antl.formatMessage('main.csv_file') }}</label>
+          <input class="form-control {{ hasErrorFor('csv') ? 'is-invalid': '' }}"
+            type="file" id="csv" name="csv" accept=".csv" required>
+          <div class="cred">{{ getErrorFor('csv') || "" }}</div>
+        </div>
+        <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.import') }}</button>
+      </form>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-sm-6">
       @!component('groups.components.users', { title: antl.formatMessage('main.participants'),

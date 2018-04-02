@@ -22,7 +22,9 @@
           {{ user.student_id || '' }}
         </td>
         <td>
-          {{ user.email }}
+          <a href="{{ route('UserController.show', {id: user.id}) }}">
+            {{ user.email }}
+          </a>
         </td>
         <td>
           <a href="{{ route(controller, {id: group.id, user_id: user.id}) }}" >

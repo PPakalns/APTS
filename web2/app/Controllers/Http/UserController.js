@@ -5,12 +5,6 @@ const Event = use('Event')
 const Hash = use('Hash')
 const { sanitizor } = use('Validator')
 
-const Token = require('rand-token').generate;
-const LEN_KEY = 48
-
-const WAIT_TIME = 30 * 60 * 1000
-const VALID_TIME = 120 * 60 * 1000
-
 class UserController {
 
   async show ({ view, params, request, auth, session, antl, response }) {
@@ -61,15 +55,7 @@ class UserController {
   async store ({ request, response, session, antl }) {
     let data = request.only(['email', 'email_confirmation'])
 
-    let user = new User()
-    user.email = data.email
-    user.activated = false
-    user.email_change_hash = String(Token(LEN_KEY))
-    user.email_change_time = new Date()
-    await user.save()
-
-    // Fire event for registration email etc
-    Event.fire('new:user', user)
+    await User.newUser(data.email)
 
     session
       .flash({ success: antl.formatMessage('main.successful_signup') })
