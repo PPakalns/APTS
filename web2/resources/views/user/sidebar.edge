@@ -1,7 +1,14 @@
 <ul class="list-unstyled components">
   @loggedIn
   <li>
-    <span class="small">{{ antl.formatMessage('main.email') }}: {{ auth.user.email }}</span>
+    <span>
+      {{ antl.formatMessage('main.user') }}:
+    </span>
+  </li>
+  <li>
+    <a class="small" href="{{ route('UserController.show') }}">
+      {{ auth.user.email }}
+    </a>
   </li>
   @if(auth.user.student_id)
   <li>

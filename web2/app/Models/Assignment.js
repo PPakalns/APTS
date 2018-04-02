@@ -19,7 +19,7 @@ class Assignment extends Model {
   // Validate that user can see this assignment
   static async checkViewPermission(ctx, assignment) {
     let { request, session, response, antl } = ctx
-    let group = assignment.group().fetch()
+    let group = await assignment.group().fetch()
     // Check if user has access to the group
     if ((await Group.checkViewPermission(ctx, group)) == false) {
       return false

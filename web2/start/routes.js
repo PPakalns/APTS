@@ -19,6 +19,8 @@ Route.post('signup', 'UserController.store').validator('StoreUser')
 Route.get('signup/activate/:token/:key', 'UserController.activate')
 Route.post('signup/activate', 'UserController.storeActivate').validator('ActivateUser')
 
+Route.get('user/:id?/:page?', 'UserController.show').middleware('auth')
+
 // Page routes
 Route.get('page/show/:path', 'PageController.show')
 

@@ -3,6 +3,7 @@
 const User = use('App/Models/User')
 const Event = use('Event')
 const Hash = use('Hash')
+const { sanitizor } = use('Validator')
 
 const Token = require('rand-token').generate;
 const LEN_KEY = 48
@@ -11,6 +12,41 @@ const WAIT_TIME = 30 * 60 * 1000
 const VALID_TIME = 120 * 60 * 1000
 
 class UserController {
+
+  async show ({ view, params, request, auth, session, antl, response }) {
+    let thisUser = await auth.getUser()
+    let requestedUserId = params.id || thisUser.id
+
+    if (!request.roles.admin && thisUser.id != requestedUserId) {
+      session
+        .flash({error: antl.formatMessage('main.no_permissions') })
+      return response.redirect('back')
+    }
+
+    let user = await User.findOrFail(requestedUserId)
+    await user.load('groups')
+
+    let submissions = null
+
+    if (request.roles.admin) {
+      let page = sanitizor.toInt(params.page, 10)
+      page = isNaN(page) ? 1 : Math.max(page, 1)
+      submissions = await user
+        .submissions()
+        .with('assignment.group')
+        .with('assignment.problem')
+        .with('user')
+        .orderBy('id', 'desc')
+        .paginate(page, 20)
+      submissions = submissions.toJSON()
+    }
+
+    return view.render('user.show', {
+        submissions: submissions,
+        user: user.toJSON(),
+      }
+    )
+  }
 
   /**
    * Display user sign up page

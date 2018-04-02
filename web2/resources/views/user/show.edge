@@ -1,0 +1,43 @@
+@layout('master.edge')
+
+@section('content')
+  <h1 class="display-4">{{ antl.formatMessage('main.user') }}</h1>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-3 text-right">{{ antl.formatMessage('main.email') }}</div>
+        <div class="col-sm-7">{{ user.email }}</div>
+      </div>
+      @if(user.student_id)
+      <div class="row">
+        <div class="col-sm-3 text-right">{{ antl.formatMessage('main.student_id') }}</div>
+        <div class="col-sm-7">{{ user.student_id }}</div>
+      </div>
+      @endif
+      <div class="row">
+        <div class="col-sm-3 text-right">Reģistrēts:</div>
+        <div class="col-sm-7">{{ user.created_at }}</div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3 text-right">Dalībnieks grupās:</div>
+        <div class="col-sm-7">
+          <ul class="list-unstyled">
+            @each(group in user.groups)
+              <li><a href="{{ route('GroupController.show', {id: group.id}) }}">{{ group.name }}</a></li>
+            @else
+              <li> - </li>
+            @endeach
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  @if(request.roles.admin)
+    @!component('submissions.partials.submission_list',
+    { antl, submissions, show_user: false, request,
+      controller_action: 'UserController.show',
+       page_param: 'page', params: { id: user.id }})
+  @endif
+@endsection
