@@ -1,11 +1,14 @@
 'use strict'
 
 const Submission = use('App/Models/Submission')
+const Assignment = use('App/Models/Assignment')
+const Group = use('App/Models/Group')
+const File = use('App/Models/File')
 const { sanitizor } = use('Validator')
 
 class SubmissionController {
 
-  async show({ params, request, session, response, auth, view }) {
+  async show({ params, request, session, response, auth, view, antl }) {
     let submission = await Submission.findOrFail(params.id)
     await submission.loadMany(
       ['assignment.group', 'assignment.problem', 'file', 'testresults.test',
@@ -30,7 +33,7 @@ class SubmissionController {
     return view.render('submissions.show', { submission })
   }
 
-  async index({params, auth, view}) {
+  async index({ params, auth, view }) {
     let page = sanitizor.toInt(params.page, 10)
     page = isNaN(page) ? 1 : Math.max(page, 1)
 
@@ -46,7 +49,7 @@ class SubmissionController {
     return view.render('submissions.index', { submissions: submissions.toJSON() })
   }
 
-  async indexAll({params, auth, view}) {
+  async indexAll({ params, auth, view }) {
     let page = sanitizor.toInt(params.page, 10)
     page = isNaN(page) ? 1 : Math.max(page, 1)
 
@@ -61,6 +64,52 @@ class SubmissionController {
     return view.render('submissions.indexAll', { submissions: submissions.toJSON() })
   }
 
+  async store(ctx) {
+    let { request, response, params, session, auth, antl } = ctx
+    let assignment = await Assignment.findOrFail(params.assignment_id)
+    let group = await assignment.group().fetch()
+    let user = await auth.getUser()
+    let data = request.only(['type']) // Validated in validator
+
+    if ((await Assignment.checkViewPermission(ctx, assignment)) == false) {
+      return
+    }
+
+    // 60 sec delay between submissions
+    let last_submission = await user.submissions().last()
+    if (last_submission && !request.roles.admin)
+    {
+      if ((new Date() - Date.parse(last_submission.created_at)) < 60 * 1000)
+      {
+        session
+          .flash({error: antl.formatMessage('main.alert_submission_rate')})
+        return response.redirect('back')
+      }
+    }
+
+    // Upload solution
+    let solution = await File.upload(ctx, 'solution', ['text'], true, '64KB')
+    if (!solution) {
+      return
+    }
+
+    if ((await Group.isParticipant(user, group)) == false) {
+      // Public group - attach user as participant
+      await user.groups().attach([group.id])
+    }
+
+    const submission = new Submission()
+    submission.user_id = user.id
+    submission.assignment_id = assignment.id
+    submission.status = 0
+    submission.type = data.type
+    submission.file_id = solution.id
+    await submission.save()
+
+    session
+      .flash({success: antl.formatMessage('main.submission_accepted')})
+    return response.redirect('back')
+  }
 }
 
 module.exports = SubmissionController

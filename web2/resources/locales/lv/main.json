@@ -77,6 +77,7 @@
   "use_files": "Ievads, izvads uz failiem",
   "input_file": "Ievadfails",
   "output_file": "Izvadfails",
+  "standartio": "Standarta ievads, izvads",
 
   "edit_testset": "Labot testkopu",
   "saved": "Saglabāts!",
@@ -131,6 +132,12 @@
   "stderr": "stderr",
   "system_private_output": "Sistēmas izvads",
   "group_assignments": "Grupas uzdevumi",
-  "all_submissions": "Visi APTS iesūtījumi"
+  "all_submissions": "Visi APTS iesūtījumi",
+  "submission_accepted": "Risinājums veiksmīgi iesniegts!",
+  "alert_submission_rate": "Lai iesniegtu jaunu risinājumu, ir jāpagaida 60 sekundes kopš iepriekšējā risinājuma iesniegšanas.",
+  "submit_require_registration": "Lai iesūtītu risinājumu, reģistrējieties sistēmā!",
+  "submit": "Iesūtīt",
+  "choose_file": "Izvēlēties failu",
+  "submit_solution": "Iesūtīt risinājumu"
 }
 

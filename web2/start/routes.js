@@ -70,6 +70,7 @@ Route.group(() => {
 
 // Assignment routes
 Route.get('assignment/:id', 'AssignmentController.show')
+Route.post('assignment/:assignment_id', 'SubmissionController.store').middleware(['auth']).validator('SubmissionStore')
 Route.group(() => {
   Route.get('edit/:group_id', 'AssignmentController.edit')
   Route.get('add/:group_id/:problem_id', 'AssignmentController.store')
@@ -79,4 +80,5 @@ Route.group(() => {
 Route.get('submission/:id', 'SubmissionController.show').middleware(['auth'])
 Route.get('submissions/all/:page?', 'SubmissionController.indexAll').middleware(['admin'])
 Route.get('submissions/:page?', 'SubmissionController.index').middleware(['auth'])
+
 

@@ -19,16 +19,10 @@ class AssignmentController {
     let assignment = await Assignment.findOrFail(params.id)
     let group = await Group.findOrFail(assignment.group_id)
     let problem = await Problem.findOrFail(assignment.problem_id)
+    await problem.load('testset')
 
-    // Check if user has access to the group
-    if ((await Group.checkViewPermission(ctx, group)) == false) {
+    if ((await Assignment.checkViewPermission(ctx, assignment)) == false) {
       return
-    }
-    // Check if assignment is visible to user
-    if (!assignment.visible && !request.roles.admin) {
-      session
-        .flash({ error: antl.formatMessage('main.no_permissions') })
-      return response.redirect('back')
     }
 
     return view.render('problems.show',

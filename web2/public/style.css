@@ -222,6 +222,10 @@ i.material-icons {
     color: purple;
 }
 
+.white {
+  color: white;
+}
+
 .break-word {
   /* These are technically the same, but use both */
   overflow-wrap: break-word;

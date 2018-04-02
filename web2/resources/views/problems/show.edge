@@ -3,6 +3,81 @@
 @section('content')
   @include('problems.partials.admin-nav')
   <h1 class="display-4">{{ problem.name }}</h1>
+
+  <div class="md-float-right mb-3 p-3">
+    <table class="table table-bordered">
+      <thead>
+        <tr class="bg-primary">
+          <th colspan=2 class="white">
+            {{ antl.formatMessage('main.restrictions') }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th class="text-right">{{ antl.formatMessage('main.memory') }}</tj>
+          <td>{{ problem.testset.memory }}MB</td>
+        </tr>
+        <tr>
+          <th class="text-right">{{ antl.formatMessage('main.time') }}</th>
+          <td>{{ problem.testset.timelimit }}s</td>
+        </tr>
+        @if(problem.testset.use_files)
+          <tr>
+            <th class="text-right">{{ antl.formatMessage('main.input_file') }}</th>
+            <td>{{ problem.testset.input_file }}</td>
+          </tr>
+          <tr>
+            <th class="text-right">{{ antl.formatMessage('main.output_file') }}</th>
+            <td>{{ problem.testset.output_file }}</td>
+          </tr>
+        @else
+          <tr>
+            <td colspan=2>
+              {{ antl.formatMessage('main.standartio') }}
+            </td>
+          </tr>
+        @endif
+      </tbody>
+    </table>
+    @if(assignment)
+    <table class="table table-bordered">
+      <thead class="bg-primary white">
+        <tr><th>{{ antl.formatMessage('main.submit_solution') }}</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan=2 class="text-center">
+            @if(request.roles.auth)
+              <form action="{{ route('SubmissionController.store', {assignment_id: assignment.id}) }}" method="POST" enctype="multipart/form-data">
+                {{ csrfField() }}
+                <select name="type" class="form-control" style="width:100%; text-align: center;">
+                  <option value="cpp11" >C++11</option>
+                  <option value="cpp">C++</option>
+                  <option value="c">C</option>
+                  <option value="c11">C11</option>
+                  <option value="fpc">Pascal</option>
+                </select>
+                <input type="file" name="solution" id="submit_file">
+                <p>
+                  <button type="button" class="btn btn-default button-hidden" style="width:100%;" id="submit_button">{{ antl.formatMessage('main.choose_file') }}</button><br />
+                </p>
+                <p id="submit_text"></p>
+                <p>
+                  <button type="submit" class="btn btn-success" style="width:100%;" id="submit_form">{{ antl.formatMessage('main.submit') }}</button>
+                </p>
+              </form>
+            @else
+              <p class="text-warning">
+              {{ antl.formatMessage('main.submit_require_registration') }}
+              </p>
+            @endif
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    @endif
+  </div>
   <div>
     <div class="tex2jax_process">
       {{ markdown(problem.description) }}
@@ -14,6 +89,20 @@
         tex2jax: { inlineMath: [['$','$']] },
         TeX: { equationNumbers: {autoNumber: "AMS"} }
       });
+      $(document).ready(function(){
+        $('#submit_file').hide()
+        $('#submit_form').hide()
+        $('#submit_button').show()
+
+        $( '#submit_button' ).click(function(){
+          $( '#submit_file' ).click();
+        });
+
+        $( '#submit_file').change(function(){
+          $( '#submit_text' ).text($( this ).val() );
+          $( '#submit_form' ).show()
+        });
+      })
     </script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
 @endsection

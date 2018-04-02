@@ -12,6 +12,7 @@ class ProblemController {
 
   async show ({ view, params }) {
     const problem = await Problem.findOrFail(params.id)
+    await problem.load('testset')
     return view.render('problems.show', { problem: problem.toJSON() })
   }
 

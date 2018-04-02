@@ -5,19 +5,19 @@ const Model = use('Model')
 class Problem extends Model {
 
   creator() {
-    return this.belongsTo('App/Models/User', 'id', 'author')
+    return this.belongsTo('App/Models/User', 'author', 'id')
   }
 
   testset() {
-    return this.belongsTo('App/Models/Testset', 'id', 'testset_id')
+    return this.belongsTo('App/Models/Testset', 'testset_id', 'id')
   }
 
   testsets() {
-    return this.hasMany('App/Models/Testset', 'id', 'problem_id')
+    return this.hasMany('App/Models/Testset', 'problem_id', 'id')
   }
 
   assignments() {
-    return this.hasMany('App/Models/Assignment', 'id', 'problem_id')
+    return this.hasMany('App/Models/Assignment', 'problem_id', 'id')
   }
 
 }
