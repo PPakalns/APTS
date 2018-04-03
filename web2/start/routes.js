@@ -77,10 +77,13 @@ Route.group(() => {
   Route.get('edit/:group_id', 'AssignmentController.edit')
   Route.get('add/:group_id/:problem_id', 'AssignmentController.store')
   Route.post('update/:id', 'AssignmentController.update').validator('AssignmentStore')
+  Route.post('export/:id', 'AssignmentController.exportSubmissions').validator('ExportTill')
+  Route.post('export/specified/:id', 'AssignmentController.exportSpecifiedSubmissions')
 }).middleware(['admin']).prefix('assignments')
 
-Route.get('submission/:id', 'SubmissionController.show').middleware(['auth'])
 Route.get('submissions/all/:page?', 'SubmissionController.indexAll').middleware(['admin'])
+Route.get('submissions/export/:id', 'SubmissionController.export').middleware(['admin'])
+Route.get('submission/:id', 'SubmissionController.show').middleware(['auth'])
 Route.get('submissions/:page?', 'SubmissionController.index').middleware(['auth'])
 
 

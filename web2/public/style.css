@@ -19,7 +19,7 @@ html, body {
 #content {
   min-height: 100vh;
   text-align: center;
-  flex: 10 1 auto;
+  flex: 1 1 900px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -92,7 +92,7 @@ html, body {
 }
 
 .spacer{
-  flex: 1 1 0;
+  flex: 1 10 0px;
 }
 
 .vflex {
@@ -288,3 +288,6 @@ td pre {
   margin-bottom: 0px;
 }
 
+.tex2jax_process hr {
+  overflow: auto !important;
+}

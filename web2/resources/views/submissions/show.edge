@@ -87,6 +87,18 @@
       </tbody>
   </table>
   <button data-toggle="collapse" class="source_code_toggle btn btn-default" data-target="#source_code">Pirmkods</button>
+  @if(request.roles.admin)
+    @if(submission.status>=2)
+      <a class="btn btn-danger float-right ml-3" href="{{ route("SubmissionController.retest", {id: submission.id}) }}"
+      role="button">
+        {{ antl.formatMessage('main.reevaluate') }}
+      </a>
+    @endif
+    <a class="btn btn-warning float-right" href="{{ route("SubmissionController.export", {id: submission.id}) }}"
+    role="button">
+      {{ antl.formatMessage('main.export') }}
+    </a>
+  @endif
   <div class="tex2jax_process prettycontent collapse" id="source_code">
       <pre><code>{{ submission.file.file }}</code></pre>
   </div>

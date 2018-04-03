@@ -147,6 +147,16 @@
   "email_column": "Epasta kolumna",
   "student_id_column": "Studenta id kolumna",
   "import": "Importēt",
-  "csv_file": "CSV fails"
+  "csv_file": "CSV fails",
+  "export": "Eksportēt",
+  "reevaluate": "Pārtestēt",
+  "assignment_doesnt_own_submission": "\"{submission_id}\" nav attiecīgās grupas uzdevuma iesūtījums.",
+  "not_an_integer": "\"{value}\" nav skaitlis",
+  "export_latest_submissions": "Eksportēt dalībnieku pēdējos iesūtījumus",
+  "submissions_till": "Iesūtījumi līdz laikam",
+  "submissions_till_desc": "Ja nepieciešams, varat norādīt laiku līdz kuram eksportēt risinājumus, iesūtījumi pēc norādītā laika eksporta sagatavošanā tiks ignorēti. Formāts: (YYYY-MM-DD HH:mm:ss)",
+  "submission_id_list": "Iesūtījumu id numuri",
+  "submission_id_list_desc": "Iesūtījumu id numuru saraksts, atdalīts ar komatiem. Piemērs: '1, 2, 434'",
+  "export_specified_solutions": "Eksportēt norādītos iesūtījumus"
 }
 

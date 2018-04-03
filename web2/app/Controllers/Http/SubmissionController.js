@@ -4,6 +4,7 @@ const Submission = use('App/Models/Submission')
 const Assignment = use('App/Models/Assignment')
 const Group = use('App/Models/Group')
 const File = use('App/Models/File')
+const AssignmentController = use('App/Controllers/Http/AssignmentController')
 const { sanitizor } = use('Validator')
 
 class SubmissionController {
@@ -93,7 +94,7 @@ class SubmissionController {
       return
     }
 
-    if ((await Group.isParticipant(user, group)) == false) {
+    if (!request.roles.admin && (await Group.isParticipant(user, group)) == false) {
       // Public group - attach user as participant
       await user.groups().attach([group.id])
     }
@@ -109,6 +110,20 @@ class SubmissionController {
     session
       .flash({success: antl.formatMessage('main.submission_accepted')})
     return response.redirect('back')
+  }
+
+  async retest({ params }) {
+    let submission = await Submission.findOrFail(params.id)
+
+    // TODO: implement retesting
+  }
+
+  async export(ctx) {
+    let { params } = ctx
+    let submission = await Submission.findOrFail(params.id)
+    let assignment = await submission.assignment().fetch()
+
+    await AssignmentController.exportSubmissionCsv(ctx, assignment, [submission.id])
   }
 }
 
