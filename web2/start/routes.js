@@ -76,6 +76,7 @@ Route.post('assignment/:assignment_id', 'SubmissionController.store').middleware
 Route.group(() => {
   Route.get('edit/:group_id', 'AssignmentController.edit')
   Route.get('add/:group_id/:problem_id', 'AssignmentController.store')
+  Route.get('retest/old/:id', 'AssignmentController.retestOld')
   Route.post('update/:id', 'AssignmentController.update').validator('AssignmentStore')
   Route.post('export/:id', 'AssignmentController.exportSubmissions').validator('ExportTill')
   Route.post('export/specified/:id', 'AssignmentController.exportSpecifiedSubmissions')

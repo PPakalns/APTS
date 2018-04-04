@@ -157,6 +157,14 @@
   "submissions_till_desc": "Ja nepieciešams, varat norādīt laiku līdz kuram eksportēt risinājumus, iesūtījumi pēc norādītā laika eksporta sagatavošanā tiks ignorēti. Formāts: (YYYY-MM-DD HH:mm:ss)",
   "submission_id_list": "Iesūtījumu id numuri",
   "submission_id_list_desc": "Iesūtījumu id numuru saraksts, atdalīts ar komatiem. Piemērs: '1, 2, 434'",
-  "export_specified_solutions": "Eksportēt norādītos iesūtījumus"
+  "export_specified_solutions": "Eksportēt norādītos iesūtījumus",
+  "solution_count": "Risinājumu skaits",
+  "test_count": "Testu skaits",
+  "solutions_old_configuration": "Risinājumi, kas ir testēti ar novecojušu testu konfigurāciju",
+  "submissions_per_group": "Iesūtītie risinājumi pa grupām",
+  "checker_added": "Pievienots čekeris",
+  "tests_added": "Pievienoti testi",
+  "testset_configuration_state": "Testkopas konfigurācijas stāvoklis",
+  "reevaluating_solutions": "Pārtestēšanai nodoti {cnt} risinājumi"
 }
 

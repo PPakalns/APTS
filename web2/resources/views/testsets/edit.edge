@@ -12,7 +12,108 @@
       {{ problem.name }}
     </a>
   </h2>
+
   <div class="card">
+    <div class="card-header">{{ antl.formatMessage('main.testset_configuration_state') }}</div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <table class="table table-sm"
+            <tr>
+              <td>
+                {{ antl.formatMessage('main.checker_added') }}
+              </td>
+              <td>
+                {{ (testset.checker_id) ? "OK" : "-" }}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                {{ antl.formatMessage('main.tests_added') }}
+              </td>
+              <td>{{ (testset.zip_id) ? "OK" : "-" }}</td>
+            </tr>
+            <tr>
+              <td>{{ antl.formatMessage('main.test_count') }}</td>
+              <td>{{ tests.length }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-sm-6">
+          @each(state in statistics.submissionStates)
+            <div class="row">
+              <div class="col-sm-4 text-keep-right">
+                {{ state['name'] }}:
+              </div>
+              <div class="col-sm-6">
+                <td>{{ state.cnt }}</td>
+              </div>
+            </div>
+          @endeach
+        </div>
+      </div>
+      @if(statistics.submissions.length > 0)
+        <div class="mt-3">
+          <strong style="padding: 20px;">{{ antl.formatMessage('main.submissions_per_group') }}:</strong>
+          <table class="table table-bordered table-sm">
+            <thead>
+              <tr>
+                <th>{{ antl.formatMessage('main.group') }}</th>
+                <th>{{ antl.formatMessage('main.solution_count') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @each(sub in statistics.submissions)
+                <tr>
+                  <td>
+                    <a href="{{ route('AssignmentController.show', {id: sub.assignment_id}) }}">
+                      {{ sub.name }}
+                    </a>
+                  </td>
+                  <td>{{ sub['count(*)'] }}</td>
+                </tr>
+              @endeach
+            </tbody>
+          </table>
+        </div>
+      @endif
+      @if(statistics.oldsubmissions.length > 0)
+        <div class="mt-3">
+          <strong class="text-danger" style="padding: 20px;">{{ antl.formatMessage('main.solutions_old_configuration') }}:</strong>
+          <table class="table table-bordered table-sm">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{{ antl.formatMessage('main.group') }}</th>
+                <th>{{ antl.formatMessage('main.solution_count') }}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @each(olds in statistics.oldsubmissions)
+                <tr class="hover-row">
+                  <td>{{ olds.assignment_id }}</td>
+                  <td>
+                    <a href="{{ route('AssignmentController.show', {id: olds.assignment_id}) }}">
+                      {{ olds.name }}
+                    </a>
+                  </td>
+                  <td>{{ olds['count(*)'] }}</td>
+                  <td class="no-padding">
+                    <a href="{{ route('AssignmentController.retestOld', {id: olds.assignment_id}) }}">
+                      {{ antl.formatMessage('main.reevaluate') }}
+                    </a>
+                  </td>
+                </tr>
+              @endeach
+            </tbody>
+          </table>
+        </div>
+      @endif
+    </div>
+  </div>
+
+  <div class="card mt-5">
     <div class="card-body">
       <form action="{{ route('TestsetController.updateRestrictions', {id: testset.id}) }}" method="POST">
         {{ csrfField() }}
@@ -128,8 +229,6 @@
           {{ antl.formatMessage("main.no_tests") }}
         </div>
       @endif
-    </div>
-  </div>
     </div>
   </div>
 @endsection

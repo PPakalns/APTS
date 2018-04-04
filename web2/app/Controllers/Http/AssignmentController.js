@@ -101,6 +101,27 @@ class AssignmentController {
     return response.redirect('back')
   }
 
+  async retestOld({ params, response, session, antl }) {
+    let assignment = await Assignment.findOrFail(params.id)
+    let problem = await assignment.problem().fetch()
+    let testset = await problem.testset().fetch()
+
+    const affectedRows = await Database
+      .table('submissions')
+      .update('status', 0)
+      .update('testing_stage', 0)
+      .where('assignment_id', assignment.id)
+      .whereNot('testing_stage', 0)
+      .where(function() {
+        this.whereNot('testset_id', testset.id)
+          .orWhereNot('testset_update', testset.updated)
+      })
+
+    session
+      .flash({ success: antl.formatMessage('main.reevaluating_solutions', {cnt: affectedRows}) })
+    return response.redirect('back')
+  }
+
   async exportSubmissions(ctx) {
     let { params, request } = ctx
     let assignment = await Assignment.findOrFail(params.id)

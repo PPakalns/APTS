@@ -2,10 +2,12 @@
 
 const Testset = use('App/Models/Testset')
 const Problem = use('App/Models/Problem')
+const Submission = use('App/Models/Submission')
 const File = use('App/Models/File')
 const Test = use('App/Models/Test')
 const Helpers = use('Helpers')
 const Antl = use('Antl')
+const Database = use('Database')
 
 const yauzl = require("yauzl");
 
@@ -17,10 +19,52 @@ class TestsetController {
     let checker = await testset.checker().fetch()
     let tests = await testset.tests().fetch()
     if (checker) checker = checker.toJSON()
+
+    let statistics = {}
+
+    // Retrieve submission count per group
+    statistics.submissions = await Database
+      .table('submissions')
+      .select('assignment_id', 'groups.name')
+      .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
+      .innerJoin('groups', 'groups.id', 'assignments.group_id')
+      .where('assignments.problem_id', problem.id)
+      .groupBy('assignment_id', 'groups.name')
+      .count()
+
+    // Retrieves submissions that are tested with old testsets
+    statistics.oldsubmissions = await Database
+      .table('submissions')
+      .select('assignment_id', 'groups.name')
+      .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
+      .innerJoin('groups', 'groups.id', 'assignments.group_id')
+      .where('assignments.problem_id', problem.id)
+      .whereNot('status', 0)
+      .where(function() {
+        this.whereNot('submissions.testset_id', testset.id)
+          .orWhereNot('submissions.testset_update', testset.updated)
+      })
+      .groupBy('assignment_id', 'groups.name')
+      .count()
+
+    // Retrieves count of submissions that are being tested now
+    statistics.submissionStates = await Database
+      .table('submissions')
+      .select('status')
+      .innerJoin('assignments', 'submissions.assignment_id', 'assignments.id')
+      .where('assignments.problem_id', problem.id)
+      .groupBy('status')
+      .count('* as cnt')
+
+    for (let state of statistics.submissionStates) {
+      state['name'] = Submission.getStatus(state['status'])
+    }
+
     return view.render('testsets.edit', {testset: testset.toJSON(),
                                          problem: problem.toJSON(),
                                          checker,
-                                         tests: tests.toJSON() })
+                                         tests: tests.toJSON(),
+                                         statistics })
   }
 
   async updateRestrictions ({ params, request, response, session, antl }) {
