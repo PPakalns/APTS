@@ -2,7 +2,7 @@
 
 const { rule } = require('indicative')
 
-const FILE_REGEX = /^[a-zA-Z]+\.[a-zA-Z]+$/;
+const FILE_REGEX = /^[a-zA-Z_]+\.[a-zA-Z]+$/;
 
 class TestsetRestrictionUpdate {
   get validateAll () {

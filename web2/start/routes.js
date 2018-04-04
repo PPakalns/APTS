@@ -81,9 +81,13 @@ Route.group(() => {
   Route.post('export/specified/:id', 'AssignmentController.exportSpecifiedSubmissions')
 }).middleware(['admin']).prefix('assignments')
 
-Route.get('submissions/all/:page?', 'SubmissionController.indexAll').middleware(['admin'])
-Route.get('submissions/export/:id', 'SubmissionController.export').middleware(['admin'])
 Route.get('submission/:id', 'SubmissionController.show').middleware(['auth'])
 Route.get('submissions/:page?', 'SubmissionController.index').middleware(['auth'])
+
+Route.group(() => {
+  Route.get('all/:page?', 'SubmissionController.indexAll')
+  Route.get('export/:id', 'SubmissionController.export')
+  Route.get('retest/:id', 'SubmissionController.retest')
+}).middleware(['admin']).prefix('admin/submissions')
 
 

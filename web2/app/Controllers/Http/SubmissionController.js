@@ -112,10 +112,15 @@ class SubmissionController {
     return response.redirect('back')
   }
 
-  async retest({ params }) {
+  async retest({ params, response }) {
     let submission = await Submission.findOrFail(params.id)
-
-    // TODO: implement retesting
+    if (submission.testing_stage > 0)
+    {
+      submission.status = 0
+      submission.testing_stage = 0
+      await submission.save()
+    }
+    return response.redirect('back')
   }
 
   async export(ctx) {
