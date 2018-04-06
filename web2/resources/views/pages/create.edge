@@ -10,7 +10,9 @@
       <form action="{{ route('PageController.store') }}" method="POST">
         @include('pages.partials.form')
         <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.create') }}</button>
+        <a class="btn btn-secondary" href="#page_name" id="preview">{{ antl.formatMessage('main.preview') }}</a>
       </form>
     </div>
   </div>
+  @include('pages.partials.preview')
 @endsection

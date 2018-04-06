@@ -194,7 +194,6 @@ function parseCsv(file, student_id_column, email_column) {
   readStream
     .on('data', (row) => {
       stats.lines += 1
-      console.log(row)
       if (row.hasOwnProperty(email_column) == false ||
           Validator.is.email(row[email_column]) == false) {
         readStream.destroy()

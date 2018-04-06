@@ -28,8 +28,13 @@
 @else
 <div class="form-group">
   <label for="{{ name }}">{{ label }}</label>
-  <input class="form-control {{ hasErrorFor(name) ? 'is-invalid': '' }}"
-  id="{{ name }}" type="{{type}}" name="{{ name }}" placeholder="" value="{{ old(name, data[name] || '') }}">
+  @if(type == 'textarea')
+    <textarea class="form-control {{ hasErrorFor(name) ? 'is-invalid': '' }}"
+      id="{{ name }}" name="{{ name }}" rows="30">{{ old(name, data[name] || '') }}</textarea>
+  @else
+    <input class="form-control {{ hasErrorFor(name) ? 'is-invalid': '' }}"
+    id="{{ name }}" type="{{type}}" name="{{ name }}" placeholder="" value="{{ old(name, data[name] || '') }}">
+  @endif
   <p class="form-text text-muted">
     {{ comment || "" }}
   </p>

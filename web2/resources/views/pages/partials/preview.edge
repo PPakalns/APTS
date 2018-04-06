@@ -1,0 +1,23 @@
+  <h1 class="display-4 mt-5" id="page_name"></h1>
+  <p class="lead" id="page_intro"></p>
+  <div>
+    <div class="tex2jax_process" id="page_body"></div>
+  </div>
+  @!component('components.mathjax')
+  <script>
+    var preview = document.getElementById("preview")
+    preview.addEventListener("click", function(){
+      var data_name = $("#name").val() + ''
+      var data_lead = $("#intro").val() + ''
+      var data_description = $("#description").val() + ''
+
+      $("#page_name").text(data_name)
+      $("#page_intro").text(data_lead)
+      data_description = $("#page_body").text(data_description).text()
+      $("#page_body").html(marked(data_description))
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+
+      hljs.initHighlighting.called = false;
+      hljs.initHighlighting();
+    })
+  </script>
