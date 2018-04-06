@@ -1,10 +1,10 @@
 @if(group)
   <li class="purplish">
-    <a class="pl-4" href="{{ route('GroupController.show', {id: group.id}) }}">{{ group.name }}</a>
+    <a class="pl-13" href="{{ route('GroupController.show', {id: group.id}) }}">{{ group.name }}</a>
   </li>
   @if(assignment)
   <li class="purplish">
-    <a class="pl-5" href="{{ route('AssignmentController.show', {id: assignment.id}) }}">{{ problem.name }}</a>
+    <a class="pl-14" href="{{ route('AssignmentController.show', {id: assignment.id}) }}">{{ problem.name }}</a>
   </li>
   @endif
 @endif

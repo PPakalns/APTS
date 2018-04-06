@@ -2,11 +2,11 @@
 
 html, body {
   font-family: 'Poppins', sans-serif;
-  background: #fafafa;
   min-height: 100vh;
+  height: 100%;
 }
 
-.wrapper {
+#wrapper {
   min-height: 100vh;
   max-width: 100%;
   width: 100%;
@@ -17,7 +17,9 @@ html, body {
 }
 
 #content {
+  min-width: 0;
   min-height: 100vh;
+  height: 100%;
   text-align: center;
   flex: 1 1 900px;
   display: flex;
@@ -28,9 +30,11 @@ html, body {
 #content #center-content{
   margin-top: 1em;
   text-align: left;
+  margin-bottom: 50px;
 }
 
 #footer {
+  height: 40px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -52,7 +56,6 @@ html, body {
   background: #7386D5;
   color: #fff;
   transition: all 0.3s;
-  box-shadow: 0px 0px 10px black;
 }
 
 #center-content {
@@ -71,6 +74,7 @@ html, body {
   flex-direction: column;
   align-items: stretch;
   justify-content: space-between;
+  box-shadow: 0px 0px 10px black;
 }
 
 #sidebar ul li.purplish {
@@ -83,11 +87,41 @@ html, body {
   }
 }
 
-@media only screen and (min-height: 700px) {
+@media only screen and (min-height: 750px) and (min-width: 814px){
   #sidebar {
     position: fixed;
     top: 0px;
     left: 0px;
+  }
+}
+
+@media only screen and (max-height: 750px) {
+  #sidebar ul:not(:first-child) {
+    margin-top: 30px;
+  }
+}
+
+@media only screen and (max-width: 813px) {
+  #sidebar {
+    width: 100%;
+    min-height: 0vh;
+    box-shadow: none;
+  }
+
+  #sidebar-wrapper {
+    flex: 0 0 auto;
+    min-height: 0px;
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+  }
+
+  #wrapper {
+    flex-direction: column;
+  }
+
+  #sidebar ul:not(:first-child) {
+    margin-top: 30px;
   }
 }
 
@@ -121,7 +155,15 @@ html, body {
 }
 
 #sidebar>ul>li>a {
-  padding-left: 15px;
+  padding-left: 25px;
+}
+
+.pl-13 {
+  padding-left: 35px !important;
+}
+
+.pl-14 {
+  padding-left: 45px !important;
 }
 
 #sidebar>ul>li .small {
@@ -278,10 +320,6 @@ td.message {
   .md-float-right{
     float: none;
   }
-}
-
-.hljs {
-  width: 100%;
 }
 
 td pre {
