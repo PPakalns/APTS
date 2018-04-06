@@ -1,0 +1,21 @@
+<h1 class="display-4" id="group_name"></h1>
+<div>
+  <div class="tex2jax_process" id="group_description"></div>
+</div>
+
+@!component('components.mathjax')
+<script>
+  var preview = document.getElementById("preview")
+  preview.addEventListener("click", function(){
+    var data_name = $("#name").val() + ''
+    var data_description = $("#description").val() + ''
+
+    $("#group_name").text(data_name)
+    data_description = $("#group_description").text(data_description).text()
+    $("#group_description").html(marked(data_description))
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+
+    hljs.initHighlighting.called = false;
+    hljs.initHighlighting();
+  })
+</script>
