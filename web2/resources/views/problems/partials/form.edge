@@ -1,15 +1,9 @@
 {{ csrfField() }}
 
-<div class="form-group">
-  <label for="name">{{ antl.formatMessage('main.title') }}</label>
-  <input class="form-control {{ hasErrorFor('name') ? 'is-invalid': '' }}"
-    id="name" type="text" name="name" placeholder="" value="{{ old('name', problem.name || '') }}" autofocus>
-  <div class="invalid-feedback">{{ getErrorFor('name') }}</div>
-</div>
+@!component('components.input',
+  { label: antl.formatMessage('main.title'), name: 'name', type: 'text', data: problem,
+    getErrorFor, hasErrorFor, old })
 
-<div class="form-group">
-  <label for="description">{{ antl.formatMessage('main.description') }}</label>
-  <textarea class="form-control {{ hasErrorFor('description') ? 'is-invalid': '' }}"
-    id="description" name="description" rows="30">{{ old('description', problem.description || '') }}</textarea>
-  <div class="invalid-feedback">{{ getErrorFor('description') }}</div>
-</div>
+@!component('components.input',
+  { label: antl.formatMessage('main.description'), name: 'description', type: 'textarea', data: problem,
+    getErrorFor, hasErrorFor, old })

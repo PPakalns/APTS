@@ -83,26 +83,26 @@
       {{ markdown(problem.description) }}
     </div>
   </div>
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        showProcessingMessages: false,
-        tex2jax: { inlineMath: [['$','$']] },
-        TeX: { equationNumbers: {autoNumber: "AMS"} }
+@endsection
+
+@section('script')
+  @if(request.roles.auth)
+  <script>
+    $(document).ready(function(){
+      $('#submit_file').hide()
+      $('#submit_form').hide()
+      $('#submit_button').show()
+
+      $( '#submit_button' ).click(function(){
+        $( '#submit_file' ).click();
       });
-      $(document).ready(function(){
-        $('#submit_file').hide()
-        $('#submit_form').hide()
-        $('#submit_button').show()
 
-        $( '#submit_button' ).click(function(){
-          $( '#submit_file' ).click();
-        });
-
-        $( '#submit_file').change(function(){
-          $( '#submit_text' ).text($( this ).val() );
-          $( '#submit_form' ).show()
-        });
-      })
-    </script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+      $( '#submit_file').change(function(){
+        $( '#submit_text' ).text($( this ).val() );
+        $( '#submit_form' ).show()
+      });
+    })
+  </script>
+  @endif
+  @!component('components.mathjax')
 @endsection

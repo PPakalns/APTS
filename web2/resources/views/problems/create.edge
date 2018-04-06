@@ -10,7 +10,9 @@
       <form action="{{ route('ProblemController.store') }}" method="POST">
         @include('problems.partials.form')
         <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.create') }}</button>
+        <a class="btn btn-secondary" href="#problem_name" id="preview">{{ antl.formatMessage('main.preview') }}</a>
       </form>
     </div>
   </div>
+  @include('problems.partials.preview')
 @endsection
