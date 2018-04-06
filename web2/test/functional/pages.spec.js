@@ -38,8 +38,8 @@ test('Priviliged user can write a post', async ({ assert, browser }) => {
     request.loginVia(user)
   })
 
-  // Where visible checkbox should be enabled by default
-  await bPage.assertIsChecked('[name="visible"]')
+  // Where visible checkbox should be disabled by default
+  await bPage.assertIsNotChecked('[name="visible"]')
 
   // When we fill and send the form
   await bPage
