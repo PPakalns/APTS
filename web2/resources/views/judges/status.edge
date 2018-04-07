@@ -1,0 +1,51 @@
+@layout('master.edge')
+
+@section('content')
+  <h1 class="display-4">{{ antl.formatMessage('main.testing') }}</h1>
+
+  <div class="progress">
+    @each(stats in statistics)
+    <div class="progress-bar {{stats.color}}" style="width: {{ stats.width }}%">
+      <span class="bold">{{ stats.name }} ({{ stats.size }})</span>
+    </div>
+    @endeach
+  </div>
+
+  <table class="table ftable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th style="width: 40px;"></th>
+        <th>Apraksts</th>
+        <th>Pēdējās izmaiņas</th>
+        <th>Notestēti</th>
+        <th>Status</th>
+        <th>Testē</th>
+      </tr>
+    </thead>
+    <tbody>
+      @each(judge in judges)
+        <tr>
+          <td>{{ judge.name }}</td>
+          <td class="text-center">
+            @if(judge.disabled)
+              DISABLED
+            @else
+            @endif
+          </td>
+          <td>{{ judge.description }}</td>
+          <td>{{ judge.updated_at }}</td>
+          <td>{{ judge.tested }}</td>
+          <td class="bold">{{ judge.status }}</td>
+          <td>
+            @if(judge.submission_id)
+              <a href="{{ route('SubmissionController.show', {id: judge.submission_id}) }}">
+                {{ judge.submission_id }}
+              </a>
+            @endif
+          </td>
+        </tr>
+      </tbody>
+      @endeach
+    </table>
+@endsection

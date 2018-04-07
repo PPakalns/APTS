@@ -31,7 +31,7 @@ Route.group(() => {
   Route.get('edit/:id', 'PageController.edit')
   Route.post('update/:id', 'PageController.update').validator('PageStore')
   Route.get('delete/:id', 'PageController.delete')
-}).middleware(['admin']).prefix('page')
+}).middleware(['admin']).prefix('pages')
 
 // Groups routes
 Route.get('group/show/:id', 'GroupController.show')
@@ -48,7 +48,7 @@ Route.group(() => {
   Route.get('participants/add/:id/:user_id', 'GroupController.addParticipant')
   Route.get('participants/remove/:id/:user_id', 'GroupController.removeParticipant')
   Route.post('participants/import/:id', 'GroupController.importParticipantCSV').validator('ParticipantImport')
-}).middleware(['admin']).prefix('group')
+}).middleware(['admin']).prefix('groups')
 
 // Problem routes
 Route.post('problem/:id/update', 'ProblemController.update')
@@ -68,7 +68,7 @@ Route.group(() => {
   Route.post('restrictions/:id', 'TestsetController.updateRestrictions').validator('TestsetRestrictionUpdate')
   Route.post('checker/:id', 'TestsetController.updateChecker')
   Route.post('tests/:id', 'TestsetController.updateTests')
-}).middleware(['admin']).prefix('testset')
+}).middleware(['admin']).prefix('testsets')
 
 // Assignment routes
 Route.get('assignment/:id', 'AssignmentController.show')
@@ -91,4 +91,4 @@ Route.group(() => {
   Route.get('retest/:id', 'SubmissionController.retest')
 }).middleware(['admin']).prefix('admin/submissions')
 
-
+Route.get('judges', 'JudgeController.status').middleware(['admin'])

@@ -166,6 +166,7 @@
   "tests_added": "Pievienoti testi",
   "testset_configuration_state": "Testkopas konfigurācijas stāvoklis",
   "reevaluating_solutions": "Pārtestēšanai nodoti {cnt} risinājumi",
-  "preview": "Priekštatīt"
+  "preview": "Priekštatīt",
+  "testing": "Testēšana"
 }
 
