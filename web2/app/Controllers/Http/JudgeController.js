@@ -86,7 +86,7 @@ class JudgeController {
 
   async getFile(ctx) {
     let { params } = ctx
-    let file = await File.findOrFail(id)
+    let file = await File.findOrFail(params.file_id)
     await File.download(ctx, file)
   }
 

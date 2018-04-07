@@ -92,3 +92,11 @@ Route.group(() => {
 }).middleware(['admin']).prefix('admin/submissions')
 
 Route.get('judges', 'JudgeController.status').middleware(['admin'])
+
+Route.group(() => {
+    Route.get('judge/get', 'JudgeController.getJob')
+    Route.get('judge/stop', 'JudgeController.stop')
+    Route.get('judge/download/:file_id', 'JudgeController.getFile')
+    Route.post('judge/submit', 'JudgeController.submitResult')
+}).middleware(['judge'])
+
