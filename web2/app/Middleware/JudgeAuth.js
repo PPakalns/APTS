@@ -4,7 +4,7 @@ const Judge = use('App/Models/Judge')
 const Hash = use('Hash')
 const basic_auth = require('basic-auth')
 
-class Judge {
+class JudgeAuth {
   async handle ({ request, response }, next) {
 
     // Login judge with basec auth
@@ -30,4 +30,4 @@ class Judge {
   }
 }
 
-module.exports = Judge
+module.exports = JudgeAuth

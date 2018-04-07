@@ -4,8 +4,8 @@ const Judge = use('App/Models/Judge')
 const Database = use('Database')
 const Submission = use('App/Models/Submission')
 const Testresult = use('App/Models/Testresult')
-const File = use('App/Model/File')
-const Problem = use('App/Model/Problem')
+const File = use('App/Models/File')
+const Problem = use('App/Models/Problem')
 
 const utility = require('../../../utility/utility.js')
 
@@ -107,7 +107,7 @@ class JudgeController {
     submission.judge_id = request.judge.id
     submission.testset_id = body.testset_id
     submission.testset_update = body.testset_update
-    submission.testing_stage = submission.testing_stage + STAGE_DELTA
+    submission.testing_stage += STAGE_DELTA
 
     if (inPublicStage) {
       if (body.status != 2) {
@@ -129,7 +129,7 @@ class JudgeController {
       submission.maxtime = body.maxtime
       submission.maxmemory = body.maxmemory
 
-      submission.public_store = body.public_score
+      submission.public_score = body.public_score
       submission.public_maxscore = body.public_maxscore
       submission.public_maxtime = body.public_maxtime
       submission.public_maxmemory = body.public_maxmemory
@@ -181,7 +181,7 @@ class JudgeController {
       return response.json({status: "wait"})
     }
 
-    if (submission.testing_stage != STAGE_WAIT)
+    if (submission.testing_stage == STAGE_WAIT)
       submission.status = 1
 
     submission.testing_stage += STAGE_DELTA
@@ -198,9 +198,9 @@ class JudgeController {
     const public_stage = submission.testing_stage == STAGE_PUBLIC
 
     let assignment = await submission.assignment().fetch()
-    let problem = await assignemnt.problem().fetch()
+    let problem = await assignment.problem().fetch()
     let testset = await problem.testset().fetch()
-    let tests = await testset.tests().fetch()
+    let tests = (await testset.tests().fetch()).toJSON()
 
     let publicset = utility.getRangeSet(testset.public_range)
 
@@ -247,10 +247,10 @@ async function getJudgableSubmission() {
     //  1. Evaluate public tests
     //  2. Evaluate non public tests
 
-    let submission = await Submission.query().where('testing_stage', TESTING_STAGE['WAIT']).first();
+    let submission = await Submission.query().where('testing_stage', STAGE_WAIT).first();
 
     if (!submission)
-        submission = await Submission.query().where('testing_stage', TESTING_STAGE['PUBLIC_DONE']).first();
+        submission = await Submission.query().where('testing_stage', STAGE_WAIT_PRIVATE).first();
 
     return submission
 }
@@ -259,19 +259,19 @@ async function getJudgableSubmission() {
  * Clear judge testing state
  */
 async function clearJudge(judge) {
-    if (judge.submission_id)
+  if (judge.submission_id)
+  {
+    let submission = await judge.submission().fetch()
+    if (submission.status <= 1) // See app/Model/Submission.js
     {
-        let submission = await judge.submission().fetch()
-        if (submission.status <= 1) // See app/Model/Submission.js
-        {
-            submission.judge_id = null
-            submission.status = 0
-            submission.testing_stage = 0
-            await submission.save()
-        }
-        judge.submission_id = null
-        await judge.save()
+      submission.judge_id = null
+      submission.status = 0
+      submission.testing_stage = 0
+      await submission.save()
     }
+    judge.submission_id = null
+    await judge.save()
+  }
 }
 
 module.exports = JudgeController

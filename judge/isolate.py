@@ -21,7 +21,7 @@ def runIsolate(params):
     return_code = proc.wait()
 
     if len(err):
-        logger.debug("Isolate error: %s", err.decode())
+        logger.debug("Isolate error: %s", err)
 
     out = out.decode().strip()
     logger.debug("Isolate exit code %d\tReturned string: \"%s\"", return_code, out);
@@ -192,7 +192,7 @@ class Isolate:
 
     def cleanUp(self):
         self.cleaned = True
-        # runIsolate(self.config.getCleanupOptions())
+        runIsolate(self.config.getCleanupOptions())
 
     def copyTo(self, src, filename):
         rdst = os.path.join("box", filename)

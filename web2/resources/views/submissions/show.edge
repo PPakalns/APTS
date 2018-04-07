@@ -120,8 +120,8 @@
     </thead>
     <tbody>
       @each(test in submission.testresults)
-        @if(request.roles.admin || testVisible(test, assignment))
-           <tr class="initial{{ testVisible(test, assignment) ? "" : " private-result" }}">
+        @if(request.roles.admin || testVisible(test, submission.assignment))
+           <tr class="initial{{ testVisible(test, submission.assignment) ? "" : " private-result" }}">
             <td>{{ (test.visible) ? "** " : "" }}{{ test.test.tid }}</td>
             <td>{{ test.test.gid }}</td>
             <td class="cc_sub {{ (test.status=="OK") ? "c_OK" : "c_CE" }}">
@@ -131,13 +131,13 @@
             <td>{{ round( test.memory / 1024 / 1024, 2) }}MB</td>
             <td>{{ round(test.time, 2) }}</td>
           </tr>
-          @if(request.roles.admin || testDetailed(test, assignment))
-            <tr class="{{ testDetailed(test, assignment) ? "" : "private-result" }}">
+          @if(request.roles.admin || testDetailed(test, submission.assignment))
+            <tr class="{{ testDetailed(test, submission.assignment) ? "" : "private-result" }}">
                 <td colspan=2 class="text-right">{{ antl.formatMessage('main.message') }}</td>
                 <td colspan=4 class="message"><pre class="simple">{{ test.public || " "}}</pre></td>
             </tr>
             @if(test.visible)
-            <tr class="{{ testDetailed(test, assignment) ? "" : "private-result" }}">
+            <tr class="{{ testDetailed(test, submission.assignment) ? "" : "private-result" }}">
                 <td colspan=2 class="text-right">{{ antl.formatMessage('main.stderr') }}</td>
                 <td colspan=4 class="message"><pre class="simple">{{ truncate((test.stderr || " "), 5000) }}</pre></td>
             </tr>
