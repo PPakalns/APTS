@@ -11,7 +11,7 @@ class ActivateUser {
 
   get rules () {
     return {
-      password: 'required|min:8',
+      password: 'required|min:6',
       password_confirmation: 'required_if:password|same:password',
     }
   }

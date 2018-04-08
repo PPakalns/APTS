@@ -19,6 +19,14 @@ Route.post('signup', 'UserController.store').validator('StoreUser')
 Route.get('signup/activate/:token/:key', 'UserController.activate')
 Route.post('signup/activate', 'UserController.storeActivate').validator('ActivateUser')
 
+Route.get('activate', 'UserController.requireResendActivation')
+Route.post('activate', 'UserController.resendActivation').validator('RequestEmail')
+
+Route.get('forgot', 'UserController.requireResetPassword')
+Route.post('forgot', 'UserController.sendResetPassword').validator('RequestEmail')
+Route.get('forgot/:token/:key', 'UserController.resetPassword')
+Route.post('forgot/apply', 'UserController.storeResetPassword').validator('ActivateUser')
+
 Route.group(() => {
   Route.get(':id?/:page?', 'UserController.show')
   Route.post('password', 'UserController.changePassword').validator('ActivateUser')

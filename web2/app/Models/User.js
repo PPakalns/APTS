@@ -2,6 +2,7 @@
 
 const Model = use('Model')
 const Event = use('Event')
+const Hash = use('Hash')
 const Token = require('rand-token').generate;
 
 class User extends Model {
@@ -19,17 +20,31 @@ class User extends Model {
     return ['password']
   }
 
-  static async newUser(email) {
+  static getToken() {
     const LEN_KEY = 48
+    return String(Token(LEN_KEY));
+  }
+
+  // In database we store hashed values
+  static async Hash(plain) {
+    return await Hash.make(plain, 10)
+  }
+
+  static async validateHash(plain, hashed) {
+    return await Hash.verify(plain, hashed)
+  }
+
+  static async newUser(email) {
     let user = new User()
     user.email = email
     user.activated = false
-    user.email_change_hash = String(Token(LEN_KEY))
+    let key = User.getToken()
+    user.email_change_hash = await User.Hash(key)
     user.email_change_time = new Date()
     await user.save()
 
     // Fire event for registration email etc
-    Event.fire('mail:registration', user)
+    Event.fire('mail:registration', {user, key})
     return user
   }
 

@@ -1,3 +1,3 @@
 {{ antl.formatMessage('main.activation_email_subject') }}
 
-{{ antl.formatMessage('main.activation_email_body', {DOMAIN, url: route('UserController.activate', {token: user.token, key: user.email_change_hash})}) }}
+{{ antl.formatMessage('main.activation_email_body', {DOMAIN, url: route('UserController.activate', {token: user.token, key: key})}) }}

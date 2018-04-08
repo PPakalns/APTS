@@ -1,0 +1,29 @@
+@layout('master.edge')
+
+@section('content')
+  <div class="card card-default">
+    <div class="card-header">{{ header }}</div>
+    <div class="card-body">
+      <div class="form-group">
+        <div class='col-md-10'>
+          <p class="text-info">
+            {{ lead }}
+          </p>
+        </div>
+      </div>
+      <form action="{{ route(action) }}" method="post">
+        {{ csrfField() }}
+
+        @!component('components.input',
+          { label: antl.formatMessage('main.email'), name: 'email', type: 'text', data: {},
+            getErrorFor, hasErrorFor, old })
+
+        @!component('components.input',
+          { label: antl.formatMessage('main.email_confirmation'), name: 'email_confirmation', type: 'text', data: {},
+            getErrorFor, hasErrorFor, old })
+
+        <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.send_email') }}</button>
+      </form>
+    </div>
+  </div>
+@endsection

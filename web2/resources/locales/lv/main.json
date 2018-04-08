@@ -6,10 +6,11 @@
   "signout": "Iziet",
   "email": "Epasts",
   "email_confirmation": "Epasts atkārtoti",
+  "send_email": "Izsūtīt epastu",
   "password": "Parole",
   "password_confirmation": "Parole atkārtoti",
   "old_password": "Pašreizējā parole",
-  "missing_credentials": "Nevarēja atrast lietotāju ar dotajiem datiem.",
+  "missing_credentials": "Neveiksmīga autentifikācija!",
 
   "alert_success": "Operācija izpildīta veiksmīgi!",
   "alert_exists": "Nevarēja izveidot! Jau eksistē!",
@@ -17,7 +18,8 @@
   "successful_user_activation": "Lietotāja reģistrācija ir veiksmīgi pabeigta! Varat ieiet lietotājā!",
 
   "user_not_activated": "Lūdzu apstipriniet reģistrāciju, atverot uz epast nosūtīto saiti.",
-  "bad_activation_url": "Slikts aktivācijas url, pārbaudiet vai to atvērāt pareizi!",
+  "bad_activation_url": "Nepareiza vai novecojusi saite, pārbaudiet vai atvērāt to pareizi!",
+  "outdated_link": "Atvērtā saite ir novecojusi. Veiciet APTS sistēmā pieprasījumu, lai nosūta jaunu epastu.",
 
   "activation_email_subject": "Reģistrācija APTS!",
   "activation_email_body": "Lai pabeigtu reģistrāciju APTS sistēmā, lūdzu atveriet sekojošo saiti: {DOMAIN}{url}",
@@ -176,6 +178,17 @@
   "testing": "Testēšana",
   "successfull_password_change": "Parole veiksmīgi nomainīta!",
   "wrong_current_password": "Nepareiza pašreizējā parole",
-  "password_min_length": "Parolei ir jābūt vismaz {length} simbolus garai!"
+  "password_min_length": "Parolei ir jābūt vismaz {length} simbolus garai!",
+  "forgot_password": "Aizmirsi paroli?",
+  "did_not_recieve_activation_email": "Nesaņēmi reģistrācijas epastu?",
+  "send_activation_email_again": "Izsūtīt reģistrācijas epastu atkārtoti!",
+  "send_activation_email_again_desc": "Maksimums vienu reizi 30 minūtēs var tikt izsūtīts reģistrācijas epasts. Epasts var pienākt ar 10 minūšu aizkavi.",
+  "send_forgot_password_email": "Izsūtīt paroles atiestatīšanas epastu!",
+  "send_forgot_password_email_desc": "Maksimums vienu reizi 30 minūtēs var tikt izsūtīts paroles maiņas epasts. Epasts var pienākt ar 10 minūšu aizkavi.",
+
+  "user_already_activated": "Lietotājs jau ir apstiprinājis reģistrācijas epastu vai nav reģistrējies sistēmā!",
+  "email_rate_limit": "Epasts jau nesen izsūtīts! Lūdzu mēģiniet vēlreiz pēc {remaining} minūtēm!",
+  "email_sent": "Epasts veiksmīgi izsūtīts!",
+  "user_not_activated_not_registered": "Norādītais lietotājs nav reģistrēts vai nav pabeidzis reģistrāciju atverot uz epastu nosūtīto saiti."
 }
 

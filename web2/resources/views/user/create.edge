@@ -20,6 +20,10 @@
         {{ csrfField() }}
         <button type="submit" class="btn btn-primary float-right">{{ antl.formatMessage("main.signup") }}</button>
       </form>
+      <div class="clearfix"></div>
+      <div>
+        {{ antl.formatMessage('main.did_not_recieve_activation_email') }} <a href="{{ route('UserController.requireResendActivation') }}">{{ antl.formatMessage('main.send_activation_email_again') }}</a>
+      </div>
     </div>
   </div>
 @endsection

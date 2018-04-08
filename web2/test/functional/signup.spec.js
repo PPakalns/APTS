@@ -23,7 +23,7 @@ test('can sign up and activate user through email', async ({ browser, assert }) 
     .waitForNavigation()
 
   // We expect to be on the homepage
-  await page.assertPath('/signup')
+  await page.assertPath('/signin')
 
   // And we expect to see an alert message
   await page.assertExists('div.alert.alert-success')
@@ -39,8 +39,16 @@ test('can sign up and activate user through email', async ({ browser, assert }) 
   assert.equal(recentEmail.envelope.to.length, 1)
   assert.equal(recentEmail.envelope.to[0], 'test@test.te')
 
+  // Retrieve url from email
+  let html = recentEmail.message.html
+  let idx = html.indexOf("/signup/activate/")
+  assert.notEqual(idx, -1)
+  let idx2 = html.indexOf("\n", idx)
+  assert.notEqual(idx2, -1)
+  let url = html.substr(idx, idx2)
+
   // Opening activation link
-  page = await browser.visit('/signup/activate/' + user.token + '/' + user.email_change_hash)
+  page = await browser.visit(url)
 
   // And providing password
   await page
