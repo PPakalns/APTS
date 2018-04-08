@@ -1,3 +1,4 @@
 const Event = use('Event')
 
-Event.on('new:user', 'MailListener.newUser')
+Event.on('mail:registration', 'MailListener.newUser')
+Event.on('mail:reset_password', 'MailListener.resetPassword')

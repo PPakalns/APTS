@@ -14,7 +14,7 @@ test('Non priviliged user can not write post', async ({ assert, browser }) => {
   const user = await Factory.model('App/Models/User').create()
 
   // And we are logged on the page creation page
-  const page = await browser.visit('/page/create', (request) => {
+  const page = await browser.visit('/pages/create', (request) => {
     request.loginVia(user)
   })
 
@@ -22,7 +22,7 @@ test('Non priviliged user can not write post', async ({ assert, browser }) => {
   await page.assertExists('div.alert.alert-danger')
 
   // And be redirected elsewere
-  assert.notInclude(await page.getPath(), '/page/create')
+  assert.notInclude(await page.getPath(), '/pages/create')
 })
 
 test('Priviliged user can write a post', async ({ assert, browser }) => {
@@ -34,7 +34,7 @@ test('Priviliged user can write a post', async ({ assert, browser }) => {
   const page = await Factory.model('App/Models/Page').make({visible: false})
 
   // And we are logged on the page creation page
-  const bPage = await browser.visit('/page/create', (request) => {
+  const bPage = await browser.visit('/pages/create', (request) => {
     request.loginVia(user)
   })
 

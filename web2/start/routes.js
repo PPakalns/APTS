@@ -19,7 +19,10 @@ Route.post('signup', 'UserController.store').validator('StoreUser')
 Route.get('signup/activate/:token/:key', 'UserController.activate')
 Route.post('signup/activate', 'UserController.storeActivate').validator('ActivateUser')
 
-Route.get('user/:id?/:page?', 'UserController.show').middleware('auth')
+Route.group(() => {
+  Route.get(':id?/:page?', 'UserController.show')
+  Route.post('password', 'UserController.changePassword').validator('ActivateUser')
+}).middleware(['auth']).prefix('user')
 
 // Page routes
 Route.get('page/show/:path', 'PageController.show')

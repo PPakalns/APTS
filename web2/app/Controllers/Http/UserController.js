@@ -92,6 +92,71 @@ class UserController {
       .flash({ success: antl.formatMessage('main.successful_user_activation') })
     return response.redirect('/signin')
   }
+
+  /**
+   * Show resend activation form
+   */
+  async renderResendActivationEmail({ view }) {
+    return view.render('user.resend_activation')
+  }
+
+  /**
+   * Resend activation email
+   */
+  async resendActivationEmail() {
+
+  }
+
+  /**
+   * Password reset form
+   */
+  async resetPassword({ view }) {
+
+  }
+
+  /**
+   * Sends password reset email to user
+   */
+  async sendResetPassword({}) {
+
+  }
+
+  /**
+   * Password change view after opening url sent in email
+   */
+  async resetPassword({}) {
+    const data = { token: params.token, key: params.key }
+    return view.render('user.reset_password', data)
+  }
+
+  /**
+   * Change user password after opening url and submitting form
+   */
+  async storeResetPassword({}) {
+
+  }
+
+  async changePassword({ request, session, response, auth, antl }) {
+    const data = request.only(['old_password', 'password'])
+    let user = await auth.getUser()
+
+    let passwordValidated = await Hash.verify(data.old_password, user.password)
+
+    if (!passwordValidated) {
+      console.log("ASDAS")
+      session
+        .withErrors([{ field: "old_password", message: antl.formatMessage('main.wrong_current_password')}])
+        .flash({})
+      return response.redirect('back')
+    }
+
+    user.password = await Hash.make(data.password)
+    await user.save()
+
+    session
+      .flash({ success: antl.formatMessage('main.successfull_password_change') })
+    return response.redirect('back')
+  }
 }
 
 module.exports = UserController

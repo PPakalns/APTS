@@ -29,7 +29,7 @@ class User extends Model {
     await user.save()
 
     // Fire event for registration email etc
-    Event.fire('new:user', user)
+    Event.fire('mail:registration', user)
     return user
   }
 

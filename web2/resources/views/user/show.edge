@@ -34,6 +34,33 @@
     </div>
   </div>
 
+  @if(user.id == auth.user.id)
+    <div class="card card-default mt-3">
+      <div class="card-header">
+        {{ antl.formatMessage('main.change_password') }}
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{{ route('UserController.changePassword') }}">
+          {{ csrfField() }}
+
+          @!component('components.input',
+            { label: antl.formatMessage('main.old_password'), name: 'old_password', type: 'password', data: {},
+              getErrorFor, hasErrorFor, old })
+
+          @!component('components.input',
+            { label: antl.formatMessage('main.password'), name: 'password', type: 'password', data: {},
+              getErrorFor, hasErrorFor, old })
+
+          @!component('components.input',
+            { label: antl.formatMessage('main.password_confirmation'), name: 'password_confirmation', type: 'password', data: {},
+              getErrorFor, hasErrorFor, old })
+
+          <input type="submit" class="btn btn-primary" value="{{ antl.formatMessage('main.change_password') }}">
+        </form>
+      </div>
+    </div>
+  @endif
+
   @if(request.roles.admin)
     @!component('submissions.partials.submission_list',
     { antl, submissions, show_user: false, request,

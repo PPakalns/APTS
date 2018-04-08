@@ -17,6 +17,15 @@ class MailListener {
         .subject(antl.formatMessage('main.activation_email_subject'))
     })
   }
+
+  async resetPassword (user) {
+    await Mail.send('email.change_password', {DOMAIN, user: user.toJSON(), antl}, (message) => {
+      message
+        .from(FROM_EMAIL)
+        .to(user.email)
+        .subject(antl.formatMessage('main.change_password_email_subject'))
+    })
+  }
 }
 
 module.exports = MailListener

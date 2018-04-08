@@ -8,6 +8,7 @@
   "email_confirmation": "Epasts atkārtoti",
   "password": "Parole",
   "password_confirmation": "Parole atkārtoti",
+  "old_password": "Pašreizējā parole",
   "missing_credentials": "Nevarēja atrast lietotāju ar dotajiem datiem.",
 
   "alert_success": "Operācija izpildīta veiksmīgi!",
@@ -20,6 +21,11 @@
 
   "activation_email_subject": "Reģistrācija APTS!",
   "activation_email_body": "Lai pabeigtu reģistrāciju APTS sistēmā, lūdzu atveriet sekojošo saiti: {DOMAIN}{url}",
+
+  "change_password_email_subject": "APTS paroles maiņa!",
+  "change_password_email_body": "Lai nomainītu paroli APTS sistēmā, lūdzu atveriet sekojošo saiti: {DOMAIN}{url}",
+
+  "change_password": "Nomainīt paroli",
 
   "no_permissions": "Nav nepieciešamo pilnvaru, lai piekļūtu lapai.",
   "no_assignments": "Grupā nav uzdevumu",
@@ -167,6 +173,9 @@
   "testset_configuration_state": "Testkopas konfigurācijas stāvoklis",
   "reevaluating_solutions": "Pārtestēšanai nodoti {cnt} risinājumi",
   "preview": "Priekštatīt",
-  "testing": "Testēšana"
+  "testing": "Testēšana",
+  "successfull_password_change": "Parole veiksmīgi nomainīta!",
+  "wrong_current_password": "Nepareiza pašreizējā parole",
+  "password_min_length": "Parolei ir jābūt vismaz {length} simbolus garai!"
 }
 

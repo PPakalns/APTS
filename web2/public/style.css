@@ -329,3 +329,7 @@ td pre {
 .tex2jax_process hr {
   overflow: auto !important;
 }
+
+img {
+  max-width: 100%;
+}

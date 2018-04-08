@@ -76,7 +76,7 @@ class JudgeController {
 
   async stop({ request, response }) {
     console.log("Stopping judge")
-    let judge = clearJudge(judge)
+    let judge = request.judge
     await clearJudge(judge)
     judge.status = "STOPPED"
     await judge.save()
