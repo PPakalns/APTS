@@ -190,6 +190,7 @@
   "email_rate_limit": "Epasts jau nesen izsūtīts! Lūdzu mēģiniet vēlreiz pēc {remaining} minūtēm!",
   "email_sent": "Epasts veiksmīgi izsūtīts!",
   "user_not_activated_not_registered": "Norādītais lietotājs nav reģistrēts vai nav pabeidzis reģistrāciju atverot uz epastu nosūtīto saiti.",
-  "alert_recaptcha": "Tiešām esi robots?"
+  "alert_recaptcha": "Tiešām esi robots?",
+  "route_not_found": "Lapa neeksistē!"
 }
 

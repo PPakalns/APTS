@@ -8,6 +8,8 @@ Route.get('/', async ({ response, session, view }) => {
   return response.route('PageController.show', {path: 'apts'})
 })
 
+Route.get('404', ({ view }) => { return view.render('errors.404') })
+
 // Sign in, out routes
 Route.get('signin', 'SessionController.create')
 Route.post('signin', 'SessionController.store')

@@ -31,7 +31,6 @@ class SessionController {
         try {
           await Recaptcha.validate(captcha_key)
         } catch (errorCodes) {
-          console.error("RECAPTCHA", errorCodes)
           session
             .flashExcept(['password'])
             .withErrors([{ field: 'recaptcha', message: antl.formatMessage('main.alert_recaptcha')}])

@@ -20,12 +20,16 @@ class ExceptionHandler extends BaseExceptionHandler {
    *
    * @return {void}
    */
-  async handle (error, { request, response, session }) {
+  async handle (error, { request, response, session, view }) {
     if (error.name === 'ValidationException') {
       session.withErrors(error.messages).flashAll()
       await session.commit()
-      response.redirect('back')
-      return
+      return response.redirect('back')
+    }
+    if (error.name === 'HttpException') {
+      if (error.status === 404) {
+        return response.redirect('404')
+      }
     }
 
     response.status(error.status).send("Please try again")
@@ -42,7 +46,8 @@ class ExceptionHandler extends BaseExceptionHandler {
    * @return {void}
    */
   async report (error, { request }) {
-    if (error.name === 'ValidationException') {
+    if (error.name === 'ValidationException' ||
+        (error.name === 'HttpException' && error.status === 404)) {
       return
     }
     console.error(error)
