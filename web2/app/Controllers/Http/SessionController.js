@@ -1,7 +1,7 @@
 'use strict'
 
 const User = use('App/Models/User')
-const recaptcha = use('Recaptcha2')
+const Recaptcha = use('Recaptcha2')
 
 class SessionController {
 
@@ -29,7 +29,7 @@ class SessionController {
         const captcha_key = request.input('g-recaptcha-response')
 
         try {
-          await recaptcha.validate(captcha_key)
+          await Recaptcha.validate(captcha_key)
         } catch (errorCodes) {
           console.error("RECAPTCHA", errorCodes)
           session

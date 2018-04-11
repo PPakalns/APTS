@@ -3,6 +3,7 @@
 const User = use('App/Models/User')
 const Event = use('Event')
 const Hash = use('Hash')
+const Recaptcha = use('Recaptcha2')
 const { sanitizor } = use('Validator')
 
 const WAIT_TIME = 30 * 60 * 1000;
@@ -57,6 +58,15 @@ class UserController {
    */
   async store ({ request, response, session, antl }) {
     let data = request.only(['email'])
+
+    try {
+      await Recaptcha.validate(request.input('g-recaptcha-response'))
+    } catch (errorCodes) {
+      session
+        .withErrors([{ field: 'recaptcha', message: antl.formatMessage('main.alert_recaptcha')}])
+        .flashAll()
+      return response.route('UserController.create')
+    }
 
     await User.newUser(data.email)
 
@@ -116,6 +126,16 @@ class UserController {
    */
   async resendActivation({ request, response, session, antl }) {
     let data = request.only(['email'])
+
+    try {
+      await Recaptcha.validate(request.input('g-recaptcha-response'))
+    } catch (errorCodes) {
+      session
+        .withErrors([{ field: 'recaptcha', message: antl.formatMessage('main.alert_recaptcha')}])
+        .flashAll()
+      return response.route('UserController.requireResendActivation')
+    }
+
     let user = await User.findBy('email', data.email)
     if (!user || user.activated) {
       session.flash({ error: antl.formatMessage('main.user_already_activated') })
@@ -158,6 +178,16 @@ class UserController {
    */
   async sendResetPassword({ request, antl, session, response }) {
     let data = request.only(['email'])
+
+    try {
+      await Recaptcha.validate(request.input('g-recaptcha-response'))
+    } catch (errorCodes) {
+      session
+        .withErrors([{ field: 'recaptcha', message: antl.formatMessage('main.alert_recaptcha')}])
+        .flashAll()
+      return response.route('UserController.requireResetPassword')
+    }
+
     let user = await User.findBy('email', data.email)
     if (!user || !user.activated) {
       session.flash({ error: antl.formatMessage('main.user_not_activated_not_registered') })

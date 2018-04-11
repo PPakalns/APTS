@@ -18,6 +18,7 @@
           {{ elIf('<div class="invalid-feedback">$self</div>', getErrorFor('email_confirmation'), hasErrorFor('email_confirmation')) }}
         </div>
         {{ csrfField() }}
+        @!component('components.recaptcha', {getErrorFor})
         <button type="submit" class="btn btn-primary float-right">{{ antl.formatMessage("main.signup") }}</button>
       </form>
       <div class="clearfix"></div>

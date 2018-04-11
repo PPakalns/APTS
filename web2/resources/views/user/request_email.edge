@@ -22,7 +22,11 @@
           { label: antl.formatMessage('main.email_confirmation'), name: 'email_confirmation', type: 'text', data: {},
             getErrorFor, hasErrorFor, old })
 
-        <button class="btn btn-primary" type="submit">{{ antl.formatMessage('main.send_email') }}</button>
+        @!component('components.recaptcha', {getErrorFor})
+
+        <div class="mt-2">
+          <input class="btn btn-primary" type="submit" value="{{ antl.formatMessage('main.send_email') }}">
+        </div>
       </form>
     </div>
   </div>

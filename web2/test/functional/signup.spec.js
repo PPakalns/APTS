@@ -5,12 +5,14 @@ const { test, trait } = use('Test/Suite')('Sign up')
 const User = use('App/Models/User')
 const Mail = use('Mail')
 const Hash = use('Hash')
+const Recaptcha2 = use('Recaptcha2')
 
 trait('Test/Browser')
 trait('DatabaseTransactions')
 
 test('can sign up and activate user through email', async ({ browser, assert }) => {
   Mail.fake()
+  Recaptcha2.fake()
 
   // Given we are on the sign up page
   let page = await browser.visit('/signup')
@@ -73,5 +75,6 @@ test('can sign up and activate user through email', async ({ browser, assert }) 
   // assert.equal(await Hash.make('secret'), user.password)
 
   Mail.restore()
+  Recaptcha2.restore()
 }).timeout(4000)
 
