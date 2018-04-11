@@ -15,6 +15,9 @@
           <label for="password">{{ antl.formatMessage("main.password") }}</label>
           <input class="form-control" type="password" name="password" id="password">
         </div>
+        @if(old('showRecaptcha', false))
+          @!component('components.recaptcha', {getErrorFor})
+        @endif
         {{ csrfField() }}
         <button type="submit" class="btn btn-primary float-right">{{ antl.formatMessage("main.signin") }}</button>
       </form>

@@ -3,6 +3,10 @@ const { hooks } = require('@adonisjs/ignitor')
 const utility = require('../utility/utility.js')
 
 hooks.after.providersBooted(() => {
+  // DEBUG DATABASE
+  // const Database = use('Database')
+  // Database.on('query', console.log)
+
   const View = use('View')
   let marked = require('marked');
   View.global('markdown', function (text) {

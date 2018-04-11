@@ -189,6 +189,7 @@
   "user_already_activated": "Lietotājs jau ir apstiprinājis reģistrācijas epastu vai nav reģistrējies sistēmā!",
   "email_rate_limit": "Epasts jau nesen izsūtīts! Lūdzu mēģiniet vēlreiz pēc {remaining} minūtēm!",
   "email_sent": "Epasts veiksmīgi izsūtīts!",
-  "user_not_activated_not_registered": "Norādītais lietotājs nav reģistrēts vai nav pabeidzis reģistrāciju atverot uz epastu nosūtīto saiti."
+  "user_not_activated_not_registered": "Norādītais lietotājs nav reģistrēts vai nav pabeidzis reģistrāciju atverot uz epastu nosūtīto saiti.",
+  "alert_recaptcha": "Tiešām esi robots?"
 }
 

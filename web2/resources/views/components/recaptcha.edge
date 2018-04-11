@@ -1,0 +1,5 @@
+<div>
+  {{{ recaptcha() }}}
+  <div class="cred">{{ getErrorFor('recaptcha') || "" }}</div>
+</div>
+@!yield($slot.main)

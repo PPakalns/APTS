@@ -1,5 +1,8 @@
 'use strict'
 
+const User = use('App/Models/User')
+const recaptcha = use('Recaptcha2')
+
 class SessionController {
 
   /**
@@ -14,12 +17,43 @@ class SessionController {
    */
   async store ({ auth, request, response, session, antl }) {
     const { email, password } = request.all()
+    const MAX_FAILED_LOGINS = 5
+    let showRecaptcha = false
+
+    let tmpUser = await User.findBy('email', email)
+
+    if (tmpUser) {
+      // Validate recaptcha
+      if (tmpUser.failed_login > MAX_FAILED_LOGINS) {
+        showRecaptcha = true;
+        const captcha_key = request.input('g-recaptcha-response')
+
+        try {
+          await recaptcha.validate(captcha_key)
+        } catch (errorCodes) {
+          console.error("RECAPTCHA", errorCodes)
+          session
+            .flashExcept(['password'])
+            .withErrors([{ field: 'recaptcha', message: antl.formatMessage('main.alert_recaptcha')}])
+            .flash({showRecaptcha: true})
+          return response.route('SessionController.create')
+        }
+      }
+    }
 
     try {
       await auth.attempt(email, password)
     } catch (e) {
-      session.flashExcept(['password'])
-      session.flash({ error: antl.formatMessage('main.missing_credentials') })
+      if (tmpUser) {
+        tmpUser.failed_login += 1
+        await tmpUser.save()
+        if (tmpUser.failed_login > MAX_FAILED_LOGINS) {
+          showRecaptcha = true;
+        }
+      }
+      session
+        .flashExcept(['password'])
+        .flash({ showRecaptcha, error: antl.formatMessage('main.missing_credentials') })
       return response.route('SessionController.create')
     }
 
@@ -27,11 +61,15 @@ class SessionController {
     const user = await auth.getUser()
     if (!user.activated)
     {
-      session.flashExcept(['password'])
-      session.flash({ error: antl.formatMessage('main.user_not_activated') })
+      session
+        .flashExcept(['password'])
+        .flash({ showRecaptcha, error: antl.formatMessage('main.user_not_activated') })
       await auth.logout()
       return response.route('SessionController.create')
     }
+
+    user.failed_login = 0
+    await user.save()
     return response.redirect('/')
   }
 
