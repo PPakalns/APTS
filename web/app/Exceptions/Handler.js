@@ -28,7 +28,7 @@ class ExceptionHandler extends BaseExceptionHandler {
     }
     if (error.name === 'HttpException') {
       if (error.status === 404) {
-        return response.redirect('404')
+        return response.redirect('/404')
       }
     }
 
