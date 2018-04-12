@@ -1,7 +1,17 @@
-]
+# Node modules
 node_modules
-storage
-database/development.sqlite
-!.gitkeep
+
+# Adonis directory for storing tmp files
+tmp
+
+# Environment variables, never commit this file
 .env
-npm-debug.log
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# The development and testing sqlite files
+database/development.sqlite
+database/testing.sqlite
+database/adonis.sqlite

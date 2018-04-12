@@ -1,169 +1,229 @@
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+
 html, body {
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
   height: 100%;
 }
 
 #wrapper {
+  min-height: 100vh;
+  max-width: 100%;
   width: 100%;
-  min-height: 100%;
-  padding-bottom: 70px;
-  margin-bottom: -34px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
 }
 
-body {
-  font-family: 'Open Sans', sans-serif;
-  background: #ffffff;
-}
-
-.lead {
-    font-size: 22px !important;
-}
-
-.footer {
+#content {
+  min-width: 0;
+  min-height: 100vh;
+  height: 100%;
   text-align: center;
-  margin: auto;
-  background-color: rgb(248,248,248);
-  border-top: 2px solid rgb(231,231,231);
-  box-sizing: border-box;
-  height: 34px;
+  flex: 1 1 900px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.footer .row{
-  background-color: rgb(248,248,248);
+#content #center-content{
+  margin-top: 1em;
+  text-align: left;
+  margin-bottom: 50px;
 }
 
-.footer div p {
-  padding-top: 5px;
+#footer {
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+#footer div{
+  opacity: 0.4;
+  transition: all 0.3s;
+}
+
+#footer div:hover {
+  opacity: 1;
+}
+
+#sidebar-wrapper {
+  flex: 0 0 200px;
+  min-height: 100%;
+  background: #7386D5;
+  color: #fff;
+  transition: all 0.3s;
+}
+
+#center-content {
+  transition: all 0.3s;
+}
+
+#center-content {
+  min-width: 100%;
+}
+
+#sidebar {
+  background: #7386D5;
+  width: 200px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  box-shadow: 0px 0px 10px black;
+}
+
+#sidebar ul li.purplish {
+  background: #a386D5;
+}
+
+@media only screen and (max-width: 950px) {
+  #apts_foot {
+    display: none;
+  }
+}
+
+@media only screen and (min-height: 750px) and (min-width: 814px){
+  #sidebar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+  }
+}
+
+@media only screen and (max-height: 750px) {
+  #sidebar ul:not(:first-child) {
+    margin-top: 30px;
+  }
+}
+
+@media only screen and (max-width: 813px) {
+  #sidebar {
+    width: 100%;
+    min-height: 0vh;
+    box-shadow: none;
+  }
+
+  #sidebar-wrapper {
+    flex: 0 0 auto;
+    min-height: 0px;
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+  }
+
+  #wrapper {
+    flex-direction: column;
+  }
+
+  #sidebar ul:not(:first-child) {
+    margin-top: 30px;
+  }
+}
+
+.spacer{
+  flex: 1 10 0px;
+}
+
+.vflex {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+#sidebar ul {
   margin-bottom: 0px;
 }
 
-.sidebar ol {
-  padding-left: 0;
-  list-style-position: inside;
+#sidebar>ul>li>a, #sidebar>ul>li>span {
+  color: white;
+  display: block;
+  padding: 8px;
+  padding-left: 15px;
+  font-size: 1.2em;
+  line-height: 1.3em;
+  overflow-x: hidden;
 }
 
-.bg-success, .bg-danger, .bg-info, .bg-warning {
+#sidebar>ul>li>span>a {
+  text-decoration: none;
+  color: white;
+}
+
+#sidebar>ul>li>a {
+  padding-left: 25px;
+}
+
+.pl-13 {
+  padding-left: 35px !important;
+}
+
+.pl-14 {
+  padding-left: 45px !important;
+}
+
+#sidebar>ul>li .small {
+  font-size: 1em;
+}
+
+#sidebar>ul>li>a:hover {
+  color: #7386D5;
+  background: #fff;
+  text-decoration: none;
+}
+
+a, a:hover, a:focus {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.card-header h4 {
+  margin: 0px;
+}
+
+#github a {
+  display: inline-block;
+  text-decoration: none;
   padding: 10px;
 }
 
-table {
-    border-collapse: collapse;
-    width:100%;
+.col-auto {
+  max-width: 100% !important;
+  word-wrap: break-word !important;
 }
 
-table.ftable {
-    table-layout: fixed;
-}
-table.ftable td, table.ftable th{
-    overflow: hidden;
+i.material-icons {
+  vertical-align: middle !important;
 }
 
-table td,
-table tr, table th {
-  padding-left: 5px;
-  padding-right: 5px;
-  border: 1px solid #ddd;
+.cgray {
+  color: gray;
 }
 
-.editmenu a{
-  margin-left: 10px;
-  display: inline-block;
+.cred {
+  color: red;
 }
 
-.content{
-
+/* Testing stage colors */
+.sub_wait{
+    background-color: #fa8af2;
 }
 
-pre code.hljs{
-  margin: -9.5px;
-  background-color: white;
+.sub_public_testing{
+    background-color: lightpink;
 }
 
-pre.simple{
-    padding: 2px;
-    margin:0px;
-    background-color: white;
-    border-radius: 0px;
-    border: 0px;
+.sub_wait_nonpublic_testing{
+    background-color: #ffff70;
 }
 
-td.message{
-    vertical-align: center;
-    overflow-x: auto;
-}
-
-td.message pre{
-    max-width: 100%;
-}
-
-tr.initial{
-    border-top-width: 3px;
-    border-top-color: #ffaaff;
-}
-
-td.nocontent{
-  color: darkred;
-  font-style: italic;
-}
-
-table.no-border td, table.no-border th{
-  border-left: 0px;
-  border-right: 0px;
-}
-
-/* Breadcrumbs */
-
-.breadcrumb {background: rgba(255, 255, 255, 1); border: 0px solid rgba(255, 255, 255, 1); border-radius: 4px; display: block;}
-.breadcrumb li {font-size: 15px;}
-.breadcrumb a {color: rgba(0, 98, 184, 1);}
-.breadcrumb a:hover {color: rgba(7, 95, 173, 1);}
-.breadcrumb>.active {color: rgba(92, 92, 92, 1);}
-.breadcrumb>li+li:before {color: rgba(92, 92, 125, 1); content: "\276D\00a0";}
-
-/* Breadcrumbs end */
-
-.prettycontent{
-  line-height: 170%;
-  font-size: 16px;
-}
-
-.prettycontent img{
-  max-width: 100%;
-  padding: 5px;
-}
-
-.prettycontent h1{
-  font-size: 30px;
-}
-.prettycontent h2{
-  font-size: 27px;
-}
-.prettycontent h3{
-  font-size: 24px;
-}
-.prettycontent h4{
-  font-size: 20px;
-}
-
-.prettycontent h5{
-  font-size: 18px;
-}
-
-.sidebar, textarea{
-  font-family: "Courier New", Courier, monospace;
-}
-
-.alert-hidden, .button-hidden, .elem-hidden{
-  display: none;
-}
-
-/* Header colors */
-
-thead {
-    background-color: #f5fff5;
-}
-
-.h_green {
-    background-color: #eeffdd;
+.sub_nonpublic_testing{
+    background-color: lightgreen;
 }
 
 /* Submission colors */
@@ -199,85 +259,77 @@ thead {
     color: purple;
 }
 
-.bold{
-    font-weight: bold;
+.white {
+  color: white;
 }
 
-.top-buffer{
-    margin-top:10px;
+.break-word {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
 }
 
-.panel-heading{
-    font-weight: bold;
+.private-result {
+  background-color: #eff1f0;
 }
 
-.checkbox{
-    margin-left: 20px;
+td.message {
+  overflow-x: auto;
+  max-width: 1px; /* Why dis works */
 }
 
-.partially_hidden{
-    background-color: #eeeeff;
+.simple {
+  overflow: visible;
 }
 
-.rectangle{
-    width:20px;
-    height:20px;
-    display: inline-block;
-    border: 2px dotted;
+.rectangle {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
 }
 
-tr.hover-row:hover{
-    background-color: #fafafa;
+.border {
+  border: 3px dotted black;
 }
 
-.no-padding{
-    padding: 0px;
-}
-
-.full-cell{
-    width: 100%;
+.testresult tbody:before {
+    content: "";
+    display: block;
     margin: 0px;
-    height: 100%;
-    background-color: transparent;
-    border: 0px;
-    font-weight: bold;
+    padding: 0px;
+    line-height: 0px;
+    height: 0px;
+    color: transparent;
 }
 
-#clock-wrapper {
-    background-color: #eeffdd;
+.testresult .initial {
+  border-top: 2px solid purple;
 }
 
-#clock {
-    font-family: courier, monospace;
-    font-weight: bold;
-    color: rgba(0, 98, 184, 0.9);
-    font-size: 20px;
-    text-shadow: 0px 0px 2px rgba(150, 150, 150, 0.5);
+.md-float-right {
+  float: right;
 }
 
-/* Small++ Devices, Desktops */
-@media only screen and (min-width : 768px) {
-    .text-keep-right{
-        text-align: right;
-    }
+@media only screen and (max-width: 800px) {
+  .md-float-right{
+    float: none;
+  }
 }
 
-.sub_wait{
-    background-color: #fa8af2;
+td pre {
+  margin-bottom: 0px;
 }
 
-.sub_public_testing{
-    background-color: lightpink;
+.tex2jax_process hr {
+  overflow: auto !important;
 }
 
-.sub_wait_nonpublic_testing{
-    background-color: #ffff70;
-}
-
-.sub_nonpublic_testing{
-    background-color: lightgreen;
-}
-
-.source_code_toggle{
-    background-color: #f5fff5;
+img {
+  max-width: 100%;
 }

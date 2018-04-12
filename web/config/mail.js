@@ -1,19 +1,18 @@
 'use strict'
 
-const Helpers = use('Helpers')
 const Env = use('Env')
 
 module.exports = {
   /*
   |--------------------------------------------------------------------------
-  | Driver
+  | Connection
   |--------------------------------------------------------------------------
   |
-  | driver defines the default driver to be used for sending emails. Adonis
-  | has support for 'mandrill', 'mailgun', 'smtp', 'ses' and 'log' driver.
+  | Connection to be used for sending emails. Each connection needs to
+  | define a driver too.
   |
   */
-  driver: Env.get('MAIL_DRIVER', 'log'),
+  connection: Env.get('MAIL_CONNECTION', 'smtp'),
 
   /*
   |--------------------------------------------------------------------------
@@ -24,6 +23,7 @@ module.exports = {
   |
   */
   smtp: {
+    driver: 'smtp',
     pool: true,
     port: 2525,
     host: '',
@@ -39,60 +39,47 @@ module.exports = {
 
   /*
   |--------------------------------------------------------------------------
-  | Mandrill
+  | SparkPost
   |--------------------------------------------------------------------------
   |
-  | Here we define api options for mandrill. Mail provider makes use of
-  | mandrill raw api, which means you cannot set email body specific
-  | options like template, tracking_domain etc.
+  | Here we define configuration for spark post. Extra options can be defined
+  | inside the `extra` object.
+  |
+  | https://developer.sparkpost.com/api/transmissions.html#header-options-attributes
+  |
+  | extras: {
+  |   campaign_id: 'sparkpost campaign id',
+  |   options: { // sparkpost options }
+  | }
   |
   */
-  mandrill: {
-    apiKey: Env.get('MANDRILL_APIKEY'),
-    async: false,
-    ip_pool: 'Main Pool'
+  sparkpost: {
+    driver: 'sparkpost',
+    apiKey: Env.get('SPARKPOST_API_KEY'),
+    extras: {}
   },
 
   /*
   |--------------------------------------------------------------------------
-  | Amazon SES
+  | Mailgun
   |--------------------------------------------------------------------------
   |
-  | Here we define api credentials for Amazon SES account. Make sure you have
-  | verified your domain and email address, before you can send emails.
+  | Here we define configuration for mailgun. Extra options can be defined
+  | inside the `extra` object.
   |
-  */
-  ses: {
-    accessKeyId: Env.get('SES_KEY'),
-    secretAccessKey: Env.get('SES_SECRET'),
-    region: 'us-east-1',
-    rateLimit: 10
-  },
-
-  /*
-  |--------------------------------------------------------------------------
-  | MailGun
-  |--------------------------------------------------------------------------
+  | https://mailgun-documentation.readthedocs.io/en/latest/api-sending.html#sending
   |
-  | Here we define api credentials for Amazon SES account. Make sure you have
-  | verified your domain and email address, before you can send emails.
+  | extras: {
+  |   'o:tag': '',
+  |   'o:campaign': '',,
+  |   . . .
+  | }
   |
   */
   mailgun: {
+    driver: 'mailgun',
     domain: Env.get('MAILGUN_DOMAIN'),
-    apiKey: Env.get('MAILGUN_APIKEY')
-  },
-
-  /*
-  |--------------------------------------------------------------------------
-  | Log
-  |--------------------------------------------------------------------------
-  |
-  | Log driver is mainly for testing your emails expectations. Emails are
-  | written inside a log file, which can be used for inspection.
-  |
-  */
-  log: {
-    toPath: Helpers.storagePath('logs/mail.eml')
+    apiKey: Env.get('MAILGUN_API_KEY'),
+    extras: {}
   }
 }

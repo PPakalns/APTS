@@ -24,6 +24,10 @@ class TestsetsTableSchema extends Schema {
 
             // Checker cpp file
             table.integer('checker_id').unsigned().references('id').inTable('files')
+
+            table.boolean('use_files').notNullable().defaultTo(false)
+            table.string('input_file', 20).notNullable().defaultTo("")
+            table.string('output_file', 20).notNullable().defaultTo("")
         })
         this.table('problems', (table) => {
             table.integer('testset_id').unsigned().references('id').inTable('testsets')
