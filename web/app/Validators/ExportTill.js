@@ -1,7 +1,7 @@
 'use strict'
 
 const Antl = use('Antl')
-const { rule } = require('indicative')
+const { rule } = use('Validator')
 
 class ExportTill {
   get messages() {
