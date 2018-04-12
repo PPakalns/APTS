@@ -59,6 +59,7 @@
                   <option value="fpc">Pascal</option>
                 </select>
                 <input type="file" name="solution" id="submit_file">
+                <div class="cred">{{ getErrorFor("solution") || "" }}</div>
                 <p>
                   <button type="button" class="btn btn-default button-hidden" style="width:100%;" id="submit_button">{{ antl.formatMessage('main.choose_file') }}</button><br />
                 </p>

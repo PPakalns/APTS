@@ -48,7 +48,7 @@ class File extends Model {
 
     if (!dataFile.moved()) {
       console.log(dataFile.error())
-      session.withErrors({[name]: dataFile.error().message})
+      session.withErrors([{field: dataFile.error().fieldName, message: dataFile.error().message}])
       response.redirect('back')
       return false
     }
