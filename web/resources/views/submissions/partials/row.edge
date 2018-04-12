@@ -1,5 +1,7 @@
 <tr class="
+@if(request.roles.admin)
 @!component('submissions.partials.trclass', { submission })
+@endif
 ">
   <td>
     <a href="{{ route('SubmissionController.show', {id: submission.id}) }}">
