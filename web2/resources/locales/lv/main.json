@@ -178,7 +178,6 @@
   "testing": "Testēšana",
   "successfull_password_change": "Parole veiksmīgi nomainīta!",
   "wrong_current_password": "Nepareiza pašreizējā parole",
-  "password_min_length": "Parolei ir jābūt vismaz {length} simbolus garai!",
   "forgot_password": "Aizmirsi paroli?",
   "did_not_recieve_activation_email": "Nesaņēmi reģistrācijas epastu?",
   "send_activation_email_again": "Izsūtīt reģistrācijas epastu atkārtoti!",
@@ -191,6 +190,23 @@
   "email_sent": "Epasts veiksmīgi izsūtīts!",
   "user_not_activated_not_registered": "Norādītais lietotājs nav reģistrēts vai nav pabeidzis reģistrāciju atverot uz epastu nosūtīto saiti.",
   "alert_recaptcha": "Tiešām esi robots?",
-  "route_not_found": "Lapa neeksistē!"
+  "route_not_found": "Lapa neeksistē!",
+
+  "val_min": "Vērtībai jābūt vismaz \\{\\{ argument.0 \\}\\} simbolus garai!",
+  "val_max": "Vērtībai jābūt ne garākai par \\{\\{ argument.0 \\}\\} simboliem!",
+  "val_required": "Obligāts lauks!",
+  "val_required_if": "Jānorāda vērtība!",
+  "val_same": "Vērtības nesakrīt!",
+  "val_dateFormat": "Vērtībai jāatbilst sekojošajam formātam \\{\\{ argument.0 \\}\\}!",
+  "val_string": "Vērtībai jābūt tekstam!",
+  "val_alpha_numeric": "Vērtība var sastēvēt tikai no latīņu alfabēta burtiem un cipariem!",
+  "val_unique": "Norādītā vērtība jau eksistē, tiek izmantota.",
+  "val_email": "Laukā jānorāda epasta adrese!",
+  "val_number": "Jānorāda skaitliska vērtība!",
+  "val_integer": "Jānorāda vesels vērtība!",
+  "val_above": "Norādītajam skaitlim ir jābūt lielākam par \\{\\{ argument.0 \\}\\}!",
+  "val_under": "Norādītajam skaitlim ir jābūt mazākam par \\{\\{ argument.0 \\}\\}!",
+  "val_regex": "Norādītajai vērtībai ir jāatbilst \"\\{\\{ argument.0 \\}\\}\" regex izteiksmei!",
+  "io_file_names_different": "Ievadfaila, izvadfaila nosaukumi nedrīkst sakrist!"
 }
 

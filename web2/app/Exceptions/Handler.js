@@ -32,7 +32,7 @@ class ExceptionHandler extends BaseExceptionHandler {
       }
     }
 
-    response.status(error.status).send("Please try again")
+    response.status(error.status).send("Unexpected error! Please try again")
   }
 
   /**

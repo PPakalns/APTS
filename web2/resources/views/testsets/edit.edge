@@ -129,8 +129,8 @@
             comment: antl.formatMessage('main.example') + ': 1-9,13,14-16' })
         @!component('components.input',
           { label: antl.formatMessage('main.use_files'), name: 'use_files', type: 'checkbox', data: testset,
-            getErrorFor, hasErrorFor, old })
-        <div>
+            getErrorFor, hasErrorFor, old, custom_prop: ["data-toggle=collapse", "data-target=#ionames"] })
+        <div id="ionames" class="{{ (old('use_files', testset['use_files'])) ? "show" : "" }} collapse">
         @!component('components.input',
           { label: antl.formatMessage('main.input_file'), name: 'input_file', type: 'text', data: testset,
             getErrorFor, hasErrorFor, old,

@@ -5,7 +5,10 @@ const Antl = use('Antl')
 class ActivateUser {
   get messages() {
     return {
-      'password.min': Antl.formatMessage('main.password_min_length', {length: 6}),
+      'min': Antl.formatMessage('main.val_min'),
+      'required': Antl.formatMessage('main.val_required'),
+      'required_if': Antl.formatMessage('main.val_required_if'),
+      'same': Antl.formatMessage('main.val_same'),
     }
   }
 

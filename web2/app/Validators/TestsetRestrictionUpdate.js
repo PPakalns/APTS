@@ -1,10 +1,25 @@
 'use strict'
 
+const Antl = use('Antl')
 const { rule } = require('indicative')
 
 const FILE_REGEX = /^[a-zA-Z_]+\.[a-zA-Z]+$/;
 
 class TestsetRestrictionUpdate {
+  get messages() {
+    return {
+      'required': Antl.formatMessage('main.val_required'),
+      'number': Antl.formatMessage('main.val_number'),
+      'above': Antl.formatMessage('main.val_above'),
+      'under': Antl.formatMessage('main.val_under'),
+      'integer': Antl.formatMessage('main.val_integer'),
+      'max': Antl.formatMessage('main.val_max'),
+      'required_if': Antl.formatMessage('main.val_required_if'),
+      'regex': Antl.formatMessage('main.val_regex'),
+      'different': Antl.formatMessage('main.io_file_names_different'),
+    }
+  }
+
   get validateAll () {
     return true
   }

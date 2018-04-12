@@ -3,7 +3,11 @@
   <div class="form-check">
     <input class="form-check-input {{ hasErrorFor(name) }}"
       id="{{ name }}" type="checkbox" name="{{ name }}"
-      placeholder="" {{ old(name, data[name]) ? ' checked' : '' }} >
+      placeholder="" {{ old(name, data[name]) ? ' checked' : '' }}
+      @each(prop in custom_prop)
+        {{prop}}
+      @endeach
+      >
       <label class="form-check-label" for="{{ name }}">{{ label }}</label>
       <p class="form-text text-muted">
         {{ comment || "" }}
@@ -15,7 +19,11 @@
 <div class="form-group">
   <label for="{{ name }}">{{ label }}</label>
   <select class="form-control {{ hasErrorFor(name) ? 'is-invalid': '' }}"
-  id="{{ name }}" name="{{ name }}">
+    id="{{ name }}" name="{{ name }}"
+    @each(prop in custom_prop)
+    {{prop}}
+    @endeach
+    >
     @each((sname, sval) in options)
     <option value="{{ sval }}" {{ (sval == old(name, data[name])) ? 'selected' : '' }}>{{ sname }}</option>
     @endeach
@@ -30,10 +38,18 @@
   <label for="{{ name }}">{{ label }}</label>
   @if(type == 'textarea')
     <textarea class="form-control {{ hasErrorFor(name) ? 'is-invalid': '' }}"
-      id="{{ name }}" name="{{ name }}" rows="30">{{ old(name, data[name] || '') }}</textarea>
+      id="{{ name }}" name="{{ name }}" rows="30"
+      @each(prop in custom_prop)
+      {{prop}}
+      @endeach
+      >{{ old(name, data[name] || '') }}</textarea>
   @else
     <input class="form-control {{ hasErrorFor(name) ? 'is-invalid': '' }}"
-    id="{{ name }}" type="{{type}}" name="{{ name }}" placeholder="" value="{{ old(name, data[name] || '') }}">
+    id="{{ name }}" type="{{type}}" name="{{ name }}" placeholder="" value="{{ old(name, data[name] || '') }}"
+    @each(prop in custom_prop)
+    {{prop}}
+    @endeach
+    >
   @endif
   <p class="form-text text-muted">
     {{ comment || "" }}

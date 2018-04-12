@@ -1,6 +1,19 @@
 'use strict'
 
+const Antl = use('Antl')
+
 class PageStore {
+  get messages() {
+    return {
+      'required': Antl.formatMessage('main.val_required'),
+      'string': Antl.formatMessage('main.val_string'),
+      'max': Antl.formatMessage('main.val_max'),
+      'alpha_numeric': Antl.formatMessage('main.val_alpha_numeric'),
+      'min': Antl.formatMessage('main.val_min'),
+      'unique': Antl.formatMessage('main.val_unique'),
+    }
+  }
+
   get rules () {
     const pageId = parseInt(this.ctx.params.id)
     return {
