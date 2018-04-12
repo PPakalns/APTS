@@ -1,9 +1,9 @@
 @if(submission.testing_stage == 0)
 sub_wait
-@elif(submission.testing_stage == 4)
+@elseif(submission.testing_stage == 4)
 sub_public_testing
-@elif(submission.testing_stage == 8)
+@elseif(submission.testing_stage == 8)
 sub_wait_nonpublic_testing
-@elif(submission.testing_stage == 12)
+@elseif(submission.testing_stage == 12)
 sub_nonpublic_testing
 @endif
