@@ -7,11 +7,11 @@ class Assignment extends Model {
 
   // Returned value is used to display sidebar with
   // assignments for the group
-  static async getGroupVisibleAssignments(group) {
+  static async getGroupAssignments(group, visible) {
     return (await group
         .assignments()
         .with('problem')
-        .where('visible', true)
+        .where('visible', visible)
         .fetch()
       ).toJSON()
   }

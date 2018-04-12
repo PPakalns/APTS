@@ -1,6 +1,17 @@
 @if(request.roles.admin)
 <div class="col">
   <ul class="nav justify-content-end">
+    @if(assignment)
+    <li class="nav-item">
+      <button class="btn btn-outline-secondary" disabled>
+      @if(assignment.visible)
+      <span class="font-weight-bold">({{ antl.formatMessage('main.public_assignment') }})</span>
+      @else
+      ({{ antl.formatMessage('main.private_assignment') }})
+      @endif
+      </button>
+    </li>
+    @endif
     <li class="nav-item ml-2">
       <a class="btn btn-dark d-flex align-items-center" href="{{ route('ProblemController.edit', {id: problem.id}) }}">
         @!component('icon.edit', { size: '25px' })

@@ -4,20 +4,30 @@
   @include('groups/partials/admin-nav')
   <h1 class="display-4">{{ group.name }}</h1>
 
-  <ul class="list-group md-float-right mb-3">
-    <li class="list-group-item active">{{ antl.formatMessage('main.group_assignments') }}</li>
-    @each(assignment in groupVisibleAssignments)
-    <li class="list-group-item">
-      <a href="{{ route('AssignmentController.show', {id: assignment.id}) }}">
-        {{ assignment.problem.name }}
-      </a>
-    </li>
-    @else
-    <li class="list-group-item list-group-item-info">
-      {{ antl.formatMessage("main.no_assignments") }}
-    </li>
-    @endeach
-  </ul>
+  <div class="md-float-right">
+    <ul class="list-group mb-3">
+      <li class="list-group-item active">{{ antl.formatMessage('main.group_assignments') }}</li>
+      @each(assignment in groupVisibleAssignments, include = 'groups.partials.assignment')
+      @else
+      <li class="list-group-item list-group-item-info">
+        {{ antl.formatMessage("main.no_assignments") }}
+      </li>
+      @endeach
+    </ul>
+
+    @if(request.roles.admin)
+    <ul class="list-group mb-3">
+      <li class="list-group-item list-group-item-dark">{{ antl.formatMessage('main.group_hidden_assignments') }}</li>
+      @each(assignment in groupHiddenAssignments, include = 'groups.partials.assignment')
+      @else
+      <li class="list-group-item list-group-item-info">
+        {{ antl.formatMessage("main.no_assignments") }}
+      </li>
+      @endeach
+    </ul>
+    @endif
+  </div>
+
   <div>
     <div class="tex2jax_process">
       {{ markdown(group.description) }}

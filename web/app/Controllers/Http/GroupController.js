@@ -44,10 +44,17 @@ class GroupController {
       return;
     }
 
-    return ctx.view.render('groups.show',
-      { group: group.toJSON(),
-        groupVisibleAssignments: await Assignment.getGroupVisibleAssignments(group),
-      })
+    let data = {
+      group: group.toJSON(),
+      groupVisibleAssignments: await Assignment.getGroupAssignments(group, true),
+    }
+
+    // Get hidden group assignments
+    if (ctx.request.roles.admin) {
+      data.groupHiddenAssignments = await Assignment.getGroupAssignments(group, false)
+    }
+
+    return ctx.view.render('groups.show', data)
   }
 
   async create ({ view }) {
