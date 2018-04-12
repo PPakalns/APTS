@@ -36,6 +36,7 @@
     "csv-parse": "^2.1.0",
     "csv-stringify": "^2.0.4",
     "marked": "^0.3.17",
+    "moment": "^2.22.0",
     "mysql": "^2.15.0",
     "node-uuid": "^1.4.8",
     "rand-token": "^0.4.0",
