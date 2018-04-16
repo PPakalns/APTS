@@ -89,7 +89,7 @@ class SubmissionController {
     }
 
     // Upload solution
-    let solution = await File.upload(ctx, 'solution', ['text'], true, '64KB')
+    let solution = await File.upload(ctx, 'solution', ['text', 'application/octet-stream'], true, '64KB')
     if (!solution) {
       return
     }
