@@ -143,7 +143,7 @@ class GroupController {
     let group = await Group.findOrFail(params.id)
     let data = await request.only(['student_id', 'email'])
 
-    let csv = await File.upload(ctx, 'csv', ['text', 'text/csv'], false, '10MB')
+    let csv = await File.upload(ctx, 'csv', ['text', 'csv', 'vnd.ms-excel'], false, '10MB')
     if (!csv) {
       return
     }
