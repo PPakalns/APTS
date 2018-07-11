@@ -1,7 +1,7 @@
 'use strict'
 
 const Antl = use('Antl')
-const { rule } = require('indicative')
+const { rule } = use('Validator')
 
 const FILE_REGEX = /^[a-zA-Z_]+\.[a-zA-Z]+$/;
 

@@ -107,7 +107,7 @@ class TestsetController {
     let testset = await Testset.findOrFail(params.id)
     let problem = await Problem.findOrFail(testset.problem_id)
 
-    let zip_file = await File.upload(ctx, 'tests', ['zip'], false, '100MB')
+    let zip_file = await File.upload(ctx, 'tests', ['zip', 'x-zip-compressed'], false, '100MB')
     if (!zip_file) {
       return
     }
