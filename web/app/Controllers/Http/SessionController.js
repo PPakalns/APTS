@@ -17,8 +17,8 @@ class SessionController {
    * Authorize user and store a session
    */
   async store ({ auth, request, response, session, antl }) {
-    const { raw_email, password } = request.all()
-    const email = sanitizor.normalizeEmail(raw_email)
+    let { email, password } = request.all()
+    email = sanitizor.normalizeEmail(email)
 
     const MAX_FAILED_LOGINS = 5
     let showRecaptcha = false
