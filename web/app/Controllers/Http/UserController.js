@@ -68,7 +68,7 @@ class UserController {
       return response.route('UserController.create')
     }
 
-    await User.newUser(data.email)
+    await User.newUser(sanitizor.normalizeEmail(data.email))
 
     session
       .flash({ success: antl.formatMessage('main.successful_signup') })
@@ -136,7 +136,7 @@ class UserController {
       return response.route('UserController.requireResendActivation')
     }
 
-    let user = await User.findBy('email', data.email)
+    let user = await User.findBy('email', sanitizor.normalizeEmail(data.email))
     if (!user || user.activated) {
       session.flash({ error: antl.formatMessage('main.user_already_activated') })
       return response.redirect('back')
@@ -188,7 +188,7 @@ class UserController {
       return response.route('UserController.requireResetPassword')
     }
 
-    let user = await User.findBy('email', data.email)
+    let user = await User.findBy('email', sanitizor.normalizeEmail(data.email))
     if (!user || !user.activated) {
       session.flash({ error: antl.formatMessage('main.user_not_activated_not_registered') })
       return response.redirect('back')

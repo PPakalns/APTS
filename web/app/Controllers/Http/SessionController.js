@@ -2,6 +2,7 @@
 
 const User = use('App/Models/User')
 const Recaptcha = use('Recaptcha2')
+const { sanitizor } = use('Validator')
 
 class SessionController {
 
@@ -16,7 +17,9 @@ class SessionController {
    * Authorize user and store a session
    */
   async store ({ auth, request, response, session, antl }) {
-    const { email, password } = request.all()
+    const { raw_email, password } = request.all()
+    const email = sanitizor.normalizeEmail(raw_email)
+
     const MAX_FAILED_LOGINS = 5
     let showRecaptcha = false
 

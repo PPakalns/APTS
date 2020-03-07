@@ -4,6 +4,7 @@ const Model = use('Model')
 const Event = use('Event')
 const Hash = use('Hash')
 const Token = require('rand-token').generate;
+const Validator = use('Validator')
 
 class User extends Model {
   static boot () {
@@ -36,7 +37,7 @@ class User extends Model {
 
   static async newUser(email) {
     let user = new User()
-    user.email = email
+    user.email = Validator.sanitizor.normalizeEmail(email)
     user.activated = false
     let key = User.getToken()
     user.email_change_hash = await User.Hash(key)
