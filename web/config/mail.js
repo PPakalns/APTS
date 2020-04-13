@@ -31,7 +31,13 @@ module.exports = {
     auth: null,
     maxConnections: 5,
     maxMessages: 100,
-    rateLimit: 10
+    rateLimit: 10,
+    name: "apts.lv",
+    dkim: {
+      domainName: "apts.lv",
+      keySelector: "main",
+      privateKey: Env.get('DKIM_PRIVATE_KEY'),
+    }
   },
 
   /*

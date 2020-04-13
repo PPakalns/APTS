@@ -88,7 +88,7 @@ class TestsetController {
     let testset = await Testset.findOrFail(params.id)
     let problem = await Problem.findOrFail(testset.problem_id)
 
-    let checker_file = await File.upload(ctx, 'checker', ['text'], true, '64KB')
+    let checker_file = await File.upload(ctx, 'checker', ['text', 'octet-stream'], true, '64KB')
     if (!checker_file) {
       return
     }
