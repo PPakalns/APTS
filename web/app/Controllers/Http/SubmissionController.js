@@ -77,7 +77,7 @@ class SubmissionController {
     }
 
     // 60 sec delay between submissions
-    let last_submission = await user.submissions().last()
+    let last_submission = await user.submissions().orderBy('created_at', 'desc').first()
     if (last_submission && !request.roles.admin)
     {
       if ((new Date() - Date.parse(last_submission.created_at)) < 60 * 1000)
